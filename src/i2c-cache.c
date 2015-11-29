@@ -66,7 +66,6 @@ struct device_cache* initCache(int8_t dev_addr, int r8_len, int r16_len, int w8_
 
 static void updateCache(struct device_cache *cache) {
     int i;
-    updating = 0;
     for(i=0; i<cache->r8_cache_length; i++) {
         if(cache->r8_flags[i] == CACHE_RECENT_READ) { // if a read was made after last update
             cache->r8_cache[i] = I2Cread8(cache->addr, cache->r8_cmds[i]); // we update the current value
@@ -102,6 +101,7 @@ static void updateCache(struct device_cache *cache) {
 }
 static void onUpdate(int arg) {
     int i=0;
+    updating = 0;
     for(;i<cacheCount; i++)
         updateCache(caches[i]);
     if(updating) {
@@ -122,6 +122,7 @@ static void startUpdates() {
     timerDelay.it_value.tv_usec = period/2;
     signal(SIGALRM, onUpdate);
     setitimer(ITIMER_REAL, &timerDelay, NULL);
+    updating = 1;
 }
 
 void setUpdateFrequency(int frequency) {

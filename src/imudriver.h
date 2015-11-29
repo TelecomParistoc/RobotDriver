@@ -1,8 +1,8 @@
-/* IMU (Inertial Motion Unit) driver
- * keeps track of the robot's relative orientation and gravity vector
+/* IMU (Inertial Motion Unit) driver for bno055
+ * keeps track of the robot's relative orientation
  * functionnalities :
  *  > get/set heading, roll and pitch
- *  > get gravity vector
+ *
  *  Note : in order to free the programmer from I2C ressource sharing
  * considerations, read may be cached and write may be delayed when write/read
  * are made too often and might saturate the I2C bus.
@@ -16,8 +16,9 @@
  * returns 0 if success, -1 if failure */
 int initIMU();
 
-/* get/set euler angles. the angles are relative to the power on position of the
- * module. All angles are in degrees from 0 to 360 (excluded) */
+/* get/set euler angles. the angles are relative to the power-on position of the
+ * module. All angles are in degrees from 0 to 360 (excluded)
+ * WARNING : setting angles DOES NOT MOVE the robot, it offsets the angle*/
 
 double getHeading();
 void setHeading(double heading);

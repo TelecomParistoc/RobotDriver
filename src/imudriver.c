@@ -10,7 +10,7 @@
 #define IMU_ROLL 1
 #define IMU_PITCH 2
 
-static struct device_cache *cache;
+static struct device_cache *cache = NULL;
 
 static double headingOffset = 0.0;
 static double pitchOffset = 0.0;

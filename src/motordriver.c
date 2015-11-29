@@ -21,7 +21,7 @@
 #define CODL_CMD 2
 #define CODR_CMD 3
 
-struct device_cache *cache;
+struct device_cache *cache = NULL;
 
 int initMotorDriver() {
     int error = 0;
