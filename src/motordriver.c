@@ -40,6 +40,7 @@ int initMotorDriver() {
 
     //check for the two I2C devices
     if(i2c_init(MOTOR_ADDR)<0) {
+        printf("initMotorDriver : ERROR cannot initialize MotorController\n", );
         error += -2;
     }
     return error;

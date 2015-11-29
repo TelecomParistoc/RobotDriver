@@ -136,8 +136,14 @@ int getUpdateFrequency() {
 }
 
 int8_t c_read8(struct device_cache *cache, int cmd_index) {
-    if(cmd_index >= cache->r8_cache_length)
+    if(cache == NULL) {
+        printf("c_read8 : ERROR cache not initialized !\n");
+        return -2;
+    }
+    if(cmd_index >= cache->r8_cache_length) {
+        printf("c_read8 : ERROR out of bound command index !\n");
         return -1;
+    }
     if(cache->r8_flags[cmd_index] == CACHE_NOT_VALID)
         cache->r8_cache[cmd_index] = I2Cread8(cache->addr, cache->r8_cmds[cmd_index]);
     if(!updating)
@@ -146,8 +152,14 @@ int8_t c_read8(struct device_cache *cache, int cmd_index) {
     return cache->r8_cache[cmd_index];
 }
 int16_t c_read16(struct device_cache *cache, int cmd_index) {
-    if(cmd_index >= cache->r16_cache_length)
+    if(cache == NULL) {
+        printf("c_read16 : ERROR cache not initialized !\n");
+        return -2;
+    }
+    if(cmd_index >= cache->r16_cache_length) {
+        printf("c_read16 : ERROR out of bound command index !\n");
         return -1;
+    }
     if(cache->r16_flags[cmd_index] == CACHE_NOT_VALID)
         cache->r16_cache[cmd_index] = I2Cread16(cache->addr, cache->r16_cmds[cmd_index]);
     if(!updating)
@@ -156,8 +168,14 @@ int16_t c_read16(struct device_cache *cache, int cmd_index) {
     return cache->r16_cache[cmd_index];
 }
 int c_write8(struct device_cache *cache, int cmd_index, int8_t value) {
-    if(cmd_index >= cache->w8_cache_length)
+    if(cache == NULL) {
+        printf("c_write8 : ERROR cache not initialized !\n");
+        return -2;
+    }
+    if(cmd_index >= cache->w8_cache_length) {
+        printf("c_write8 : ERROR out of bound command index !\n");
         return -1;
+    }
     cache->w8_cache[cmd_index] = value;
     cache->w8_flags[cmd_index] = CACHE_VALID;
     if(!updating)
@@ -165,8 +183,14 @@ int c_write8(struct device_cache *cache, int cmd_index, int8_t value) {
     return 0;
 }
 int c_write16(struct device_cache *cache, int cmd_index, int16_t value) {
-    if(cmd_index >= cache->w16_cache_length)
+    if(cache == NULL) {
+        printf("c_write16 : ERROR cache not initialized !\n");
+        return -2;
+    }
+    if(cmd_index >= cache->w16_cache_length) {
+        printf("c_write16 : ERROR out of bound command index !\n");
         return -1;
+    }
     cache->w16_cache[cmd_index] = value;
     cache->w16_flags[cmd_index] = CACHE_VALID;
     if(!updating)
