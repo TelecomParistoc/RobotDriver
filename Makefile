@@ -4,7 +4,7 @@ HEADERS := $(addprefix src/, ${SRCS:.c=.h})
 OBJS := $(addprefix build/, ${SRCS:.c=.o})
 CC=gcc
 CFLAGS = -O2 -Wall
-LDFLAGS= -shared
+LDFLAGS= -shared -lwiringPi
 PREFIX = /usr/local
 
 .PHONY: all
