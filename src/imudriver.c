@@ -34,7 +34,7 @@ int initIMU() {
     /* Make sure we have the right device */
     uint8_t id = I2Cread8(BNO055_ADDRESS, BNO055_CHIP_ID_ADDR);
     if(id != BNO055_ID) {
-        printf("initIMU : ERROR wrong device ID, check IMU is connected to the I2C bus\n", );
+        printf("initIMU : ERROR wrong device ID, check IMU is connected to the I2C bus\n");
         return -1;  // no? ok bail
     }
 
