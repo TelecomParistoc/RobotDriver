@@ -2,6 +2,7 @@
 #include "i2c-cache.h"
 #include "i2c-functions.h"
 #include "imudriver.h"
+#include <stdio.h>
 
 #define MOTOR_ADDR 0x23
 // PIC registers
@@ -40,7 +41,7 @@ int initMotorDriver() {
 
     //check for the two I2C devices
     if(i2c_init(MOTOR_ADDR)<0) {
-        printf("initMotorDriver : ERROR cannot initialize MotorController\n", );
+        printf("initMotorDriver : ERROR cannot initialize MotorController\n");
         error += -2;
     }
     return error;

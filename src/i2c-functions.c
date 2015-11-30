@@ -1,8 +1,12 @@
 #include "i2c-functions.h"
 #include <wiringPi.h>
+#include <wiringPiI2C.h>
 #include <sys/ioctl.h>
+#include <stdio.h>
 
-int i2c_device = NULL;
+#define I2C_SLAVE	0x0703
+
+int i2c_device = 0;
 
 int i2c_init(uint8_t addr) {
     i2c_device = wiringPiI2CSetup(addr);
@@ -10,7 +14,7 @@ int i2c_init(uint8_t addr) {
 }
 
 int8_t I2Cread8(uint8_t addr, uint8_t reg) {
-    if(i2c_device == NULL || i2c_device < 0) {
+    if(i2c_device <= 0) {
         if(i2c_init(addr) < 0) {
             printf("I2Cread8 : ERROR cannot open device\n");
             return -1;
@@ -22,7 +26,7 @@ int8_t I2Cread8(uint8_t addr, uint8_t reg) {
     return wiringPiI2CReadReg8 (i2c_device, reg);
 }
 int16_t I2Cread16(uint8_t addr, uint8_t reg) {
-    if(i2c_device == NULL || i2c_device < 0) {
+    if(i2c_device <= 0) {
         if(i2c_init(addr) < 0) {
             printf("I2Cread16 : ERROR cannot open device\n");
             return -1;
@@ -34,7 +38,7 @@ int16_t I2Cread16(uint8_t addr, uint8_t reg) {
     return wiringPiI2CReadReg16 (i2c_device, reg);
 }
 int I2Cwrite8(uint8_t addr, uint8_t reg, uint8_t value) {
-    if(i2c_device == NULL || i2c_device < 0) {
+    if(i2c_device <= 0) {
         if(i2c_init(addr) < 0) {
             printf("I2Cwrite8 : ERROR cannot open device\n");
             return -1;
@@ -46,7 +50,7 @@ int I2Cwrite8(uint8_t addr, uint8_t reg, uint8_t value) {
     return wiringPiI2CWriteReg8 (i2c_device, reg, value);
 }
 int I2Cwrite16(uint8_t addr, uint8_t reg, uint16_t value) {
-    if(i2c_device == NULL || i2c_device < 0) {
+    if(i2c_device <= 0) {
         if(i2c_init(addr) < 0) {
             printf("I2Cwrite16 : ERROR cannot open device\n");
             return -1;
