@@ -1,6 +1,7 @@
 #include "i2c-functions.h"
 #include <wiringPi.h>
 #include <sys/ioctl.h>
+#include <stdio.h>
 
 int i2c_device = NULL;
 

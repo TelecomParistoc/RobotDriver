@@ -5,6 +5,7 @@
 #include "bno055.h"
 #include "i2c-cache.h"
 #include "i2c-functions.h"
+#include <stdio.h>
 
 #define IMU_HEADING 0
 #define IMU_ROLL 1

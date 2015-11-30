@@ -2,6 +2,7 @@
 #include "i2c-cache.h"
 #include "i2c-functions.h"
 #include "imudriver.h"
+#include <stdio.h>
 
 #define MOTOR_ADDR 0x23
 // PIC registers

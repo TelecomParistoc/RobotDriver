@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <sys/time.h>
+#include <stdio.h>
 
 static struct device_cache *caches[10];
 static int cacheCount = 0;
