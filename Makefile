@@ -3,7 +3,7 @@ SRCS = i2c-cache.c imudriver.c motordriver.c i2c-functions.c
 HEADERS := $(addprefix src/, ${SRCS:.c=.h})
 OBJS := $(addprefix build/, ${SRCS:.c=.o})
 CC=gcc
-CFLAGS = -O2 -Wall
+CFLAGS = -O2 -Wall -Werror -fpic
 LDFLAGS= -shared -lwiringPi
 PREFIX = /usr/local
 
@@ -19,10 +19,13 @@ build/$(TARGET): $(OBJS)
 
 clean:
 	rm -f build/*.o
-	rm -f build/*.a
+	rm -f build/*.so
 
 install: build/$(TARGET)
 	mkdir -p $(DESTDIR)$(PREFIX)/lib
 	mkdir -p $(DESTDIR)$(PREFIX)/include/robotdriver
-	cp $(TARGET) $(DESTDIR)$(PREFIX)/lib/
+	cp build/$(TARGET) $(DESTDIR)$(PREFIX)/lib/
 	cp HEADERS $(DESTDIR)$(PREFIX)/include/robotdriver/
+	chmod 0755 $(DESTDIR)$(PREFIX)/lib/$(TARGET)
+	ldconfig
+	ldconfig -p | grep robotdriver
