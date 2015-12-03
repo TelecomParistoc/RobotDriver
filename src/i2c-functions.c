@@ -3,6 +3,7 @@
 #include <wiringPiI2C.h>
 #include <sys/ioctl.h>
 #include <stdio.h>
+#include <time.h>
 
 #define I2C_SLAVE	0x0703
 
@@ -60,4 +61,12 @@ int I2Cwrite16(uint8_t addr, uint8_t reg, uint16_t value) {
         return -2;
     }
     return wiringPiI2CWriteReg16(i2c_device, reg, value);
+}
+
+void delayMilli(int milliseconds) {
+    struct timespec wait_time = {
+        .tv_sec = 0,
+        .tv_nsec = 1000000*milliseconds,
+    };
+    nanosleep(&wait_time, NULL);
 }
