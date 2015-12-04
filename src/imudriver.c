@@ -1,11 +1,10 @@
-#include <time.h>
 #include <stdint.h>
+#include <stdio.h>
 
 #include "imudriver.h"
 #include "bno055.h"
 #include "i2c-cache.h"
 #include "i2c-functions.h"
-#include <stdio.h>
 
 #define IMU_HEADING 0
 #define IMU_ROLL 1
@@ -17,17 +16,9 @@ static double headingOffset = 0.0;
 static double pitchOffset = 0.0;
 static double rollOffset = 0.0;
 
-static void delay(int milliseconds) {
-    struct timespec wait_time = {
-        .tv_sec = 0,
-        .tv_nsec = 1000000*milliseconds,
-    };
-    nanosleep(&wait_time, NULL);
-}
-
 void setMode(bno055_opmode_t mode) {
   I2Cwrite8(BNO055_ADDRESS, BNO055_OPR_MODE_ADDR, mode);
-  delay(30);
+  delayMilli(30);
 }
 
 int initIMU() {
@@ -44,21 +35,21 @@ int initIMU() {
     /* Reset */
     I2Cwrite8(BNO055_ADDRESS, BNO055_SYS_TRIGGER_ADDR, 0x20);
     while (((uint8_t) I2Cread8(BNO055_ADDRESS, BNO055_CHIP_ID_ADDR)) != BNO055_ID) {
-        delay(10);
+        delayMilli(10);
     }
-    delay(50);
+    delayMilli(50);
 
     /* Set to normal power mode */
     I2Cwrite8(BNO055_ADDRESS, BNO055_PWR_MODE_ADDR, POWER_MODE_NORMAL);
-    delay(10);
+    delayMilli(10);
 
     I2Cwrite8(BNO055_ADDRESS, BNO055_PAGE_ID_ADDR, 0);
 
     I2Cwrite8(BNO055_ADDRESS, BNO055_SYS_TRIGGER_ADDR, 0x0);
-    delay(10);
+    delayMilli(10);
     /* Set the  operating mode (see section 3.3) */
     setMode(OPERATION_MODE_IMUPLUS);
-    delay(20);
+    delayMilli(20);
 
     /* set up the cache system */
     cache = initCache(BNO055_ADDRESS, 0, 3, 0, 0);

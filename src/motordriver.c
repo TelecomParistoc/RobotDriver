@@ -29,8 +29,8 @@ int initMotorDriver() {
 
     cache = initCache(MOTOR_ADDR, 3, 4, 3, 4);
     cache->r8_cmds[KP_CMD] = I2CMOTOR_KP; cache->w8_cmds[KP_CMD] = I2CMOTOR_KP;
-    cache->r8_cmds[KP_CMD] = I2CMOTOR_KP; cache->w8_cmds[KP_CMD] = I2CMOTOR_KP;
-    cache->r8_cmds[KP_CMD] = I2CMOTOR_KP; cache->w8_cmds[KP_CMD] = I2CMOTOR_KP;
+    cache->r8_cmds[KI_CMD] = I2CMOTOR_KI; cache->w8_cmds[KI_CMD] = I2CMOTOR_KI;
+    cache->r8_cmds[KD_CMD] = I2CMOTOR_KD; cache->w8_cmds[KD_CMD] = I2CMOTOR_KD;
 
     cache->r16_cmds[SPEEDR_CMD] = I2CMOTOR_SPEEDR; cache->w16_cmds[SPEEDR_CMD] = I2CMOTOR_SPEEDR;
     cache->r16_cmds[SPEEDL_CMD] = I2CMOTOR_SPEEDL; cache->w16_cmds[SPEEDL_CMD] = I2CMOTOR_SPEEDL;
@@ -81,9 +81,19 @@ void setRspeed(double speed) {
 uint8_t getKp() { return (uint8_t) c_read8(cache, KP_CMD); }
 uint8_t getKi() { return (uint8_t) c_read8(cache, KI_CMD); }
 uint8_t getKd() { return (uint8_t) c_read8(cache, KD_CMD); }
-void setKp(uint8_t coeff) { c_write8(cache, KP_CMD, coeff); }
-void setKi(uint8_t coeff) { c_write8(cache, KI_CMD, coeff); }
-void setKd(uint8_t coeff) { c_write8(cache, KD_CMD, -coeff); }
+
+void setKp(uint8_t coeff) {
+  I2Cwrite8(MOTOR_ADDR, I2CMOTOR_KP, coeff);
+  delayMilli(20);
+}
+void setKi(uint8_t coeff) {
+  I2Cwrite8(MOTOR_ADDR, I2CMOTOR_KI, coeff);
+  delayMilli(20);
+}
+void setKd(uint8_t coeff) {
+  I2Cwrite8(MOTOR_ADDR, I2CMOTOR_KD, coeff);
+  delayMilli(20);
+}
 
 double getRobotHeading() { return getHeading(); }
 void setRobotHeading(double heading) { setHeading(heading); }

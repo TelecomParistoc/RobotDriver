@@ -23,6 +23,7 @@ var lib = ffi.Library('./../build/librobotdriver', {
 });
 
 module.exports = {
+    init: lib.initMotorDriver,
     Lspeed: function(speed) {
         if(typeof speed != "undefined") {
             lib.setLspeed(speed);

@@ -25,7 +25,7 @@ install: build/$(TARGET)
 	mkdir -p $(DESTDIR)$(PREFIX)/lib
 	mkdir -p $(DESTDIR)$(PREFIX)/include/robotdriver
 	cp build/$(TARGET) $(DESTDIR)$(PREFIX)/lib/
-	cp HEADERS $(DESTDIR)$(PREFIX)/include/robotdriver/
+	cp $(HEADERS) $(DESTDIR)$(PREFIX)/include/robotdriver/
 	chmod 0755 $(DESTDIR)$(PREFIX)/lib/$(TARGET)
 	ldconfig
 	ldconfig -p | grep robotdriver
