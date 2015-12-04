@@ -78,12 +78,12 @@ void setRspeed(double speed) {
     c_write16(cache, SPEEDR_CMD, (int) speed);
 }
 
-int getKp() { return c_read8(cache, KP_CMD); }
-int getKi() { return c_read8(cache, KI_CMD); }
-int getKd() { return -c_read8(cache, KD_CMD); }
-void setKp(int8_t coeff) { c_write8(cache, KP_CMD, coeff); }
-void setKi(int8_t coeff) { c_write8(cache, KI_CMD, coeff); }
-void setKd(int8_t coeff) { c_write8(cache, KD_CMD, -coeff); }
+uint8_t getKp() { return (uint8_t) c_read8(cache, KP_CMD); }
+uint8_t getKi() { return (uint8_t) c_read8(cache, KI_CMD); }
+uint8_t getKd() { return (uint8_t) c_read8(cache, KD_CMD); }
+void setKp(uint8_t coeff) { c_write8(cache, KP_CMD, coeff); }
+void setKi(uint8_t coeff) { c_write8(cache, KI_CMD, coeff); }
+void setKd(uint8_t coeff) { c_write8(cache, KD_CMD, -coeff); }
 
 double getRobotHeading() { return getHeading(); }
 void setRobotHeading(double heading) { setHeading(heading); }

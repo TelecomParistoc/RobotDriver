@@ -51,17 +51,17 @@
      * the coefficients are stored the motor driver's non-volatile memory,
      * so there's no need to set them at startup. */
     /* get Kp : PID proportionnal coefficient */
-    int getKp();
+    uint8_t getKp();
     /* get Ki : PID integral coefficient */
-    int getKi();
+    uint8_t getKi();
     /* get Kd : PID derivative coefficient */
-    int getKd();
+    uint8_t getKd();
     /* set Kp : PID proportionnal coefficient */
-    void setKp(int8_t coeff);
+    void setKp(uint8_t coeff);
     /* set Ki : PID integral coefficient */
-    void setKi(int8_t coeff);
+    void setKi(uint8_t coeff);
     /* set Kd : PID derivative coefficient */
-    void setKd(int8_t coeff);
+    void setKd(uint8_t coeff);
 
     /* ##### Heading angle #####
      * get/set the heading of the robot (relative to power-on position)
