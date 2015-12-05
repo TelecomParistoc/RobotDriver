@@ -10,12 +10,12 @@ var lib = ffi.Library('./../build/librobotdriver', {
   'setRdistance': [ 'void', ['int'] ],
   'setRspeed': [ 'void', ['double'] ],
   'setLspeed': [ 'void', ['double'] ],
-  'getKp': [ 'int', [] ],
-  'getKi': [ 'int', [] ],
-  'getKd': [ 'int', [] ],
-  'setKp': [ 'void', ['int8'] ],
-  'setKi': [ 'void', ['int8'] ],
-  'setKd': [ 'void', ['int8'] ],
+  'getKp': [ 'uint8', [] ],
+  'getKi': [ 'uint8', [] ],
+  'getKd': [ 'uint8', [] ],
+  'setKp': [ 'void', ['uint8'] ],
+  'setKi': [ 'void', ['uint8'] ],
+  'setKd': [ 'void', ['uint8'] ],
   'getRobotHeading': [ 'double', [] ],
   'setRobotHeading': [ 'void', ['double'] ],
   'getMotorDriverUpdateFreq': [ 'int', [] ],
@@ -23,6 +23,7 @@ var lib = ffi.Library('./../build/librobotdriver', {
 });
 
 module.exports = {
+    init: lib.initMotorDriver,
     Lspeed: function(speed) {
         if(typeof speed != "undefined") {
             lib.setLspeed(speed);

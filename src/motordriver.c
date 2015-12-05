@@ -78,19 +78,20 @@ void setRspeed(double speed) {
     c_write16(cache, SPEEDR_CMD, (int) speed);
 }
 
-int getKp() { return c_read8(cache, KP_CMD); }
-int getKi() { return c_read8(cache, KI_CMD); }
-int getKd() { return -c_read8(cache, KD_CMD); }
-void setKp(int8_t coeff) {
+uint8_t getKp() { return (uint8_t) c_read8(cache, KP_CMD); }
+uint8_t getKi() { return (uint8_t) c_read8(cache, KI_CMD); }
+uint8_t getKd() { return (uint8_t) c_read8(cache, KD_CMD); }
+
+void setKp(uint8_t coeff) {
   I2Cwrite8(MOTOR_ADDR, I2CMOTOR_KP, coeff);
   delayMilli(20);
 }
-void setKi(int8_t coeff) {
+void setKi(uint8_t coeff) {
   I2Cwrite8(MOTOR_ADDR, I2CMOTOR_KI, coeff);
   delayMilli(20);
 }
-void setKd(int8_t coeff) {
-  I2Cwrite8(MOTOR_ADDR, I2CMOTOR_KD, -coeff);
+void setKd(uint8_t coeff) {
+  I2Cwrite8(MOTOR_ADDR, I2CMOTOR_KD, coeff);
   delayMilli(20);
 }
 
