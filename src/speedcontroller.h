@@ -103,6 +103,6 @@ void fastSpeedChange(double speed);
 
 
 // DO NOT CALL, used by the implementation
-double computeTargetSpeed();
+double computeTargetSpeed(double distance);
 
 #endif
