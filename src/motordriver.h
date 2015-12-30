@@ -14,8 +14,8 @@
  * See setMotorDriverUpdateFreq() for more details.
  */
 
-#ifndef __I2CMOTORDRIVER
-#define __I2CMOTORDRIVER
+#ifndef I2CMOTORDRIVER_H
+#define I2CMOTORDRIVER_H
     #include <stdint.h>
 
     /* initialize the driver, needs to be called before any other operations
@@ -88,4 +88,11 @@
      void setMotorDriverUpdateFreq(int max_freq);
      /* get max frequency (in Hz)*/
      int getMotorDriverUpdateFreq();
+
+     /* set a function called everytime the data is updated
+      * the function is called just after new data has been read and before data
+      * is sent.
+      * callback function should be like : void myCallback() {...} and SHOULD
+      * NOT BLOCK (no wait, filesystem access or any system call)*/
+     void setMotorUpdateCallback(void (*updateCallback)(void));
 #endif

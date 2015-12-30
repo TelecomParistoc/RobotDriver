@@ -1,3 +1,6 @@
+#ifndef BNO055_H
+#define BNO055_H
+
 #define BNO055_ADDRESS (0x28)
 #define BNO055_ID      (0xA0)
 typedef enum {
@@ -188,3 +191,6 @@ typedef enum {
   VECTOR_LINEARACCEL   = BNO055_LINEAR_ACCEL_DATA_X_LSB_ADDR,
   VECTOR_GRAVITY       = BNO055_GRAVITY_DATA_X_LSB_ADDR
 } bno055_vector_type_t;
+
+
+#endif

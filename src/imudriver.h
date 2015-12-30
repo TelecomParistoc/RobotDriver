@@ -8,8 +8,8 @@
  * are made too often and might saturate the I2C bus.
  */
 
-#ifndef __I2CIMUDRIVER
-#define __I2CIMUDRIVER
+#ifndef I2CIMUDRIVER_H
+#define I2CIMUDRIVER_H
 /* initialize the bno055 and set it in IMU mode (fusion between accelerometer and gyro)
  * this has to be called before any other operation, UNLESS the initMotorDriver()
  * was called : in that case calling initIMU() is redundant.

@@ -1,5 +1,5 @@
-#ifndef __I2CDRIVERCACHE
-#define  __I2CDRIVERCACHE
+#ifndef I2CDRIVERCACHE_H
+#define  I2CDRIVERCACHE_H
 
 #include <stdint.h>
 
@@ -10,6 +10,7 @@
 
 struct device_cache {
     int8_t addr;
+    void (*updateCallback)(void);
     int r8_cache_length;
     int8_t *r8_cmds;
     int8_t *r8_cache;

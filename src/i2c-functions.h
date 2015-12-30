@@ -2,8 +2,8 @@
  * provides functions to acces the I2C bus
  */
 
-#ifndef __I2CDRIVERFUNCTIONS
-#define __I2CDRIVERFUNCTIONS
+#ifndef I2CDRIVERFUNCTIONS_H
+#define I2CDRIVERFUNCTIONS_H
 #include <stdint.h>
 
 /* ############## I2C functions ##############
