@@ -95,6 +95,11 @@ void setKd(uint8_t coeff) {
   delayMilli(20);
 }
 
+void setMotorUpdateCallback(void (*updateCallback)(void)) {
+    if(cache != NULL)
+        cache->updateCallback = updateCallback;
+}
+
 double getRobotHeading() { return getHeading(); }
 void setRobotHeading(double heading) { setHeading(heading); }
 void setMotorDriverUpdateFreq(int max_freq) { setUpdateFrequency(max_freq); }

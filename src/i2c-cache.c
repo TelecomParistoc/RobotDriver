@@ -29,6 +29,7 @@ static int16_t* allocTable16(int size, int16_t fill) {
 struct device_cache* initCache(int8_t dev_addr, int r8_len, int r16_len, int w8_len, int w16_len) {
     struct device_cache* cache = malloc(sizeof(struct device_cache));
     cache->addr = dev_addr;
+    cache->updateCallback = NULL;
     if(r8_len == 0)
         r8_len = 1;
     cache->r8_cache_length = r8_len;
@@ -85,6 +86,10 @@ static void updateCache(struct device_cache *cache) {
             cache->r16_flags[i] = CACHE_NOT_VALID; // stop updating
         }
     }
+
+    if(cache->updateCallback != NULL)
+        cache->updateCallback();
+
     for(i=0; i<cache->w8_cache_length; i++) {
         if(cache->w8_flags[i] != CACHE_NOT_VALID) { // if a write was made after last update
             I2Cwrite8(cache->addr, cache->w8_cmds[i], cache->w8_cache[i]); // we update the current value
