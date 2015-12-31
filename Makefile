@@ -1,5 +1,5 @@
 TARGET := librobotdriver.so
-SRCS = i2c-cache.c imudriver.c motordriver.c i2c-functions.c
+SRCS = i2c-cache.c imudriver.c motordriver.c i2c-functions.c queue.c motioncontroller.c headingcontroller.c controllerutils.c speedcontroller.c
 HEADERS := $(addprefix src/, ${SRCS:.c=.h})
 OBJS := $(addprefix build/, ${SRCS:.c=.o})
 CC=gcc
