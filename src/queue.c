@@ -36,3 +36,5 @@ void clearQueue() {
     while(queueHead != NULL)
         removeHead();
 }
+
+int isQueueEmpty() { return queueHead == NULL; }

@@ -13,5 +13,7 @@ void* getHead();
 void removeHead();
 /* remove all the elements in the queue and disallocate the elements */
 void clearQueue();
+/* returns 1 if queue is empty, 0 otherwise */
+int isQueueEmpty();
 
 #endif
