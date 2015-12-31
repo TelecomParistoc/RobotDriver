@@ -9,6 +9,15 @@ void setHeadingTolerance(double tolerance);
 double getHeadingTolerance();
 void enableHeadingControl(int enable);
 
+double getCurrentHeading();
+
+void setHeadingKp(double coeff);
+double getHeadingKp();
+void setHeadingKi(double coeff);
+double getHeadingKi();
+void setHeadingKd(double coeff);
+double getHeadingKd();
+
 double computeSpeedDifferential();
 
 #endif
