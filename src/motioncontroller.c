@@ -2,6 +2,7 @@
 #include "motordriver.h"
 #include "headingcontroller.h"
 #include "speedcontroller.h"
+#include "controllerutils.h"
 #include "queue.h"
 #include <stdlib.h>
 #include <math.h>
@@ -38,8 +39,8 @@ static detectBlocking() {
         //check the error is higher than the absolute threshold
         if(abs(expected - real) > BLOCKING_ABS_THRESHOLD) {
             //check the relative error is higher than the relative threshold
-            double relativeError = abs((expected - real)
-                /((abs(expected) > abs(real)) ? expected : real));
+            double relativeError = abs(expected - real)
+                /MAX(abs(expected), abs(real));
             if(relativeError > BLOCKING_REL_THRESHOLD) {
                 if(blockingCallback != NULL)
                     blockingCallback();

@@ -7,9 +7,11 @@ inline double maxSpeedStep() {
 }
 double limitAcceleration(double lastSpeed, double targetSpeed) {
     if(targetSpeed-lastSpeed > maxSpeedStep())
-        targetSpeed = lastSpeed + maxSpeedStep();
+        return lastSpeed + maxSpeedStep();
     else if(targetSpeed-lastSpeed < -maxSpeedStep())
-        targetSpeed = lastSpeed - maxSpeedStep();
+        return lastSpeed - maxSpeedStep();
+    else
+        return targetSpeed;
 }
 int getRobotDistance() {
     return (getRdistance()+getLdistance())/2;
