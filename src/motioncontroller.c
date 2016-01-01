@@ -14,6 +14,7 @@ static int blockingHistoryFill = 0;
 static void (*blockingCallback)(void) = NULL;
 
 static double maxAcceleration = 0.5; // in m.s^-2
+
 void setMaxAcceleration(double acceleration) {
     if(acceleration != 0)
         maxAcceleration = acceleration;
@@ -22,7 +23,7 @@ double getMaxAcceleration() { return maxAcceleration; }
 
 void setBlockingCallback(void (*callback)(void)) { blockingCallback = callback; }
 
-static detectBlocking() {
+static detectBlocking(double currentSpeed) {
     // keep the 20 last value
     static int distancesHistory[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     static double speedsHistory[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
@@ -51,19 +52,19 @@ static detectBlocking() {
     } else {
         blockingHistoryFill++;
     }
-    speedsHistory[headIndex] = currentTargetSpeed;
+    speedsHistory[headIndex] = currentSpeed;
     headIndex = (headIndex+1)%20;
 }
 
 
 static void motionManager() {
     double differential = computeSpeedDifferential();
-    currentTargetSpeed = computeTargetSpeed();
+    double speed = computeTargetSpeed();
 
-    detectBlocking();
+    detectBlocking(speed);
 
-    setRspeed(currentTargetSpeed + differential);
-    setLspeed(currentTargetSpeed - differential);
+    setRspeed(speed + differential);
+    setLspeed(speed - differential);
 }
 
 int initMotionController() {

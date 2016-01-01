@@ -8,6 +8,7 @@ struct queueElement {
 
 static queueElement* queueHead = NULL;
 static queueElement* queueTail = NULL;
+static queueSize = 0;
 
 void addToQueue(void* elementPtr) {
     struct queueElement* newElement = malloc(sizeof(struct queueElement));
@@ -17,6 +18,7 @@ void addToQueue(void* elementPtr) {
         queueTail->nextElement = newElement;
     if(queueHead == NULL)
         queueHead = newElement;
+    queueSize++;
 }
 
 void* getHead() {
@@ -29,6 +31,7 @@ void removeHead() {
         free(queueHead->content);
         free(queueHead);
         queueHead = queueHead->nextElement;
+        queueSize--;
     }
 }
 
@@ -37,4 +40,4 @@ void clearQueue() {
         removeHead();
 }
 
-int isQueueEmpty() { return queueHead == NULL; }
+int getQueueSize() { return queueSize; }

@@ -26,6 +26,9 @@ void queueSpeedChangeAt(int distance, double speed, motionCallback onFinished);
 void queueStopAt(int distance, motionCallback onFinished);
 void clearMotionQueue();
 
+void setDistanceTolerance(unsigned int tolerance);
+unsigned int getDistanceTolerance();
+
 double computeTargetSpeed();
 
 #endif
