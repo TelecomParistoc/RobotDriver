@@ -5,11 +5,10 @@ double getTargetHeading();
 void setTargetHeading(double heading, void (*finishedCallback)(void));
 void turnOf(double turn, void (*finishedCallback)(void));
 
+double getCurrentHeading();
 void setHeadingTolerance(double tolerance);
 double getHeadingTolerance();
 void enableHeadingControl(int enable);
-
-double getCurrentHeading();
 
 void setHeadingKp(double coeff);
 double getHeadingKp();

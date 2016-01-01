@@ -27,6 +27,7 @@ double getHeadingKi() { return headingKi; }
 void setHeadingKd(double coeff) { headingKd = coeff; }
 double getHeadingKd() { return headingKd; }
 
+
 double getTargetHeading() { return targetHeading; }
 void setTargetHeading(double heading, void (*callback)(void)) {
     targetHeading = heading;
@@ -46,11 +47,14 @@ void enableHeadingControl(int enable) {
         headingControl = 0;
 }
 
-void filterCurrentHeading() {
+static void filterCurrentHeading() {
     static double headings[] = {0,0,0};
     int i=0;
     double median;
     headings[0] = getRobotHeading();
+    // abort in case of communication error
+    if(headings[0] < 0)
+        return;
     // median filter the 3 last headings
     if(headings[0] > MIN(headings[1], headings[2]) && headings[0] <= MAX(headings[1], headings[2])) {
         currentHeading = headings[0];
@@ -67,6 +71,7 @@ double computeSpeedDifferential() {
         static double integral=0, lastError=0, lastDifferential=0;
         double differential, error;
         filterCurrentHeading();
+
         error = targetHeading-currentHeading;
         integral += error;
         integral = clampValue(integral, MAX_HEADING_INTEGRAL);
@@ -74,6 +79,11 @@ double computeSpeedDifferential() {
         differential = clampValue(limitAcceleration(lastDifferential, differential), MAX_DIFF_SPEED);
         lastDifferential = differential;
         lastError = error;
+
+        if(abs(error) <= angularTolerance && headingCallback != NULL) {
+            headingCallback();
+            headingCallback = NULL;
+        }
         return differential;
     } else
         return 0;
