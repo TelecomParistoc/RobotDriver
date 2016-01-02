@@ -3,6 +3,7 @@
 #include "motioncontroller.h"
 #include "controllerutils.h"
 #include <stdlib.h>
+#include <math.h>
 
 #define MAX_HEADING_INTEGRAL 4000
 #define MAX_DIFF_SPEED 0.5
@@ -37,7 +38,7 @@ void setTargetHeading(double heading, void (*callback)(void)) {
 double getCurrentHeading() { return currentHeading; }
 
 void turnOf(double turn, void (*callback)(void)) {
-    setTargetHeading((targetHeading + turn + 360) % 360, callback);
+    setTargetHeading(modulo(targetHeading + turn, 360), callback);
 }
 
 void enableHeadingControl(int enable) {
@@ -49,8 +50,6 @@ void enableHeadingControl(int enable) {
 
 static void filterCurrentHeading() {
     static double headings[] = {0,0,0};
-    int i=0;
-    double median;
     headings[0] = getRobotHeading();
     // abort in case of communication error
     if(headings[0] < 0)
@@ -80,7 +79,7 @@ double computeSpeedDifferential() {
         lastDifferential = differential;
         lastError = error;
 
-        if(abs(error) <= angularTolerance && headingCallback != NULL) {
+        if(fabs(error) <= angularTolerance && headingCallback != NULL) {
             headingCallback();
             headingCallback = NULL;
         }

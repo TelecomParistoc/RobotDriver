@@ -1,7 +1,15 @@
 #include "controllerutils.h"
+#include "motordriver.h"
 
 extern double maxAcceleration;
 
+inline double modulo(double value, int modulo) {
+    while(value < 0)
+        value += modulo;
+    while(value >= modulo)
+        value = value - modulo;
+    return value;
+}
 inline double maxSpeedStep() {
     return maxAcceleration/getMotorDriverUpdateFreq();
 }
@@ -20,4 +28,5 @@ int getRobotDistance() {
 double clampValue(double value, double max) {
     value = value > max ? max : value;
     value = value < -max ? -max : value;
+    return value;
 }

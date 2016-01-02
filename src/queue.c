@@ -4,11 +4,11 @@
 struct queueElement {
     void* content;
     struct queueElement* nextElement;
-}
+};
 
-static queueElement* queueHead = NULL;
-static queueElement* queueTail = NULL;
-static queueSize = 0;
+static struct queueElement* queueHead = NULL;
+static struct queueElement* queueTail = NULL;
+static int queueSize = 0;
 
 void addToQueue(void* elementPtr) {
     struct queueElement* newElement = malloc(sizeof(struct queueElement));

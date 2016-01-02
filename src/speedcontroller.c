@@ -1,5 +1,6 @@
 #include "speedcontroller.h"
 #include "controllerutils.h"
+#include "motioncontroller.h"
 #include "queue.h"
 #include <stdlib.h>
 #include <math.h>
@@ -59,8 +60,8 @@ static double computeSpeedWithDistanceTarget(struct motionElement* action) {
         action->cruiseSpeed = currentTargetSpeed;
 
     speed = sqrt(2*abs(distanceError)*getMaxAcceleration())*SIGN(distanceError);
-    if(abs(speed) > abs(action->cruiseSpeed))
-        speed = abs(action->cruiseSpeed)*SIGN(distanceError);
+    if(fabs(speed) > fabs(action->cruiseSpeed))
+        speed = fabs(action->cruiseSpeed)*SIGN(distanceError);
     speed += action->speed;
     // detect when target distance is reached for the first time
     if(abs(distanceError) < distanceTolerance && action->finished == 0) {

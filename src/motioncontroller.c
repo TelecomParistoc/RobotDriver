@@ -13,7 +13,7 @@
 static int blockingHistoryFill = 0;
 static void (*blockingCallback)(void) = NULL;
 
-static double maxAcceleration = 0.5; // in m.s^-2
+double maxAcceleration = 0.5; // in m.s^-2
 
 void setMaxAcceleration(double acceleration) {
     if(acceleration != 0)
@@ -23,7 +23,7 @@ double getMaxAcceleration() { return maxAcceleration; }
 
 void setBlockingCallback(void (*callback)(void)) { blockingCallback = callback; }
 
-static detectBlocking(double currentSpeed) {
+static void detectBlocking(double currentSpeed) {
     // keep the 20 last value
     static int distancesHistory[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     static double speedsHistory[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
@@ -38,10 +38,10 @@ static detectBlocking(double currentSpeed) {
             expected += distancesHistory[(headIndex+i)%20]/getMotorDriverUpdateFreq();
         }
         //check the error is higher than the absolute threshold
-        if(abs(expected - real) > BLOCKING_ABS_THRESHOLD) {
+        if(fabs(expected - real) > BLOCKING_ABS_THRESHOLD) {
             //check the relative error is higher than the relative threshold
-            double relativeError = abs(expected - real)
-                /MAX(abs(expected), abs(real));
+            double relativeError = fabs(expected - real)
+                /MAX(fabs(expected), abs(real));
             if(relativeError > BLOCKING_REL_THRESHOLD) {
                 if(blockingCallback != NULL)
                     blockingCallback();
@@ -70,7 +70,7 @@ static void motionManager() {
 int initMotionController() {
     int error = initMotorDriver();
     clearMotionQueue();
-    targetHeading = getRobotHeading();
+    setTargetHeading(getRobotHeading(), NULL);
     setMotorUpdateCallback(motionManager);
     // make sure the update timer is started
     motionManager();

@@ -3,11 +3,6 @@
 
 typedef enum {speedChange, speedChangeAt, stopAt} motionType;
 
-// type for callback functions, called when a motion is finished
-// receives as argument a structure containing info about the action that has been finished
-// callback should be like : void myCallback(struct motionElement actionJustFinished) {...}
-typedef void (*motionCallback)(struct motionElement*);
-
 // info about a motion, some field are not useful for all type of motion
 struct motionElement {
     motionType type;
@@ -15,8 +10,13 @@ struct motionElement {
     double cruiseSpeed;
     int distance;
     int finished;
-    motionCallback callback;
+    void (* callback)(struct motionElement*);
 };
+
+// type for callback functions, called when a motion is finished
+// receives as argument a structure containing info about the action that has been finished
+// callback should be like : void myCallback(struct motionElement actionJustFinished) {...}
+typedef void (*motionCallback)(struct motionElement*);
 
 // the fastest speed the robot is allowed to travel at (in m/s)
 #define MAX_ALLOWED_SPEED 1
