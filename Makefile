@@ -1,25 +1,39 @@
-TARGET := librobotdriver.so
+TARGET = librobotdriver.so
 SRCS = i2c-cache.c imudriver.c motordriver.c i2c-functions.c queue.c motioncontroller.c headingcontroller.c controllerutils.c speedcontroller.c
-HEADERS := $(addprefix src/, ${SRCS:.c=.h})
-OBJS := $(addprefix build/, ${SRCS:.c=.o})
+HEADERS = $(addprefix src/, ${SRCS:.c=.h})
+OBJECTS = $(addprefix build/,${SRCS:.c=.o})
 CC=gcc
 CFLAGS = -O2 -Wall -Werror -fpic
 LDFLAGS= -shared -lwiringPi
 PREFIX = /usr/local
+VPATH = build/
 
-.PHONY: all
+vpath %.c src/ tests/
+vpath %.h src/
+-include $(subst .c,.d,$(SRCS))
+
+.PHONY: all clean test update
 
 all: build/$(TARGET)
 
-build/%.o: src/%.c
+build/%.o: %.c build/%.d
 	$(CC) -c -o $@ $< $(CFLAGS)
+build/%.d : %.c
+	$(CC) $(CFLAGS) -MM -MF $@ -MP $<
 
-build/$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS)
+build/$(TARGET): $(OBJECTS)
+	$(CC) $(CFLAGS) $(OBJECTS) -o $@ $(LDFLAGS)
+
+test:
+	make SRCS="motordriver_mock.c queue.c motioncontroller.c headingcontroller.c controllerutils.c speedcontroller.c" LDFLAGS=-shared
+
+update:
+	git pull
+	make
+	make install
 
 clean:
-	rm -f build/*.o
-	rm -f build/*.so
+	rm -f build/*.o build/*.so build/*.d
 
 install: build/$(TARGET)
 	mkdir -p $(DESTDIR)$(PREFIX)/lib
