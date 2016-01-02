@@ -8,12 +8,8 @@ In addition, it provides a mechanism against I2C bus overload, freeing the progr
 * First, you need [wiringPi](http://wiringpi.com/download-and-install/).
 
 * Once wiringPi is installed, get back the sources :
-`git clone git@bitbucket.org:telecomparitoc/robotdriver.git`
-
-> Note : you need to be part of the team telecomparistoc (hum ...) to clone
+`git clone git@github.com:TelecomParistoc/RobotDriver.git`
 
 * cd to the root of the repository and enter
-`make`
-and 
-`sudo make install`
+`make` and `sudo make install`
 
