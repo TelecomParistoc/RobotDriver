@@ -16,8 +16,8 @@ var lib = ffi.Library('./../build/librobotdriver', {
     'queueSpeedChangeAt': [ 'void', ['int', 'double', motionCallback]],
     'queueStopAt': [ 'void', ['int', motionCallback] ],
     'clearMotionQueue': ['void', []],
-    'getDistanceTolerance': [ 'unsigned int', [] ],
-    'setDistanceTolerance': [ 'void', ['unsigned int'] ],
+    'getDistanceTolerance': [ 'int', [] ],
+    'setDistanceTolerance': [ 'void', ['int'] ],
     // headingcontroller :
     'getTargetHeading': [ 'double', [] ],
     'setTargetHeading': [ 'void', ['double', simpleCallback] ],
