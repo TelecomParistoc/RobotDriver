@@ -1,0 +1,14 @@
+{
+  "name": "MotorTest",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./app.js"
+  },
+  "dependencies": {
+    "express": "^4.13.3",
+    "ffi": "^2.0.0",
+    "jade": "~1.11.0",
+    "sugar": "^1.4.1"
+  }
+}

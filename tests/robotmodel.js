@@ -1,4 +1,4 @@
-var motordriver = require("motordriver_mock.js");
+var motordriver = require("./motordriver_mock.js");
 var motion = require("../JSbinding/motioncontroller.js");
 
 var robotDiameter = 140;
@@ -9,14 +9,17 @@ module.exports = function robot() {
     var computeReaction;
     useSimpleModel();
 
-    function nextStep() {
-        var deltas = computeReaction(motordriver.speed(), motordriver.diff(), 0.01);
+    function nextStep(timeStep) {
+        var deltas = computeReaction(motordriver.speed(), motordriver.diff(), timeStep);
         distance += deltas.deltaDistance;
-        heading += deltaHeading;
+        heading += deltas.deltaHeading;
         heading = (heading + 360) % 360;
         motordriver.distance(distance);
         motordriver.heading(heading);
         motordriver.nextStep();
+    }
+    function assertInitialized() {
+        return motordriver.assertInitialized();
     }
     function useInertialModel() {
         var diffs = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
@@ -50,6 +53,7 @@ module.exports = function robot() {
         useInertialModel: useInertialModel,
         useSimpleModel: useSimpleModel,
         nextStep: nextStep,
+        assertInitialized: assertInitialized,
         speed: function() { return motordriver.speed(); },
         diff: function() { return motordriver.diff(); }
     };

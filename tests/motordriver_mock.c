@@ -33,9 +33,11 @@ double getRspeed() {
     return mockSpeedR;
 }
 void setLspeed(double speed) {
+    printf("L speed is %f\n", speed);
     mockSpeedL = speed;
 }
 void setRspeed(double speed) {
+    printf("R speed is %f\n", speed);
     mockSpeedR = speed;
 }
 

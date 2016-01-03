@@ -1,0 +1,11 @@
+block test
+    div.test
+        h2= test.title
+        h3= "inertia : "+(test.inertia ? "yes" : "no")
+        bold code :
+        pre: code(class="javascript")= test.run
+        bold output :
+        pre: code(class="javascript")= test.output
+        bold simulation :
+        div.ct-chart.ct-double-octave(id="chart#{testCount}")
+        

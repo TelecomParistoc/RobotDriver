@@ -1,0 +1,23 @@
+doctype html
+html(lang="en")
+    head
+        title Motion Controller test
+        link(rel='stylesheet', href='styles/style.css')
+        link(rel='stylesheet', href='styles/font-awesome.css')
+        link(rel='stylesheet', href='styles/monokai-sublime.css')
+        link(rel='stylesheet', href='bower_components/chartist/dist/chartist.min.css')
+    body
+        div#topbar
+            h2.topbar-title Motion Controller Test
+        div#tests
+            - var testCount = 0;
+            each test in tests
+                include test.jade
+                - testCount++;
+        
+        script(src="bower_components/jquery/dist/jquery.min.js")
+        script(src="bower_components/sugar/release/sugar-full.min.js")
+        script(src="bower_components/chartist/dist/chartist.min.js")
+        script(src="scripts/chartView.js")
+        script(src="scripts/highlight.pack.js")
+        script(src="scripts/main.js")
