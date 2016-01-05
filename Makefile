@@ -26,6 +26,7 @@ build/$(TARGET): $(OBJECTS)
 
 test:
 	make SRCS="motordriver_mock.c queue.c motioncontroller.c headingcontroller.c controllerutils.c speedcontroller.c" LDFLAGS=-shared
+	cd tests; node testrunner.js
 
 update:
 	git pull
