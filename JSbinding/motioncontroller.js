@@ -18,6 +18,8 @@ var lib = ffi.Library('./../build/librobotdriver', {
     'clearMotionQueue': ['void', []],
     'getDistanceTolerance': [ 'int', [] ],
     'setDistanceTolerance': [ 'void', ['int'] ],
+    'getRobotDistance': [ 'int', [] ],
+    'setRobotDistance': [ 'void', ['int'] ],
     // headingcontroller :
     'getTargetHeading': [ 'double', [] ],
     'setTargetHeading': [ 'void', ['double', simpleCallback] ],
@@ -25,6 +27,8 @@ var lib = ffi.Library('./../build/librobotdriver', {
     'getCurrentHeading': [ 'double', [] ],
     'getHeadingTolerance': [ 'double', [] ],
     'setHeadingTolerance': [ 'void', ['double'] ],
+    'getMaxDiffSpeed': [ 'double', [] ],
+    'setMaxDiffSpeed': [ 'void', ['double'] ],
     'enableHeadingControl' : ['void', ['int'] ]
 });
 
