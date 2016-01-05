@@ -1,9 +1,11 @@
 #include "speedcontroller.h"
 #include "controllerutils.h"
 #include "motioncontroller.h"
+#include "motordriver.h"
 #include "queue.h"
 #include <stdlib.h>
 #include <math.h>
+#include <stdio.h>
 
 static double currentTargetSpeed = 0;
 static unsigned int distanceTolerance = 1; // in mm
@@ -39,6 +41,17 @@ void queueStopAt(int distance, motionCallback onFinished){
 void clearMotionQueue() {
     clearQueue();
 }
+
+int getRobotDistance() {
+    return (getRdistance()+getLdistance())/2;
+}
+void setRobotDistance(int distance) {
+    int Roffset = getRdistance() - getRobotDistance();
+    int Loffset = getLdistance() - getRobotDistance();
+    setRdistance(Roffset + distance);
+    setLdistance(Loffset + distance);
+}
+
 static void terminateMotionAction(struct motionElement* action) {
     if(action->callback != NULL)
         action->callback(action);
@@ -59,13 +72,17 @@ static double computeSpeedWithDistanceTarget(struct motionElement* action) {
     if(action->cruiseSpeed == -23)
         action->cruiseSpeed = currentTargetSpeed;
 
-    speed = sqrt(2*abs(distanceError)*getMaxAcceleration())*SIGN(distanceError);
+    speed = sqrt(2*getMaxAcceleration()*abs(distanceError)/1000.0 + pow(action->speed,2))*SIGN(distanceError);
+
     if(fabs(speed) > fabs(action->cruiseSpeed))
         speed = fabs(action->cruiseSpeed)*SIGN(distanceError);
-    speed += action->speed;
+
     // detect when target distance is reached for the first time
-    if(abs(distanceError) < distanceTolerance && action->finished == 0) {
-        terminateMotionAction(action);
+    if(abs(distanceError) <= distanceTolerance) {
+        // make sure the speed is exactly the desired speed
+        speed = action->speed;
+        if(action->finished == 0)
+            terminateMotionAction(action);
     }
     return speed;
 }
@@ -79,8 +96,9 @@ static double computeStopAt(struct motionElement* action) {
 static double computeSpeedChangeAt(struct motionElement* action) {
     double speed = computeSpeedWithDistanceTarget(action);
     // remove the action
-    if(action->finished)
+    if(action->finished) {
         removeHead();
+    }
     return speed;
 }
 double computeTargetSpeed() {

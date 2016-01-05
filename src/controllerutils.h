@@ -8,7 +8,6 @@
 double modulo(double value, int modulo);
 double maxSpeedStep();
 double limitAcceleration(double lastSpeed, double targetSpeed);
-int getRobotDistance();
 
 double clampValue(double value, double max);
 

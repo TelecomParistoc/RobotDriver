@@ -21,9 +21,6 @@ double limitAcceleration(double lastSpeed, double targetSpeed) {
     else
         return targetSpeed;
 }
-int getRobotDistance() {
-    return (getRdistance()+getLdistance())/2;
-}
 
 double clampValue(double value, double max) {
     value = value > max ? max : value;

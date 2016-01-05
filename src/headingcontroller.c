@@ -5,21 +5,24 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define MAX_HEADING_INTEGRAL 4000
-#define MAX_DIFF_SPEED 0.5
+#define MAX_HEADING_INTEGRAL 1000
 
+static double maxDiffSpeed = 0.25;
 static double targetHeading = 0;
 static double currentHeading = 0;
 static int headingControl = 1;
 static double angularTolerance = 0.5; // in degrees
 static void (*headingCallback)(void) = NULL;
 
-static double headingKp = 0.002;
-static double headingKi = 0.0001;
-static double headingKd = 0.001;
+static double headingKp = 0.005;
+static double headingKi = 0.0002;
+static double headingKd = 0;
 
 void setHeadingTolerance(double tolerance) { angularTolerance = tolerance; }
 double getHeadingTolerance() { return angularTolerance; }
+
+void setMaxDiffSpeed(double diffspeed) { maxDiffSpeed = diffspeed; }
+double getMaxDiffSpeed() { return maxDiffSpeed; }
 
 void setHeadingKp(double coeff) { headingKp = coeff; }
 double getHeadingKp() { return headingKp; }
@@ -72,10 +75,13 @@ double computeSpeedDifferential() {
         filterCurrentHeading();
 
         error = targetHeading-currentHeading;
-        integral += error;
+        if(fabs(error)<5)
+            integral += error;
+        else
+            integral = 0;
         integral = clampValue(integral, MAX_HEADING_INTEGRAL);
         differential = headingKp*error + headingKi*integral + headingKd*(error - lastError);
-        differential = clampValue(limitAcceleration(lastDifferential, differential), MAX_DIFF_SPEED);
+        differential = clampValue(limitAcceleration(lastDifferential, differential), maxDiffSpeed);
         lastDifferential = differential;
         lastError = error;
 

@@ -26,6 +26,9 @@ void queueSpeedChangeAt(int distance, double speed, motionCallback onFinished);
 void queueStopAt(int distance, motionCallback onFinished);
 void clearMotionQueue();
 
+int getRobotDistance();
+void setRobotDistance(int distance);
+
 void setDistanceTolerance(unsigned int tolerance);
 unsigned int getDistanceTolerance();
 

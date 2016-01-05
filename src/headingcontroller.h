@@ -5,6 +5,9 @@ double getTargetHeading();
 void setTargetHeading(double heading, void (*finishedCallback)(void));
 void turnOf(double turn, void (*finishedCallback)(void));
 
+void setMaxDiffSpeed(double diffspeed);
+double getMaxDiffSpeed();
+
 double getCurrentHeading();
 void setHeadingTolerance(double tolerance);
 double getHeadingTolerance();

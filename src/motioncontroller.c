@@ -56,7 +56,6 @@ static void detectBlocking(double currentSpeed) {
     headIndex = (headIndex+1)%20;
 }
 
-
 static void motionManager() {
     double differential = computeSpeedDifferential();
     double speed = computeTargetSpeed();

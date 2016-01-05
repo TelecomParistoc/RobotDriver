@@ -16,6 +16,7 @@ void addToQueue(void* elementPtr) {
     newElement->nextElement = NULL;
     if(queueTail != NULL)
         queueTail->nextElement = newElement;
+    queueTail = newElement;
     if(queueHead == NULL)
         queueHead = newElement;
     queueSize++;
@@ -28,9 +29,13 @@ void* getHead() {
 }
 void removeHead() {
     if(queueHead != NULL) {
+        struct queueElement* nextElement = queueHead->nextElement;
         free(queueHead->content);
         free(queueHead);
-        queueHead = queueHead->nextElement;
+        // if we remove the last item of the queue
+        if(nextElement == NULL)
+            queueTail = NULL;
+        queueHead = nextElement;
         queueSize--;
     }
 }
