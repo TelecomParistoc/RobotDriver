@@ -35,7 +35,7 @@ function runTest(test) {
     var log = function(text) {
         test.output += Math.round(time*1000)/1000 + " : " + text + "\n";
     };
-    test.run(motion, log);
+    test.run(motion, log, robot.block);
     if(!robot.assertInitialized())
         log("WARNING : driver not initialized");
     test.labels = [0];

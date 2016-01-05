@@ -1,20 +1,34 @@
 var motordriver = require("./motordriver_mock.js");
 var motion = require("../JSbinding/motioncontroller.js");
+var ffi = require("ffi");
+var voidPtr = require("ref").refType('void');
+var funcs = [];
 
+function cCallback(func) {
+    var cbck = ffi.Callback('void', [ voidPtr ], func);
+    funcs.push(cbck);
+    return cbck;
+}
 var robotDiameter = 0.140;
 
 module.exports = function robot() {
     var distance = 0;
     var heading = 0;
+    var blocked = 232323;
     var computeReaction;
     useSimpleModel();
     motordriver.distance(0);
     motordriver.heading(0);
+    motion.setTargetHeading(0, cCallback(function() {}));
 
     function nextStep(timeStep) {
         var deltas = computeReaction(motordriver.speed(), motordriver.diff(), timeStep);
-        distance += deltas.deltaDistance;
-        heading += deltas.deltaHeading;
+        if(Math.abs(distance) <= blocked) {
+            distance += deltas.deltaDistance;
+            heading += deltas.deltaHeading;
+        } else {
+            distance = blocked*distance/Math.abs(distance);
+        }
         heading = (heading + 360) % 360;
         motordriver.distance(distance*1000);
         motordriver.heading(heading);
@@ -58,6 +72,9 @@ module.exports = function robot() {
             };
         };
     }
+    function simulateBlocking(distance) {
+        blocked = distance/1000;
+    }
     return {
         useInertialModel: useInertialModel,
         useSimpleModel: useSimpleModel,
@@ -66,6 +83,7 @@ module.exports = function robot() {
         speed: motordriver.speed,
         diff: motordriver.diff,
         distance: motordriver.distance,
-        heading: motordriver.heading
+        heading: motordriver.heading,
+        block: simulateBlocking
     };
 };

@@ -4,6 +4,7 @@
 #include "controllerutils.h"
 #include <stdlib.h>
 #include <math.h>
+#include <stdio.h>
 
 #define MAX_HEADING_INTEGRAL 1000
 
@@ -75,6 +76,10 @@ double computeSpeedDifferential() {
         filterCurrentHeading();
 
         error = targetHeading-currentHeading;
+        if(error > 180)
+            error -= 360;
+        if(error < -180)
+            error += 360;
         if(fabs(error)<5)
             integral += error;
         else

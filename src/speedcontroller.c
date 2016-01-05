@@ -8,10 +8,11 @@
 #include <stdio.h>
 
 static double currentTargetSpeed = 0;
-static unsigned int distanceTolerance = 1; // in mm
+static double distanceTolerance = 1; // in mm
+extern int blockingHistoryFill;
 
-void setDistanceTolerance(unsigned int tolerance) { distanceTolerance = tolerance; }
-unsigned int getDistanceTolerance() { return distanceTolerance; }
+void setDistanceTolerance(double tolerance) { distanceTolerance = fabs(tolerance); }
+double getDistanceTolerance() { return distanceTolerance; }
 
 static void queueAction(motionType type, double speed, double distance, motionCallback callback) {
     struct motionElement* action = malloc(sizeof(struct motionElement));
@@ -32,22 +33,34 @@ static void queueAction(motionType type, double speed, double distance, motionCa
 void queueSpeedChange(double speed, motionCallback onMotionFinished) {
     queueAction(speedChange, speed, 0, onMotionFinished);
 }
-void queueSpeedChangeAt(int distance, double speed, motionCallback onFinished) {
+void queueSpeedChangeAt(double distance, double speed, motionCallback onFinished) {
     queueAction(speedChangeAt, speed, distance, onFinished);
 }
-void queueStopAt(int distance, motionCallback onFinished){
+void queueStopAt(double distance, motionCallback onFinished){
     queueAction(stopAt, 0, distance, onFinished);
 }
 void clearMotionQueue() {
     clearQueue();
 }
-
-int getRobotDistance() {
-    return (getRdistance()+getLdistance())/2;
+void fastSpeedChange(double speed) {
+    clearMotionQueue();
+    currentTargetSpeed = speed;
 }
-void setRobotDistance(int distance) {
-    int Roffset = getRdistance() - getRobotDistance();
-    int Loffset = getLdistance() - getRobotDistance();
+
+double getTargetSpeed() {
+    return currentTargetSpeed;
+}
+double getRobotDistance() {
+    double dist = (getRdistance()+getLdistance())/2;
+    if(dist > 11000)
+        printf("!! WARNING !! : distance may overflow, please reset it ASAP\n");
+    return dist;
+}
+void setRobotDistance(double distance) {
+    double Roffset = getRdistance() - getRobotDistance();
+    double Loffset = getLdistance() - getRobotDistance();
+    // clear blocking detector history to avoid false positive
+    blockingHistoryFill = 0;
     setRdistance(Roffset + distance);
     setLdistance(Loffset + distance);
 }
@@ -67,18 +80,18 @@ static double computeSpeedChange(struct motionElement* action) {
 }
 static double computeSpeedWithDistanceTarget(struct motionElement* action) {
     double speed;
-    int distanceError = action->distance - getRobotDistance();
+    double distanceError = action->distance - getRobotDistance();
     // before the slow down phase, keep the speed to the previous value
     if(action->cruiseSpeed == -23)
         action->cruiseSpeed = currentTargetSpeed;
 
-    speed = sqrt(2*getMaxAcceleration()*abs(distanceError)/1000.0 + pow(action->speed,2))*SIGN(distanceError);
+    speed = sqrt(2*getMaxAcceleration()*fabs(distanceError)/1000.0 + pow(action->speed,2))*SIGN(distanceError);
 
     if(fabs(speed) > fabs(action->cruiseSpeed))
         speed = fabs(action->cruiseSpeed)*SIGN(distanceError);
 
     // detect when target distance is reached for the first time
-    if(abs(distanceError) <= distanceTolerance) {
+    if(fabs(distanceError) <= distanceTolerance) {
         // make sure the speed is exactly the desired speed
         speed = action->speed;
         if(action->finished == 0)
@@ -101,6 +114,7 @@ static double computeSpeedChangeAt(struct motionElement* action) {
     }
     return speed;
 }
+
 double computeTargetSpeed() {
     struct motionElement* action = getHead();
     if(action != NULL) {

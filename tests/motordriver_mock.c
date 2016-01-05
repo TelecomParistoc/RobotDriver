@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 static int mockIsInitialized = 0;
-static int mockDistance = 0;
+static double mockDistance = 0;
 static double mockSpeedL = 0.0;
 static double mockSpeedR = 0.0;
 static double mockHeading = 0.0;
@@ -14,16 +14,16 @@ int initMotorDriver() {
 }
 int assertInitialized() { return mockIsInitialized; }
 
-int getLdistance() {
+double getLdistance() {
     return mockDistance;
 }
-int getRdistance() {
+double getRdistance() {
     return mockDistance;
 }
-void setLdistance(int distance) {
+void setLdistance(double distance) {
     mockDistance = distance;
 }
-void setRdistance(int distance) {
+void setRdistance(double distance) {
     mockDistance = distance;
 }
 double getLspeed() {

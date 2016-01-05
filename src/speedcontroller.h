@@ -8,7 +8,7 @@ struct motionElement {
     motionType type;
     double speed;
     double cruiseSpeed;
-    int distance;
+    double distance;
     int finished;
     void (* callback)(struct motionElement*);
 };
@@ -22,15 +22,18 @@ typedef void (*motionCallback)(struct motionElement*);
 #define MAX_ALLOWED_SPEED 1
 
 void queueSpeedChange(double speed, motionCallback onMotionFinished);
-void queueSpeedChangeAt(int distance, double speed, motionCallback onFinished);
-void queueStopAt(int distance, motionCallback onFinished);
+void queueSpeedChangeAt(double distance, double speed, motionCallback onFinished);
+void queueStopAt(double distance, motionCallback onFinished);
 void clearMotionQueue();
 
-int getRobotDistance();
-void setRobotDistance(int distance);
+double getRobotDistance();
+void setRobotDistance(double distance);
 
-void setDistanceTolerance(unsigned int tolerance);
-unsigned int getDistanceTolerance();
+void setDistanceTolerance(double tolerance);
+double getDistanceTolerance();
+double getTargetSpeed();
+
+void fastSpeedChange(double speed);
 
 double computeTargetSpeed();
 

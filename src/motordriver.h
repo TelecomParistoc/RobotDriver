@@ -25,16 +25,16 @@
 
     /* get the distance travelled by the left wheel, in mm
      * forward count as positive and backward as negative
-     * Warning : the distance needs to be reset before reaching ~20000 */
-    int getLdistance();
+     * Warning : the distance needs to be reset before reaching ~12000 */
+    double getLdistance();
     /* get the distance travelled by the right wheel, in mm
      * forward count as positive and backward as negative
-     * Warning : the distance needs to be reset before reaching ~20000 */
-    int getRdistance();
+     * Warning : the distance needs to be reset before reaching ~12000 */
+    double getRdistance();
     /* set the left distance to a given value, in mm */
-    void setLdistance(int distance);
+    void setLdistance(double distance);
     /* set the right distance to a given value, in mm */
-    void setRdistance(int distance);
+    void setRdistance(double distance);
 
     /* get the actual speed of the left wheel, in m/s
      * forward is positive speed and backward is negative */

@@ -4,6 +4,8 @@
 #include "imudriver.h"
 #include <stdio.h>
 
+#define round(x) ((x)>=0?(long)((x)+0.5):(long)((x)-0.5))
+
 #define MOTOR_ADDR 0x23
 // PIC registers
 #define I2CMOTOR_KP 0x41
@@ -47,19 +49,19 @@ int initMotorDriver() {
     return error;
 }
 
-int getLdistance() {
-    return c_read16(cache, CODL_CMD)*1.55;
+double getLdistance() {
+    return c_read16(cache, CODL_CMD)*0.3875;
 }
-int getRdistance() {
-    return c_read16(cache, CODR_CMD)*1.55;
+double getRdistance() {
+    return c_read16(cache, CODR_CMD)*0.3875;
 }
-void setLdistance(int distance) {
-    distance = distance/1.55;
-    c_write16(cache, CODL_CMD, distance);
+void setLdistance(double distance) {
+    distance = distance/0.3875;
+    c_write16(cache, CODL_CMD, round(distance));
 }
-void setRdistance(int distance) {
-    distance = distance/1.55;
-    c_write16(cache, CODR_CMD, distance);
+void setRdistance(double distance) {
+    distance = distance/0.3875;
+    c_write16(cache, CODR_CMD, round(distance));
 }
 double getLspeed() {
     double result = c_read16(cache, SPEEDL_CMD)/172.34;
@@ -71,11 +73,11 @@ double getRspeed() {
 }
 void setLspeed(double speed) {
     speed = speed*172.34;
-    c_write16(cache, SPEEDL_CMD, (int) speed);
+    c_write16(cache, SPEEDL_CMD, round(speed));
 }
 void setRspeed(double speed) {
     speed = speed*172.34;
-    c_write16(cache, SPEEDR_CMD, (int) speed);
+    c_write16(cache, SPEEDR_CMD, round(speed));
 }
 
 uint8_t getKp() { return (uint8_t) c_read8(cache, KP_CMD); }
