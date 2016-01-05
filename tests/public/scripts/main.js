@@ -3,8 +3,8 @@ hljs.initHighlightingOnLoad();
 
 var testCount  = 0;
 function displayTest(test) {
-    var chart = ChartView("#chart"+testCount);
-    chart.render(test.labels, test.data);
+    ChartView("#chart"+testCount).render(test.labels, test.data);
+    ChartView("#Dchart"+testCount).render(test.labels, test.distances);
     testCount++;
 }
 $(function () {

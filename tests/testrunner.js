@@ -29,26 +29,28 @@ function runTest(test) {
     var time = 0;
     var robot = require("./robotmodel.js")();
     if(test.inertia)
-        robot.useInertialModel();
+        robot.useInertialModel(test.inertia);
     //provide a function to show logs
     test.output = "";
     var log = function(text) {
-        test.output += text + "\n";
+        test.output += Math.round(time*1000)/1000 + " : " + text + "\n";
     };
     test.run(motion, log);
     if(!robot.assertInitialized())
         log("WARNING : driver not initialized");
-    test.labels = [];
-    test.data = [[],[]];
+    test.labels = [0];
+    test.data = [[0],[0]];
+    test.distances = [[0], [0]];
     while(time < test.duration) {
         time += timeStep;
         robot.nextStep(timeStep);
         test.labels.push(time);
         test.data[0].push(robot.speed());
         test.data[1].push(robot.diff());
+        test.distances[0].push(robot.distance());
+        test.distances[1].push(robot.heading());
     }
     test.run = stringifyFunctionBody(test.run);
-    console.dir(test);
     return test;
 }
 for(var i in tests)

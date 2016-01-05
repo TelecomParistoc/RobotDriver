@@ -1,43 +1,52 @@
 var motordriver = require("./motordriver_mock.js");
 var motion = require("../JSbinding/motioncontroller.js");
 
-var robotDiameter = 140;
+var robotDiameter = 0.140;
 
 module.exports = function robot() {
     var distance = 0;
     var heading = 0;
     var computeReaction;
     useSimpleModel();
+    motordriver.distance(0);
+    motordriver.heading(0);
 
     function nextStep(timeStep) {
         var deltas = computeReaction(motordriver.speed(), motordriver.diff(), timeStep);
         distance += deltas.deltaDistance;
         heading += deltas.deltaHeading;
         heading = (heading + 360) % 360;
-        motordriver.distance(distance);
+        motordriver.distance(distance*1000);
         motordriver.heading(heading);
         motordriver.nextStep();
     }
     function assertInitialized() {
         return motordriver.assertInitialized();
     }
-    function useInertialModel() {
-        var diffs = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-        var speeds = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    function useInertialModel(delay) {
+        function createArray(size) {
+            var arr = [];
+            for(var i=0; i<size; i++)
+                arr.push(0);
+            return arr;
+        }
         function mean(buff) {
             var sum = 0;
-            for(var val in buff)
-                sum += val;
+            for(var i in buff)
+                sum += buff[i];
             return sum/buff.length;
         }
+        var diffs = createArray(Math.round(delay/0.01));
+        var speeds = createArray(Math.round(delay/0.01));
+
         computeReaction = function(speed, diff, time) {
             diffs.shift();
             diffs.push(diff);
             speeds.shift();
             speeds.push(speed);
             return {
-                deltaDistance: mean(speeds)*time,
-                deltaHeading: mean(diffs)*time*360/(Math.PI*robotDiameter)
+                deltaDistance: speeds[0]*time,
+                deltaHeading: diffs[0]*time*360/(Math.PI*robotDiameter)
             };
         };
     }
@@ -54,7 +63,9 @@ module.exports = function robot() {
         useSimpleModel: useSimpleModel,
         nextStep: nextStep,
         assertInitialized: assertInitialized,
-        speed: function() { return motordriver.speed(); },
-        diff: function() { return motordriver.diff(); }
+        speed: motordriver.speed,
+        diff: motordriver.diff,
+        distance: motordriver.distance,
+        heading: motordriver.heading
     };
 };
