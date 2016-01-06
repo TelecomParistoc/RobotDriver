@@ -5,6 +5,7 @@ This library controls robot's modules over I2C, and provides an advanced bus
 ressource sharing mecanism.
 
 It provides (user space) drivers for :
+
 * the IMU (BNO055)
 * the motor module, controlling robot's motors with speed PID
 
@@ -32,7 +33,7 @@ Don't forget to compile (actually, link) your C/C++ app with `-lrobotdriver` opt
 To access the motors, including controlling robot's speed and accessing the distance
 traveled by each wheel, include motordriver.h :
 
-```C
+```c
 #include "robotdriver/motordriver.h"
 ```
 
@@ -43,7 +44,7 @@ See src/motordriver.h for API.
 Heading access is provided by motor module driver, but access to pitch and roll
 is available through imudriver.h. Include the header with :
 
-```C
+```c
 #include "robotdriver/imudriver.h"
 ```
 
@@ -57,7 +58,7 @@ limiting mecanism and an event system based on callbacks (JS style, yeah !)
 To access high level function to control speed and heading, include the following
 headers :
 
-```C
+```c
 #include "robotdriver/motioncontroller.h"
 #include "robotdriver/speedcontroller.h"
 #include "robotdriver/headingcontroller.h"
