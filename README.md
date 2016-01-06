@@ -25,7 +25,7 @@ real time-oriented version of Raspbian).
 
 ## Usage ##
 
-Don't forget to compile (actually link) your C/C++ app with `-lrobotdriver` option.
+Don't forget to compile (actually, link) your C/C++ app with `-lrobotdriver` option.
 
 ### Motor module driver ###
 
