@@ -1,8 +1,8 @@
 # Robot drivers #
 
 A library providing high level access to the robot capabilities.
-This library controls robot's modules over I2C, including an advanced bus ressource
-sharing mecanism.
+This library controls robot's modules over I2C, and provides an advanced bus
+ressource sharing mecanism.
 
 It provides (user space) drivers for :
 * the IMU (BNO055)
@@ -25,11 +25,11 @@ real time-oriented version of Raspbian).
 
 ## Usage ##
 
-Don't forget to link your C/C++ app with `-lrobotdriver`.
+Don't forget to compile (actually link) your C/C++ app with `-lrobotdriver` option.
 
-### motor module driver ###
+### Motor module driver ###
 
-To access the motor, including controlling robot's speed and accessing the distance
+To access the motors, including controlling robot's speed and accessing the distance
 traveled by each wheel, include motordriver.h :
 
 ```C
