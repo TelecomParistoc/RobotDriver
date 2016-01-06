@@ -2,13 +2,14 @@ TARGET = librobotdriver.dylib
 SRCS = i2c-cache.c imudriver.c motordriver.c i2c-functions.c queue.c motioncontroller.c headingcontroller.c controllerutils.c speedcontroller.c
 HEADERS = $(addprefix src/, ${SRCS:.c=.h})
 OBJECTS = $(addprefix build/,${SRCS:.c=.o})
+EXAMPLES = examples/example1 examples/example2 examples/example3
 CC=gcc
 CFLAGS = -O2 -Wall -Werror -fpic
 LDFLAGS= -shared -lwiringPi
 PREFIX = /usr/local
 VPATH = build/
 
-vpath %.c src/ tests/
+vpath %.c src/ tests/ examples
 vpath %.h src/
 -include $(subst .c,.d,$(SRCS))
 
@@ -24,9 +25,15 @@ build/%.d : %.c
 build/$(TARGET): $(OBJECTS)
 	$(CC) $(CFLAGS) $(OBJECTS) -o $@ $(LDFLAGS)
 
+examples: $(EXAMPLES)
+
 test:
 	make SRCS="motordriver_mock.c queue.c motioncontroller.c headingcontroller.c controllerutils.c speedcontroller.c" LDFLAGS=-shared
 	cd tests; node testrunner.js
+
+testinstall:
+	cd tests; npm install
+	cd JSbindings; npm install
 
 update:
 	git pull
