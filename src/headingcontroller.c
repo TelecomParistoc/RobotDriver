@@ -70,8 +70,9 @@ static void filterCurrentHeading() {
     headings[2] = headings[1];
 }
 double computeSpeedDifferential() {
+    static double integral=0, lastError=0, lastDifferential=0;
+
     if(headingControl) {
-        static double integral=0, lastError=0, lastDifferential=0;
         double differential, error;
         filterCurrentHeading();
 
@@ -95,6 +96,11 @@ double computeSpeedDifferential() {
             headingCallback = NULL;
         }
         return differential;
-    } else
+    } else {
+        // reset values to avoid violent reaction on re-enabling
+        integral = 0;
+        lastError = 0;
+        lastDifferential = 0;
         return 0;
+    }
 }
