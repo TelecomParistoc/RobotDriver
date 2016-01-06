@@ -1,9 +1,19 @@
 # Robot drivers #
 
-A set of (user space) drivers for raspberry pi providing an abstract access to the robot hardware, mainly via the I2C bus.
-In addition, it provides a mechanism against I2C bus overload, freeing the programmer from these considerations
+A library providing high level access to the robot capabilities.
+This library controls robot's modules over I2C, including an advanced bus ressource
+sharing mecanism.
 
-### Installation ###
+It provides (user space) drivers for :
+* the IMU (BNO055)
+* the motor module, controlling robot's motors with speed PID
+
+In addition, it provides high level function to control robot's motions.
+
+## Installation ##
+
+This library is designed for Raspberry Pi with Raspbian (We use Raspbian RT, a
+real time-oriented version of Raspbian).
 
 * First, you need [wiringPi](http://wiringpi.com/download-and-install/).
 
@@ -13,3 +23,66 @@ In addition, it provides a mechanism against I2C bus overload, freeing the progr
 * cd to the root of the repository and enter
 `make` and `sudo make install`
 
+## Usage ##
+
+Don't forget to link your C/C++ app with `-lrobotdriver`.
+
+### motor module driver ###
+
+To access the motor, including controlling robot's speed and accessing the distance
+traveled by each wheel, include motordriver.h :
+
+```C
+#include "robotdriver/motordriver.h"
+```
+
+See src/motordriver.h for API.
+
+### IMU driver ###
+
+Heading access is provided by motor module driver, but access to pitch and roll
+is available through imudriver.h. Include the header with :
+
+```C
+#include "robotdriver/imudriver.h"
+```
+
+See src/imudriver.h for API.
+
+### Motion control library ###
+
+The goal is to provide easy programming of complex move, including acceleration
+limiting mecanism and an event system based on callbacks (JS style, yeah !)
+
+To access high level function to control speed and heading, include the following
+headers :
+
+```C
+#include "robotdriver/motioncontroller.h"
+#include "robotdriver/speedcontroller.h"
+#include "robotdriver/headingcontroller.h"
+```
+
+See src/motioncontroller.h for general use functions API.
+
+See src/speedcontroller.h for speed change API.
+
+See src/headingcontroller.h for heading change API.
+
+## Examples ##
+
+Some examples about motion control are given in examples/.
+
+To run the examples, run `make examples` from the root of the repository, and run
+the programs created in examples/ (on a Raspberry Pi with IMU and motor module connected).
+
+## Tests ##
+
+A test test environnement has been created to test motion controller without the
+actual robot.
+
+To run tests :
+
+* install node ([nodejs.org](https://nodejs.org/en/download/))
+* run `make testinstall`, then `make test`
+* access [localhost:3003](http://localhost:3003) to see results.
