@@ -1,6 +1,6 @@
 #include "robotdriver/motioncontroller.h"
 #include "robotdriver/speedcontroller.h"
-#include "motordriver.h"
+#include "robotdriver/motordriver.h"
 #include <stdio.h>
 
 /* In this example,  we'll recalibrate the robot against a wall, that is :
