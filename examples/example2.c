@@ -6,12 +6,9 @@
 /* This example shows how to go and turn : it will move of 300 mm, turn of 90°,
  * and move again of 300 mm*/
 
-/* this is called when the robot finished its first move */
-void firstCallback(struct motionElement* element) {
-    printf("I moved of 300 mm, now I will turn.\n");
-
-    // turn of 90°, and call endTurnCallback when it's done
-    turnOf(90, endTurnCallback);
+/* called when the robot reached its destination */
+void endCallback(struct motionElement* element) {
+ printf("I reached my destination !\n");
 }
 
 /* called when the robot completed its turn */
@@ -23,9 +20,12 @@ void endTurnCallback() {
     queueStopAt(300, endCallback);
 }
 
-/* called when the robot reached its destination */
-void endCallback(struct motionElement* element) {
-    printf("I reached my destination !\n");
+/* this is called when the robot finished its first move */
+void firstCallback(struct motionElement* element) {
+    printf("I moved of 300 mm, now I will turn.\n");
+
+    // turn of 90°, and call endTurnCallback when it's done
+    turnOf(90, endTurnCallback);
 }
 
 int main() {
