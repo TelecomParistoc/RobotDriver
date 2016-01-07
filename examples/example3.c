@@ -53,7 +53,7 @@ int main() {
 
     // let's say there's a wall at a distance of about 300-350 mm
     queueSpeedChange(0.3, NULL); // go toward the wall
-    queueSpeedChange(300, 0.1, disableHeadingControl); // slow down when approaching
+    queueSpeedChangeAt(300, 0.1, disableHeadingControl); // slow down when approaching
     queueStopAt(400, noWallCallback); // if there was no wall, stop
 
     while(1);
