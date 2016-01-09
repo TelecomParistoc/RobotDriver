@@ -10,20 +10,23 @@
 #ifndef HEADINGCONTROLLER_H
 #define HEADINGCONTROLLER_H
 
-/* get current target heading (in degrees, 0-360 counter-clockwise). The target
+// distance between coding wheels in mm (depends of the robot)
+#define WHEEL_DISTANCE 190
+
+/* get current target heading (in degrees, 0-360, clockwise). The target
  * heading is maintained as long as the controller is enabled. */
 double getTargetHeading();
 /* set robot's heading (will cause the robot to turn until is reaches the desired
  * heading, to correct current heading value, see setRobotHeading() in
  * motordriver.h).
  * arguments :
- *      - heading : the target heading in degrees (0-360, counter-clockwise)
+ *      - heading : the target heading in degrees (0-360, clockwise)
  *      - finishedCallback : a function to be called when the robot reaches the
  *          desired heading. The function should be like : void myCallback() {...} */
 void setTargetHeading(double heading, void (*finishedCallback)(void));
 /* rotate the robot of the given angle.
  * arguments :
- *      - turn : the angle in degrees (0-360, counter-clockwise)
+ *      - turn : the angle in degrees (0-360, clockwise)
  *      - finishedCallback : a function to be called when the robot reaches the
  *          desired heading. The function should be like : void myCallback() {...} */
 void turnOf(double turn, void (*finishedCallback)(void));
@@ -32,11 +35,6 @@ void turnOf(double turn, void (*finishedCallback)(void));
  * turning (in m/s) */
 void setMaxDiffSpeed(double diffspeed);
 double getMaxDiffSpeed();
-
-/* get current heading is degrees (0-360, counter-clockwise).
- * The value is correct only if heading control is enabled to prevent useless
- * load on the I2C bus. */
-double getCurrentHeading();
 
 /* get/set the maximum heading error (in degrees). When the robot heading is
  * within target heading +/- heading tolerance, the controller calls the callback

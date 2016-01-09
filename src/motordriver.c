@@ -50,17 +50,17 @@ int initMotorDriver() {
 }
 
 double getLdistance() {
-    return c_read16(cache, CODL_CMD)*0.3875;
+    return c_read16(cache, CODL_CMD)*0.385;
 }
 double getRdistance() {
-    return c_read16(cache, CODR_CMD)*0.3875;
+    return c_read16(cache, CODR_CMD)*0.385;
 }
 void setLdistance(double distance) {
-    distance = distance/0.3875;
+    distance = distance/0.385;
     c_write16(cache, CODL_CMD, round(distance));
 }
 void setRdistance(double distance) {
-    distance = distance/0.3875;
+    distance = distance/0.385;
     c_write16(cache, CODR_CMD, round(distance));
 }
 double getLspeed() {

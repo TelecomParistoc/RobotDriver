@@ -57,12 +57,10 @@ double getRobotDistance() {
     return dist;
 }
 void setRobotDistance(double distance) {
-    double Roffset = getRdistance() - getRobotDistance();
-    double Loffset = getLdistance() - getRobotDistance();
     // clear blocking detector history to avoid false positive
     blockingHistoryFill = 0;
-    setRdistance(Roffset + distance);
-    setLdistance(Loffset + distance);
+    setRdistance(distance);
+    setLdistance(distance);
 }
 
 static void terminateMotionAction(struct motionElement* action) {
@@ -78,9 +76,9 @@ static double computeSpeedChange(struct motionElement* action) {
     }
     return speed;
 }
-static double computeSpeedWithDistanceTarget(struct motionElement* action) {
+static double computeSpeedWithDistanceTarget(struct motionElement* action, double distance) {
     double speed;
-    double distanceError = action->distance - getRobotDistance();
+    double distanceError = action->distance - distance;
     // before the slow down phase, keep the speed to the previous value
     if(action->cruiseSpeed == -23)
         action->cruiseSpeed = currentTargetSpeed;
@@ -99,15 +97,15 @@ static double computeSpeedWithDistanceTarget(struct motionElement* action) {
     }
     return speed;
 }
-static double computeStopAt(struct motionElement* action) {
-    double speed = computeSpeedWithDistanceTarget(action);
+static double computeStopAt(struct motionElement* action, double distance) {
+    double speed = computeSpeedWithDistanceTarget(action, action->finished ? getRobotDistance() : distance);
     // remove the finished action only if there's other queued actions
     if(action->finished && getQueueSize() > 1)
         removeHead();
     return speed;
 }
-static double computeSpeedChangeAt(struct motionElement* action) {
-    double speed = computeSpeedWithDistanceTarget(action);
+static double computeSpeedChangeAt(struct motionElement* action, double distance) {
+    double speed = computeSpeedWithDistanceTarget(action, distance);
     // remove the action
     if(action->finished) {
         removeHead();
@@ -115,7 +113,7 @@ static double computeSpeedChangeAt(struct motionElement* action) {
     return speed;
 }
 
-double computeTargetSpeed() {
+double computeTargetSpeed(double distance) {
     struct motionElement* action = getHead();
     if(action != NULL) {
         switch (action->type) {
@@ -123,10 +121,10 @@ double computeTargetSpeed() {
                 currentTargetSpeed = computeSpeedChange(action);
                 break;
             case speedChangeAt:
-                currentTargetSpeed = computeSpeedChangeAt(action);
+                currentTargetSpeed = computeSpeedChangeAt(action, distance);
                 break;
             case stopAt:
-                currentTargetSpeed = computeStopAt(action);
+                currentTargetSpeed = computeStopAt(action, distance);
                 break;
         }
     }

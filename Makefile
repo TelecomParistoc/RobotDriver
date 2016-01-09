@@ -5,7 +5,7 @@ OBJECTS = $(addprefix build/,${SRCS:.c=.o})
 EXAMPLES = examples/example1 examples/example2 examples/example3
 CC=gcc
 CFLAGS = -O2 -Wall -Werror -fpic
-LDFLAGS= -shared -lwiringPi
+LDFLAGS= -shared -lwiringPi -lm
 PREFIX = /usr/local
 VPATH = build/
 
@@ -25,6 +25,7 @@ build/%.d : %.c
 build/$(TARGET): $(OBJECTS)
 	$(CC) $(CFLAGS) $(OBJECTS) -o $@ $(LDFLAGS)
 
+examples: LDFLAGS=-lrobotdriver
 examples: $(EXAMPLES)
 
 test:

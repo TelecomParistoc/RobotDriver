@@ -49,7 +49,7 @@ int initIMU() {
     delayMilli(10);
     /* Set the  operating mode (see section 3.3) */
     setMode(OPERATION_MODE_IMUPLUS);
-    delayMilli(20);
+    delayMilli(100);
 
     /* set up the cache system */
     cache = initCache(BNO055_ADDRESS, 0, 3, 0, 0);
@@ -61,8 +61,8 @@ int initIMU() {
 }
 
 double getHeading() {
-    int val = c_read16(cache, IMU_HEADING);
-    double result = val/16;
+    int val = c_read16(cache, IMU_HEADING) & 0x1FFF;
+    double result = val/16.0;
     result = result - headingOffset;
     if(result >= 360)
         result -= 360;
