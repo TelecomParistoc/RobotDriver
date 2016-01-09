@@ -105,20 +105,27 @@ static void updateCache(struct device_cache *cache) {
         }
     }
 }
+static void startTimer(int arg) {
+    struct itimerval timerDelay;
+    timerDelay.it_interval.tv_sec = 0;
+    timerDelay.it_interval.tv_usec = 0;
+    timerDelay.it_value.tv_sec = 0;
+    timerDelay.it_value.tv_usec = period;
+    signal(SIGALRM, startTimer);
+    setitimer(ITIMER_REAL, &timerDelay, NULL);
+}
 static void onUpdate(int arg) {
     int i=0;
+    startTimer(0);
+
     updating = 0;
     for(;i<cacheCount; i++)
         updateCache(caches[i]);
-    if(updating) {
-        struct itimerval timerDelay;
-        timerDelay.it_interval.tv_sec = 0;
-        timerDelay.it_interval.tv_usec = 0;
-        timerDelay.it_value.tv_sec = 0;
-        timerDelay.it_value.tv_usec = period;
+
+    if(updating)
         signal(SIGALRM, onUpdate);
-        setitimer(ITIMER_REAL, &timerDelay, NULL);
-    }
+    else
+        signal(SIGALRM, SIG_IGN);
 }
 static void startUpdates() {
     struct itimerval timerDelay;
