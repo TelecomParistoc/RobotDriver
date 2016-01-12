@@ -26,7 +26,6 @@ var lib = ffi.Library('./../build/librobotdriver', {
     'getTargetHeading': [ 'double', [] ],
     'setTargetHeading': [ 'void', ['double', simpleCallback] ],
     'turnOf': [ 'void', ['double', simpleCallback] ],
-    'getCurrentHeading': [ 'double', [] ],
     'getHeadingTolerance': [ 'double', [] ],
     'setHeadingTolerance': [ 'void', ['double'] ],
     'getMaxDiffSpeed': [ 'double', [] ],
