@@ -30,8 +30,9 @@ build/$(TARGET): $(OBJECTS)
 examples: LDFLAGS=-lrobotdriver
 examples: $(EXAMPLES)
 
-test:
+mock:
 	make SRCS="motordriver_mock.c queue.c motioncontroller.c headingcontroller.c controllerutils.c speedcontroller.c" LDFLAGS=-shared
+test: mock
 	cd tests; node testrunner.js
 
 testinstall:
