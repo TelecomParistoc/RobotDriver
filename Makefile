@@ -15,8 +15,10 @@ vpath %.h src/
 
 .PHONY: all clean test update
 
-all: build/$(TARGET)
+all: build build/$(TARGET)
 
+build:
+	mkdir -p build
 build/%.o: %.c build/%.d
 	$(CC) -c -o $@ $< $(CFLAGS)
 build/%.d : %.c
