@@ -28,6 +28,7 @@ static int16_t* allocTable16(int size, int16_t fill) {
 
 struct device_cache* initCache(int8_t dev_addr, int r8_len, int r16_len, int w8_len, int w16_len) {
     struct device_cache* cache = malloc(sizeof(struct device_cache));
+    int ret;
     cache->addr = dev_addr;
     cache->updateCallback = NULL;
     if(r8_len == 0)
@@ -61,7 +62,7 @@ struct device_cache* initCache(int8_t dev_addr, int r8_len, int r16_len, int w8_
     cacheCount++;
 
     // raise priority of the process
-    nice(-10);
+    ret = nice(-10);
 
     return cache;
 }
