@@ -36,7 +36,7 @@ test:
 
 testinstall:
 	cd tests; npm install
-	cd JSbindings; npm install
+	cd JSbinding; npm install
 
 update:
 	git pull
