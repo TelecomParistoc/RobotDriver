@@ -28,7 +28,7 @@ int main() {
     // first increase the speed to 0.3 m/s, and call cruiseSpeedCallback when its done
     queueSpeedChange(0.3, cruiseSpeedCallback);
     // then stop when traveled for 400 mm, end call endCallback
-    queueStopAt(1000, endCallback);
+    queueStopAt(400, endCallback);
 
     while(1);
     return 0;
