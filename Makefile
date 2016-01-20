@@ -13,9 +13,19 @@ vpath %.c src/ tests/ examples
 vpath %.h src/
 -include $(subst .c,.d,$(SRCS))
 
-.PHONY: all clean test update
+.PHONY: clean test update small
 
-all: build build/$(TARGET)
+small: small_conf build build/$(TARGET)
+
+small_conf:
+	@echo "\n\nYou are compiling this lib for the SMALL ROBOT. If you're on the big robot, use 'make big'\n\n"
+	cp src/config.small.h  src/config.h
+
+big: big_conf build build/$(TARGET)
+
+big_conf:
+	@echo "\n\nYou are compiling this lib for the BIG ROBOT. If you're on the small robot, use 'make small'\n\n"
+	cp src/config.big.h  src/config.h
 
 build:
 	mkdir -p build
@@ -46,6 +56,7 @@ update:
 
 clean:
 	rm -f build/*.o build/*.so build/*.d
+	rm -f src/config.h
 
 install: build/$(TARGET)
 	mkdir -p $(DESTDIR)$(PREFIX)/lib

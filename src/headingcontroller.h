@@ -10,8 +10,7 @@
 #ifndef HEADINGCONTROLLER_H
 #define HEADINGCONTROLLER_H
 
-// distance between coding wheels in mm (depends of the robot)
-#define WHEEL_DISTANCE 190
+#include "config.h"
 
 /* get current target heading (in degrees, 0-360, clockwise). The target
  * heading is maintained as long as the controller is enabled. */
