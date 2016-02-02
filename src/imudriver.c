@@ -16,6 +16,8 @@ static double headingOffset = 0.0;
 static double pitchOffset = 0.0;
 static double rollOffset = 0.0;
 
+static int headingRotationDirection = 0;
+
 void setMode(bno055_opmode_t mode) {
   I2Cwrite8(BNO055_ADDRESS, BNO055_OPR_MODE_ADDR, mode);
   delayMilli(30);
@@ -63,6 +65,10 @@ int initIMU() {
 double getHeading() {
     int val = c_read16(cache, IMU_HEADING) & 0x1FFF;
     double result = val/16.0;
+    
+    if(headingRotationDirection)
+        result = 360 -  result;
+
     result = result - headingOffset;
     if(result >= 360)
         result -= 360;
@@ -75,6 +81,9 @@ void setHeading(double heading) {
         headingOffset = 0;
         headingOffset = getHeading() - heading;
     }
+}
+void setHeadingRotationDirection(int direction) {
+    headingRotationDirection = direction ? 1 : 0;
 }
 double getPitch() {
     int val = c_read16(cache, IMU_PITCH);

@@ -72,6 +72,10 @@
     double getRobotHeading();
     void setRobotHeading(double heading);
 
+    /* change heading rotation direction (usefull for team change). 0 is clockwise
+     * (default) and 1 is anticlockwise */
+    void setRotationDirection(int direction);
+
     /* ##### Update frequency #####
      * a read/write doesn't always cause an I2C transaction. I2C
      * transactions are throttled to a max frequency, reads are cached and writes
