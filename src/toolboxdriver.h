@@ -9,6 +9,24 @@ extern "C" {
  * returns -1 if it was unable to init the toolbox driver, 0 otherwise*/
 void initToolboxDriver();
 
+double getMotorPowerLevel();
+double getLogicPowerLevel();
+int getButton(int number);
+int getSensor(int number);
+int getCollisionDetector(int number);
+
+void setSensorsCallback(void (*callback)(void));
+void enableSensorCallback(int number);
+void disableSensorCallback(int number);
+
+void setCollisionsCallback(void (*callback)(void));
+void enableCollisionCallback(int number);
+void disableCollisionCallback(int number);
+
+void setPWM(int number, uint8_t value);
+
+void setLED(int number, int state);
+
 #ifdef __cplusplus
 }
 #endif

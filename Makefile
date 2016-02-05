@@ -1,5 +1,5 @@
 TARGET = librobotdriver.so
-SRCS = i2c-cache.c imudriver.c motordriver.c i2c-functions.c queue.c motioncontroller.c headingcontroller.c controllerutils.c speedcontroller.c
+SRCS = i2c-cache.c imudriver.c motordriver.c i2c-functions.c queue.c motioncontroller.c headingcontroller.c controllerutils.c speedcontroller.c toolboxdriver.c
 HEADERS = $(addprefix src/, ${SRCS:.c=.h})
 OBJECTS = $(addprefix build/,${SRCS:.c=.o})
 EXAMPLES = examples/example1 examples/example2 examples/example3
@@ -11,7 +11,6 @@ VPATH = build/
 
 vpath %.c src/ tests/ examples
 vpath %.h src/
--include $(subst .c,.d,$(SRCS))
 
 .PHONY: clean test update small
 
@@ -66,3 +65,5 @@ install: build/$(TARGET)
 	chmod 0755 $(DESTDIR)$(PREFIX)/lib/$(TARGET)
 	ldconfig
 	ldconfig -p | grep robotdriver
+
+-include $(subst .c,.d,$(SRCS))
