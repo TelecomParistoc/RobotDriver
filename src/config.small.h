@@ -9,4 +9,10 @@
 // distance between coding wheels in mm
 #define WHEEL_DISTANCE 190
 
+// coefficient for motor battery level
+#define MOTOR_LEVEL_COEFF 8135.0
+
+// coefficient for motor battery level
+#define LOGIC_LEVEL_COEFF 0.014
+
 #endif

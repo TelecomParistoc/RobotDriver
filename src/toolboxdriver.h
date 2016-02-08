@@ -7,7 +7,7 @@ extern "C" {
 
 /* initialize the toolbox driver, needs to be called before any other operations
  * returns -1 if it was unable to init the toolbox driver, 0 otherwise*/
-void initToolboxDriver();
+int initToolboxDriver();
 
 double getMotorPowerLevel();
 double getLogicPowerLevel();

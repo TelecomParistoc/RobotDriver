@@ -1,6 +1,7 @@
 #include "toolboxdriver.h"
 #include "i2c-cache.h"
 #include "i2c-functions.h"
+#include "config.h"
 #include <wiringPi.h>
 #include <stdio.h>
 
@@ -61,7 +62,7 @@ static void interruptManager() {
 
 }
 
-void initToolboxDriver() {
+int initToolboxDriver() {
     cache = initCache(TOOLBOX_ADDR, 6, 0, 10, 0);
     cache->w8_cmds[TB_PWM1&0x0F] = TB_PWM1;
     cache->w8_cmds[TB_PWM2&0x0F] = TB_PWM2;
@@ -103,13 +104,13 @@ double getMotorPowerLevel() {
     double voltage = 0;
     if(val) {
         int period = (val+300)*2;
-        voltage = 8135.0/period;
+        voltage = MOTOR_LEVEL_COEFF/period;
     }
     return voltage;
 }
 double getLogicPowerLevel() {
     uint8_t val = c_read8(cache, TB_LOGIC_POWER_LEVEL&0x0F);
-    return (val*2 + 448)*0.014;
+    return (val*2 + 448)*LOGIC_LEVEL_COEFF;
 }
 
 int getButton(int number) {
