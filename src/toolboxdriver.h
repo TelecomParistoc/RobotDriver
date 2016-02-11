@@ -31,10 +31,9 @@ void setLED(int number, int state);
 
 void setAxActiveWheel(uint8_t id);
 void setAxActiveDefault(uint8_t id);
-void setSpeedWheel(int speed);
-void setSpeedDefault(int speed);
-void setPosition(int position);
-void setTorque(int torque);
+void setAxSpeed(int speed);
+void setAxPosition(int position);
+void setAxTorque(int torque);
 
 #ifdef __cplusplus
 }

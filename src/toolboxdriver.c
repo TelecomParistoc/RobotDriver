@@ -27,10 +27,9 @@
 #define TB_SENSORS 0x44
 #define TB_COLLISIONS 0x45
 // writable 16 bit registers
-#define AX_SETSPPEDWHEEL 0x81
-#define AX_SETSPEEDDEFAULT 0x82
-#define AX_SETPOSITION 0x83
-#define AX_SETTORQUE 0x84
+#define AX_SETSPPED 0x81
+#define AX_SETPOSITION 0x82
+#define AX_SETTORQUE 0x83
 // readable 16 bit registers
 #define AX_GETPOSITION 0x81
 // input pins
@@ -92,8 +91,7 @@ int initToolboxDriver() {
     cache->r8_cmds[TB_SENSORS&0x0F] = TB_SENSORS;
     cache->r8_cmds[TB_COLLISIONS&0x0F] = TB_COLLISIONS;
 
-    cache->w16_cmds[AX_SETSPEEDWHEEL&0x0F] = AX_SETSPEEDWHEEL;
-    cache->w16_cmds[AX_SETSPEEDDEFAULT&0x0F] = AX_SETSPEEDDEFAULT;
+    cache->w16_cmds[AX_SETWHEEL&0x0F] = AX_SETSPEED;
     cache->w16_cmds[AX_SETPOSITION&0x0F] = AX_SETPOSITION;
     cache->w16_cmds[AX_SETTORQUE&0x0F] = AX_SETTORQUE;
 
@@ -235,19 +233,15 @@ void setAxActiveDefault(uint8_t id) {
 	c_write8(cache, AX_SETACTIVEDEFAULT&0x0F, id);
 }
 
-void setSpeedWheel(int speed) {
-	c_write16(cache, AX_SETSPEEDWHEEL&0x0F, speed);
+void setAxSpeed(int speed) {
+	c_write16(cache, AX_SETSPEED&0x0F, speed);
 }
 
-void setSpeedDefault(int speed) {
-	c_write16(cache, AX_SETSPEEDDEFAULT&0x0F, speed);
-}
-
-void setPosition(int position) {
+void setAxPosition(int position) {
 	c_write16(cache, AX_SETPOSITION&0x0F, position);
 }
 
-void setTorque(int torque) {
+void setAxTorque(int torque) {
 	c_write16(cache, AX_SETTORQUE&0x0F, torque);
 }
 
