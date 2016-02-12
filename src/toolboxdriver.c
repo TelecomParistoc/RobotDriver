@@ -59,7 +59,6 @@ static void interruptManager() {
                 collisionsCallback();
         }
     }
-
 }
 
 int initToolboxDriver() {
