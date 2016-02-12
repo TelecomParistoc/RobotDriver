@@ -15,6 +15,8 @@ int getButton(int number);
 int getSensor(int number);
 int getCollisionDetector(int number);
 
+int getAxPosition();
+
 void setSensorsCallback(void (*callback)(void));
 void enableSensorCallback(int number);
 void disableSensorCallback(int number);
@@ -26,6 +28,12 @@ void disableCollisionCallback(int number);
 void setPWM(int number, uint8_t value);
 
 void setLED(int number, int state);
+
+void setAxActiveWheel(uint8_t id);
+void setAxActiveDefault(uint8_t id);
+void setAxSpeed(int speed);
+void setAxPosition(int position);
+void setAxTorque(int torque);
 
 #ifdef __cplusplus
 }

@@ -20,6 +20,10 @@
 #ifndef SPEEDCONTROLLER_H
 #define SPEEDCONTROLLER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* the different queueable actions */
 typedef enum {speedChange, speedChangeAt, stopAt} motionType;
 
@@ -104,5 +108,9 @@ void fastSpeedChange(double speed);
 
 // DO NOT CALL, used by the implementation
 double computeTargetSpeed(double distance);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

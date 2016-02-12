@@ -17,6 +17,8 @@
 #define TB_LEDSCO 0x47
 #define TB_COLLMASK 0x48
 #define TB_SENMASK 0x49
+#define AX_SETACTIVEWHEEL 0x4A
+#define AX_SETACTIVEDEFAULT 0x4B
 // readable 8 bit registers
 #define TB_INTERRUPT_STATUS 0x40
 #define TB_MOTOR_POWER_LEVEL 0x41
@@ -24,6 +26,12 @@
 #define TB_BUTTONS 0x43
 #define TB_SENSORS 0x44
 #define TB_COLLISIONS 0x45
+// writable 16 bit registers
+#define AX_SETSPPED 0x81
+#define AX_SETPOSITION 0x82
+#define AX_SETTORQUE 0x83
+// readable 16 bit registers
+#define AX_GETPOSITION 0x81
 // input pins
 #define TB_INT 7
 #define TB_BT4 2
@@ -72,6 +80,8 @@ int initToolboxDriver() {
     cache->w8_cmds[TB_LEDSCO&0x0F] = TB_LEDSCO;
     cache->w8_cmds[TB_COLLMASK&0x0F] = TB_COLLMASK;
     cache->w8_cmds[TB_SENMASK&0x0F] = TB_SENMASK;
+    cache->w8_cmds[AX_SETACTIVEWHEEL&0x0F] = AX_SETACTIVEWHEEL;
+    cache->w8_cmds[AX_SETACTIVEDEFAULT&0x0F] = AX_SETACTIVEDEFAULT;
 
     cache->r8_cmds[TB_INTERRUPT_STATUS&0x0F] = TB_INTERRUPT_STATUS;
     cache->r8_cmds[TB_MOTOR_POWER_LEVEL&0x0F] = TB_MOTOR_POWER_LEVEL;
@@ -79,6 +89,12 @@ int initToolboxDriver() {
     cache->r8_cmds[TB_BUTTONS&0x0F] = TB_BUTTONS;
     cache->r8_cmds[TB_SENSORS&0x0F] = TB_SENSORS;
     cache->r8_cmds[TB_COLLISIONS&0x0F] = TB_COLLISIONS;
+
+    cache->w16_cmds[AX_SETWHEEL&0x0F] = AX_SETSPEED;
+    cache->w16_cmds[AX_SETPOSITION&0x0F] = AX_SETPOSITION;
+    cache->w16_cmds[AX_SETTORQUE&0x0F] = AX_SETTORQUE;
+
+    cache->r16_cmds[AX_GETPOSITION&0x0F] = AX_GETPOSITION;
 
     cache->updateCallback = interruptManager;
 
@@ -152,6 +168,10 @@ int getCollisionDetector(int number) {
         return 0;
 }
 
+int getAxPosition() {
+	return c_read16(cache, AX_GETPOSITION&0x0F);
+}
+
 void enableSensorCallback(int number) {
     if(number < 1 || number > 5) {
         printf("SENSOR %d doesn't exist !\n", number);
@@ -202,6 +222,26 @@ void setLED(int number, int state) {
         c_write8(cache, TB_LEDSSO&0x0F, 1 << (number - 1));
     else
         c_write8(cache, TB_LEDSCO&0x0F, 1 << (number - 1));
+}
+
+void setAxActiveWheel(uint8_t id) {
+	c_write8(cache, AX_SETACTIVEWHEEL&0x0F, id);
+}
+
+void setAxActiveDefault(uint8_t id) {
+	c_write8(cache, AX_SETACTIVEDEFAULT&0x0F, id);
+}
+
+void setAxSpeed(int speed) {
+	c_write16(cache, AX_SETSPEED&0x0F, speed);
+}
+
+void setAxPosition(int position) {
+	c_write16(cache, AX_SETPOSITION&0x0F, position);
+}
+
+void setAxTorque(int torque) {
+	c_write16(cache, AX_SETTORQUE&0x0F, torque);
 }
 
 void setCollisionsCallback(void (*callback)(void)) {

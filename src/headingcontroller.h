@@ -10,6 +10,10 @@
 #ifndef HEADINGCONTROLLER_H
 #define HEADINGCONTROLLER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "config.h"
 
 /* get current target heading (in degrees, 0-360, clockwise). The target
@@ -59,5 +63,9 @@ double getHeadingKd();
 
 // DO NOT CALL, used by the implementation
 double computeSpeedDifferential();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
