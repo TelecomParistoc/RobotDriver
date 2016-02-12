@@ -61,7 +61,7 @@ struct device_cache* initCache(int8_t dev_addr, int r8_len, int r16_len, int w8_
     cacheCount++;
 
     // raise priority of the process
-    if(nice(-10) < 0)
+    if(nice(0) < 0)
         printf("cannot raise process priority\n");
 
     return cache;

@@ -10,6 +10,10 @@
 #ifndef HEADINGCONTROLLER_H
 #define HEADINGCONTROLLER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // distance between coding wheels in mm (depends of the robot)
 #define WHEEL_DISTANCE 190
 
@@ -60,5 +64,9 @@ double getHeadingKd();
 
 // DO NOT CALL, used by the implementation
 double computeSpeedDifferential();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
