@@ -27,7 +27,7 @@
 #define TB_SENSORS 0x44
 #define TB_COLLISIONS 0x45
 // writable 16 bit registers
-#define AX_SETSPPED 0x81
+#define AX_SETSPEED 0x81
 #define AX_SETPOSITION 0x82
 #define AX_SETTORQUE 0x83
 // readable 16 bit registers
@@ -90,7 +90,7 @@ int initToolboxDriver() {
     cache->r8_cmds[TB_SENSORS&0x0F] = TB_SENSORS;
     cache->r8_cmds[TB_COLLISIONS&0x0F] = TB_COLLISIONS;
 
-    cache->w16_cmds[AX_SETWHEEL&0x0F] = AX_SETSPEED;
+    cache->w16_cmds[AX_SETSPEED&0x0F] = AX_SETSPEED;
     cache->w16_cmds[AX_SETPOSITION&0x0F] = AX_SETPOSITION;
     cache->w16_cmds[AX_SETTORQUE&0x0F] = AX_SETTORQUE;
 
