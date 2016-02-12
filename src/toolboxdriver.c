@@ -131,7 +131,7 @@ double getLogicPowerLevel() {
 int getButton(int number) {
     if(number < 1 || number > 5) {
         printf("Button %d doesn't exist !\n", number);
-        return;
+        return -1;
     }
 
     if(number == 4)
@@ -159,7 +159,7 @@ int getSensor(int number) {
 int getCollisionDetector(int number) {
     if(number < 1 || number > 5) {
         printf("Collision detector %d doesn't exist !\n", number);
-        return 0;
+        return -1;
     }
     uint8_t val = c_read8(cache, TB_COLLISIONS&0x0F);
     if(val & (0x01 << (number-1)))
