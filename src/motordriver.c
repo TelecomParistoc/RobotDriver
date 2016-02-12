@@ -24,7 +24,7 @@
 #define CODL_CMD 2
 #define CODR_CMD 3
 
-struct device_cache *cache = NULL;
+static struct device_cache *cache = NULL;
 
 int initMotorDriver() {
     int error = 0;
@@ -104,5 +104,6 @@ void setMotorUpdateCallback(void (*updateCallback)(void)) {
 
 double getRobotHeading() { return getHeading(); }
 void setRobotHeading(double heading) { setHeading(heading); }
+void setRotationDirection(int direction) { setHeadingRotationDirection(direction); }
 void setMotorDriverUpdateFreq(int max_freq) { setUpdateFrequency(max_freq); }
 int getMotorDriverUpdateFreq() { return getUpdateFrequency(); }

@@ -1,5 +1,5 @@
 TARGET = librobotdriver.so
-SRCS = i2c-cache.c imudriver.c motordriver.c i2c-functions.c queue.c motioncontroller.c headingcontroller.c controllerutils.c speedcontroller.c
+SRCS = i2c-cache.c imudriver.c motordriver.c i2c-functions.c queue.c motioncontroller.c headingcontroller.c controllerutils.c speedcontroller.c toolboxdriver.c
 HEADERS = $(addprefix src/, ${SRCS:.c=.h})
 OBJECTS = $(addprefix build/,${SRCS:.c=.o})
 EXAMPLES = examples/example1 examples/example2 examples/example3
@@ -11,11 +11,20 @@ VPATH = build/
 
 vpath %.c src/ tests/ examples
 vpath %.h src/
--include $(subst .c,.d,$(SRCS))
 
-.PHONY: all clean test update
+.PHONY: clean test update small
 
-all: build build/$(TARGET)
+small: small_conf build build/$(TARGET)
+
+small_conf:
+	@echo "\n\nYou are compiling this lib for the SMALL ROBOT. If you're on the big robot, use 'make big'\n\n"
+	cp src/config.small.h  src/config.h
+
+big: big_conf build build/$(TARGET)
+
+big_conf:
+	@echo "\n\nYou are compiling this lib for the BIG ROBOT. If you're on the small robot, use 'make small'\n\n"
+	cp src/config.big.h  src/config.h
 
 build:
 	mkdir -p build
@@ -30,8 +39,9 @@ build/$(TARGET): $(OBJECTS)
 examples: LDFLAGS=-lrobotdriver
 examples: $(EXAMPLES)
 
-test:
+mock:
 	make SRCS="motordriver_mock.c queue.c motioncontroller.c headingcontroller.c controllerutils.c speedcontroller.c" LDFLAGS=-shared
+test: mock
 	cd tests; node testrunner.js
 
 testinstall:
@@ -45,6 +55,7 @@ update:
 
 clean:
 	rm -f build/*.o build/*.so build/*.d
+	rm -f src/config.h
 
 install: build/$(TARGET)
 	mkdir -p $(DESTDIR)$(PREFIX)/lib
@@ -54,3 +65,5 @@ install: build/$(TARGET)
 	chmod 0755 $(DESTDIR)$(PREFIX)/lib/$(TARGET)
 	ldconfig
 	ldconfig -p | grep robotdriver
+
+-include $(subst .c,.d,$(SRCS))

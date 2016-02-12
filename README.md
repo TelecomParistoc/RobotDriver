@@ -21,8 +21,10 @@ real time-oriented version of Raspbian).
 * Once wiringPi is installed, get back the sources :
 `git clone git@github.com:TelecomParistoc/RobotDriver.git`
 
-* cd to the root of the repository and enter
-`make` and `sudo make install`
+* cd to the root of the repository and enter `make small` on the small robot or
+`make big` on the big robot
+
+* finally enter `sudo make install`
 
 ## Usage ##
 

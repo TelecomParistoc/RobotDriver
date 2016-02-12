@@ -58,13 +58,12 @@ static void detectBlocking(double currentSpeed) {
 
 static void motionManager() {
     double differential = computeSpeedDifferential();
-    double speedR = computeTargetSpeed(getRdistance());
-    double speedL = computeTargetSpeed(getLdistance());
+    double speed = computeTargetSpeed(getRobotDistance());
 
-    detectBlocking((speedR+speedL)/2);
+    detectBlocking(speed);
 
-    setRspeed(speedR - differential);
-    setLspeed(speedL + differential);
+    setRspeed(speed - differential);
+    setLspeed(speed + differential);
 }
 
 int initMotionController() {

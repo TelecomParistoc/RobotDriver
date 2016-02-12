@@ -77,6 +77,10 @@ void setKd(uint8_t coeff);
 double getRobotHeading();
 void setRobotHeading(double heading);
 
+/* change heading rotation direction (usefull for team change). 0 is clockwise
+ * (default) and 1 is anticlockwise */
+void setRotationDirection(int direction);
+
 /* ##### Update frequency #####
  * a read/write doesn't always cause an I2C transaction. I2C
  * transactions are throttled to a max frequency, reads are cached and writes
@@ -93,6 +97,7 @@ void setRobotHeading(double heading);
  void setMotorDriverUpdateFreq(int max_freq);
  /* get max frequency (in Hz)*/
  int getMotorDriverUpdateFreq();
+
 
  /* set a function called everytime the data is updated
   * the function is called just after new data has been read and before data

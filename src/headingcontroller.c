@@ -37,7 +37,7 @@ double getHeadingKd() { return headingKd; }
 
 double getTargetHeading() { return targetHeading; }
 void setTargetHeading(double heading, void (*callback)(void)) {
-    targetHeading = heading;
+    targetHeading = modulo(heading, 360);
     headingCallback = callback;
     turning = 1;
 }

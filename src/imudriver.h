@@ -27,4 +27,8 @@ void setPitch(double pitch);
 double getRoll();
 void setRoll(double roll);
 
+/* change heading rotation direction (usefull for team change). 0 is clockwise
+ * (default) and 1 is anticlockwise */
+void setHeadingRotationDirection(int direction);
+
 #endif
