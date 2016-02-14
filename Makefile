@@ -4,7 +4,7 @@ HEADERS = $(addprefix src/, ${SRCS:.c=.h})
 OBJECTS = $(addprefix build/,${SRCS:.c=.o})
 EXAMPLES = examples/example1 examples/example2 examples/example3
 CC=gcc
-CFLAGS = -O2 -Wall -Werror -fpic
+CFLAGS = -O2 -std=gnu99 -Wall -Werror -fpic
 LDFLAGS= -shared -lwiringPi -lm
 PREFIX = /usr/local
 VPATH = build/
