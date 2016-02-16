@@ -169,12 +169,7 @@ int getCollisionDetector(int number) {
 }
 
 int getAxPosition() {
-	for(int i = 0 ; i < 5 ; i ++){
-		int val = c_read16(cache, AX_GETPOSITION&0x0F);
-		if(val >= 0)
-			return val;
-	}
-	return -1;
+	int val = c_read16(cache, AX_GETPOSITION&0x0F);
 }
 
 void enableSensorCallback(int number) {
@@ -230,11 +225,13 @@ void setLED(int number, int state) {
 }
 
 void setAxActiveWheel(uint8_t id) {
-	c_write8(cache, AX_SETACTIVEWHEEL&0x0F, id);
+	I2Cwrite8(TOOLBOX_ADDR, AX_SETACTIVEWHEEL, id);
+	delayMilli(4);
 }
 
 void setAxActiveDefault(uint8_t id) {
-	c_write8(cache, AX_SETACTIVEDEFAULT&0x0F, id);
+	I2Cwrite8(TOOLBOX_ADDR, AX_SETACTIVEDEFAULT, id);
+	delayMilli(4);
 }
 
 void setAxSpeed(int speed) {
