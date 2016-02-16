@@ -170,6 +170,7 @@ int getCollisionDetector(int number) {
 
 int getAxPosition() {
 	int val = c_read16(cache, AX_GETPOSITION&0x0F);
+	return val;
 }
 
 void enableSensorCallback(int number) {
