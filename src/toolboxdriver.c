@@ -99,6 +99,8 @@ int initToolboxDriver() {
     cache->updateCallback = interruptManager;
 
     // setup input pins
+    wiringPiSetup();
+
     pinMode(TB_INT, INPUT);
     pinMode(TB_BT4, INPUT);
     pinMode(TB_BT5, INPUT);
@@ -207,11 +209,12 @@ void disableCollisionCallback(int number) {
 }
 
 void setPWM(int number, uint8_t value) {
+    double dc = value*0.754;
     if(number < 1 || number > 4) {
         printf("the PWM out %d doesn't exist !\n", number);
         return;
     }
-    c_write8(cache, number, value);
+    c_write8(cache, number, (uint8_t) dc);
 }
 
 void setLED(int number, int state) {
@@ -227,8 +230,8 @@ void setLED(int number, int state) {
             c_write8(cache, TB_LEDSSO&0x0F, 1 << (number - 1));
     } else {
         // if some data is already in cache
-        if(cache->w8_flags[TB_LEDSSO&0x0F]==CACHE_VALID)
-            cache->w8_cache[TB_LEDSSO&0x0F] |= 1 << (number - 1);
+        if(cache->w8_flags[TB_LEDSCO&0x0F]==CACHE_VALID)
+            cache->w8_cache[TB_LEDSCO&0x0F] |= 1 << (number - 1);
         else
             c_write8(cache, TB_LEDSCO&0x0F, 1 << (number - 1));
     }
@@ -257,8 +260,8 @@ void setAxTorque(int torque) {
 }
 
 void setCollisionsCallback(void (*callback)(void)) {
-    sensorsCallback = callback;
+    collisionsCallback = callback;
 }
 void setSensorsCallback(void (*callback)(void)) {
-    collisionsCallback = callback;
+    sensorsCallback = callback;
 }
