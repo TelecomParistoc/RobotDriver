@@ -62,5 +62,6 @@ int main() {
 	axMove(124, pos, axCallback);
 
 	while(1);
+	axCallback();
 	return 0;
 }

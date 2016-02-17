@@ -289,7 +289,7 @@ void setAxActiveDefault(uint8_t id) {
 	axCurrentId = id;
 	axCurrentMode = DEFAULT;
 	axCurrentGoal = 2000;
-	delayMilli(20);
+	delayMilli(2000);
 }
 
 void setAxSpeed(int speed) {
