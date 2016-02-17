@@ -8,6 +8,7 @@ It provides (user space) drivers for :
 
 * the IMU (BNO055)
 * the motor module, controlling robot's motors with speed PID
+* the toolbox module, controlling AX-12 and providing access to sensors and robot's buttons and LEDs
 
 In addition, it provides high level function to control robot's motions.
 
@@ -51,6 +52,25 @@ is available through imudriver.h. Include the header with :
 ```
 
 See src/imudriver.h for API.
+
+### Toolbox module driver ###
+
+The toolbox module provides :
+* AX-12 control, supporting callback on the end of moves
+* 5 sensors inputs, supporting callback on change
+* 5 collision detector inputs, supporting callback on change
+* 3 button inputs
+* 4 LEDs ouputs
+* 4 PWM outputs
+* voltage measurements of both batteries
+
+To use these functions, include the header :
+
+```c
+#include "robotdriver/toolboxdriver.h"
+```
+
+For more info on toolbox module API, see [toolboxdriver.h](https://github.com/TelecomParistoc/RobotDriver/blob/master/src/toolboxdriver.h).
 
 ### Motion control library ###
 
