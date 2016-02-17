@@ -2,15 +2,17 @@
 #include <robotdriver/motioncontroller.h>
 #include <stdio.h>
 #include <time.h>
+#include <wiringPi.h>
 
 /* In this example, we'll demonstrate how to use toolbox driver */
 
 void delayMilli(int milliseconds) {
     struct timespec wait_time = {
         .tv_sec = 0,
-        .tv_nsec = 1000000*milliseconds,
+        .tv_nsec = 1000000
     };
-    nanosleep(&wait_time, NULL);
+    for(int i=0; i<milliseconds; i++)
+    	nanosleep(&wait_time, NULL);
 }
 static void collisionsCallback() {
     printf("coll3:%d, coll4:%d, coll5: %d\n", getCollisionDetector(3), getCollisionDetector(4), getCollisionDetector(5));
@@ -41,13 +43,16 @@ int main() {
     enableCollisionCallback(5);
     setCollisionsCallback(collisionsCallback);
 
-	setAxActiveDefault(129);
-	printf("%d\n", getAxPosition());
-	setAxActiveDefault(130);
-	printf("%d\n", getAxPosition());
-
+	setAxActiveWheel(124);
+	setAxSpeed(200);
 
     while(1) {
+	/*delayMilli(1000);
+	printf("%d\n", getAxPosition());
+	setAxPosition(0);
+	delayMilli(1000);
+	printf("%d\n", getAxPosition());
+	setAxPosition(100);*/
     }
     return 0;
 }

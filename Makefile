@@ -36,7 +36,7 @@ build/%.d : %.c
 build/$(TARGET): $(OBJECTS)
 	$(CC) $(CFLAGS) $(OBJECTS) -o $@ $(LDFLAGS)
 
-examples: LDFLAGS=-lrobotdriver
+examples: LDFLAGS=-lrobotdriver -lwiringPi
 examples: $(EXAMPLES)
 
 mock:
