@@ -62,9 +62,10 @@ static void interruptManager() {
         uint8_t flags = I2Cread8(TOOLBOX_ADDR, TB_INTERRUPT_STATUS);
 	if(flags & AX12_FINISHED_MOVE) {
 		axFinishedMove = 1;
+		printf("Interrupt\n");
 	}
 	if(flags & AX12_FORCING) {
-		axForcing;
+		axForcing = 1;
 	}
         if(flags & SENSOR_CHANGE) {
             invalidateCache(TB_SENSORS);
@@ -250,6 +251,22 @@ int getAxPosition() {
 void setAxActiveWheel(uint8_t id) {
 	I2Cwrite8(TOOLBOX_ADDR, AX_SETACTIVEWHEEL, id);
 	delayMilli(4);
+}
+
+int axHasFinishedMove() {
+	if (axFinishedMove) {
+		axFinishedMove = 0;
+		return 1;
+	}
+	return 0;
+}
+
+int axIsForcing() {
+	if (axForcing) {
+		axForcing = 0;
+		return 1;
+	}
+	return 0;
 }
 
 void setAxActiveDefault(uint8_t id) {

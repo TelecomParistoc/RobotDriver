@@ -62,14 +62,16 @@ void setLED(int number, int state);
 
 int getAxPosition();
 
+/* returns the state of the corresponding flag
+ * and clears it if it was set */
+int axHasFinishedMove();
+int axIsForcing();
+
 void setAxActiveWheel(uint8_t id);
 void setAxActiveDefault(uint8_t id);
 void setAxSpeed(int speed);
 void setAxPosition(int position);
 void setAxTorque(int torque);
-
-extern volatile int axFinishedMove;
-extern volatile int axForcing;
 
 #ifdef __cplusplus
 }
