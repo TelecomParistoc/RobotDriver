@@ -44,14 +44,16 @@ int main() {
     setCollisionsCallback(collisionsCallback);
 
 	setAxActiveDefault(124);
-	setAxTorque(1023);
+	setAxTorque(200);
 	setAxSpeed(200);
+	setAxPosition(500);
 
     while(1) {
-	setAxPosition(0);
-	while(! axHasFinishedMove());
+	/*setAxPosition(0);
+	while(! (axHasFinishedMove() || axForcing());
 	setAxPosition(1000);
-	while(! axHasFinishedMove());
+	while(! (axHasFinishedMove() || axForcing());*/
     }
+	while(1);
     return 0;
 }

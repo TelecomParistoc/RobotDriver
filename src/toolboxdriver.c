@@ -54,22 +54,14 @@ static void invalidateCache(int command) {
     cache->r8_flags[command&0x0F] = CACHE_NOT_VALID;
 }
 
-static void setCacheValidation(int command, int state) {
-	if (!state)
-		cache->w16_flags[command&0x0F] = CACHE_VALID;
-	else
-		cache->w16_flags[command&0x0F] = CACHE_NOT_VALID;
-}
-
-volatile int axFinishedMove;
-volatile int axForcing;
+static volatile int axFinishedMove;
+static volatile int axForcing;
 
 static void interruptManager() {
     if(digitalRead(TB_INT)) {
         uint8_t flags = I2Cread8(TOOLBOX_ADDR, TB_INTERRUPT_STATUS);
 	if(flags & AX12_FINISHED_MOVE) {
 		axFinishedMove = 1;
-		printf("Interrupt\n");
 	}
 	if(flags & AX12_FORCING) {
 		axForcing = 1;
@@ -143,6 +135,7 @@ double getMotorPowerLevel() {
     }
     return voltage;
 }
+
 double getLogicPowerLevel() {
     uint8_t val = c_read8(cache, TB_LOGIC_POWER_LEVEL&0x0F);
     return (val*2 + 448)*LOGIC_LEVEL_COEFF;
@@ -165,6 +158,7 @@ int getButton(int number) {
     else
         return 0;
 }
+
 int getSensor(int number) {
     if(number < 1 || number > 5) {
         printf("SENSOR %d doesn't exist !\n", number);
@@ -176,6 +170,7 @@ int getSensor(int number) {
     else
         return 0;
 }
+
 int getCollisionDetector(int number) {
     if(number < 1 || number > 5) {
         printf("Collision detector %d doesn't exist !\n", number);
@@ -257,7 +252,28 @@ int getAxPosition() {
 
 void setAxActiveWheel(uint8_t id) {
 	I2Cwrite8(TOOLBOX_ADDR, AX_SETACTIVEWHEEL, id);
-	delayMilli(4);
+	delayMilli(10);
+}
+
+
+void setAxActiveDefault(uint8_t id) {
+	I2Cwrite8(TOOLBOX_ADDR, AX_SETACTIVEDEFAULT, id);
+	delayMilli(10);
+}
+
+void setAxSpeed(int speed) {
+	I2Cwrite16(TOOLBOX_ADDR, AX_SETSPEED, speed);
+	delayMilli(10);
+}
+
+void setAxPosition(int position) {
+	I2Cwrite16(TOOLBOX_ADDR, AX_SETPOSITION, position);
+	delayMilli(10);
+}
+
+void setAxTorque(int torque) {
+	I2Cwrite16(TOOLBOX_ADDR, AX_SETTORQUE, torque);
+	delayMilli(10);
 }
 
 int axHasFinishedMove() {
@@ -270,32 +286,17 @@ int axHasFinishedMove() {
 
 int axIsForcing() {
 	if (axForcing) {
+		printf("Forcing\n");
 		axForcing = 0;
 		return 1;
 	}
 	return 0;
 }
 
-void setAxActiveDefault(uint8_t id) {
-	I2Cwrite8(TOOLBOX_ADDR, AX_SETACTIVEDEFAULT, id);
-	delayMilli(4);
-}
-
-void setAxSpeed(int speed) {
-	c_write16(cache, AX_SETSPEED&0x0F, speed);
-}
-
-void setAxPosition(int position) {
-	c_write16(cache, AX_SETPOSITION&0x0F, position);
-}
-
-void setAxTorque(int torque) {
-	c_write16(cache, AX_SETTORQUE&0x0F, torque);
-}
-
 void setCollisionsCallback(void (*callback)(void)) {
     collisionsCallback = callback;
 }
+
 void setSensorsCallback(void (*callback)(void)) {
     sensorsCallback = callback;
 }

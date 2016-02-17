@@ -66,7 +66,8 @@ int I2Cwrite16(uint8_t addr, uint8_t reg, uint16_t value) {
 void delayMilli(int milliseconds) {
     struct timespec wait_time = {
         .tv_sec = 0,
-        .tv_nsec = 1000000*milliseconds,
+        .tv_nsec = 1000000
     };
-    nanosleep(&wait_time, NULL);
+    for(int i=0; i<milliseconds; i++)
+    	nanosleep(&wait_time, NULL);
 }
