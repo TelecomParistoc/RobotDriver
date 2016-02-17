@@ -218,10 +218,19 @@ void setLED(int number, int state) {
         printf("LED%d doesn't exist !\n", number);
         return;
     }
-    if(state)
-        c_write8(cache, TB_LEDSSO&0x0F, 1 << (number - 1));
-    else
-        c_write8(cache, TB_LEDSCO&0x0F, 1 << (number - 1));
+    if(state) {
+        // if some data is already in cache
+        if(cache->w8_flags[TB_LEDSSO&0x0F]==CACHE_VALID)
+            cache->w8_cache[TB_LEDSSO&0x0F] |= 1 << (number - 1);
+        else
+            c_write8(cache, TB_LEDSSO&0x0F, 1 << (number - 1));
+    } else {
+        // if some data is already in cache
+        if(cache->w8_flags[TB_LEDSSO&0x0F]==CACHE_VALID)
+            cache->w8_cache[TB_LEDSSO&0x0F] |= 1 << (number - 1);
+        else
+            c_write8(cache, TB_LEDSCO&0x0F, 1 << (number - 1));
+    }
 }
 
 void setAxActiveWheel(uint8_t id) {
