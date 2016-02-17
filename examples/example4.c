@@ -6,6 +6,8 @@
 
 /* In this example, we'll demonstrate how to use toolbox driver */
 
+int pos = 0;
+
 void delayMilli(int milliseconds) {
 	struct timespec wait_time = {
 		.tv_sec = 0,
@@ -19,6 +21,15 @@ static void collisionsCallback() {
 }
 static void sensorsCallback() {
 	printf("sensor1:%d, sensor2:%d, sensor3: %d, sensor4:%d, sensor5: %d\n", getSensor(1), getSensor(2), getSensor(3), getSensor(4), getSensor(5));
+}
+
+static void axCallback() {
+	printf("AxEndMoveFlag = %d\n", axHasFinishedMove());
+	if(pos)
+		pos = 0;
+	else
+		pos = 1000;
+	axMove(124, pos, axCallback);
 }
 
 int main() {
@@ -44,17 +55,12 @@ int main() {
 	setCollisionsCallback(collisionsCallback);
 
 	axSetTorqueSpeed(124, 1023, 200, 0);
-	axMove(124, 1023, NULL);
+	/*axMove(124, 1023, NULL);
 	while(! (axHasFinishedMove() || axIsForcing())) { delayMilli(10); }
-	printf("End\n");
+	printf("End\n"); */
 
-	/*axSetTorqueSpeed(124, -1, -1, 0);
-	while(1) {
-		axMove(124, 0, NULL);
-		while(! (axHasFinishedMove() || axIsForcing())) { delayMilli(10); }
-		axMove(124, 1023, NULL);
-		while(! (axHasFinishedMove() || axIsForcing())) { delayMilli(10); }
-	}*/
+	axMove(124, pos, axCallback);
+
 	while(1);
 	return 0;
 }

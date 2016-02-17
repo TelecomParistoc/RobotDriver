@@ -77,7 +77,8 @@ static void interruptManager() {
 	if(digitalRead(TB_INT)) {
 		uint8_t flags = I2Cread8(TOOLBOX_ADDR, TB_INTERRUPT_STATUS);
 		if(flags & AX12_FINISHED_MOVE) {
-			if(axCurrentGoal == I2Cread16(TOOLBOX_ADDR, AX_GETPOSITION))
+			int currentPos = I2Cread16(TOOLBOX_ADDR, AX_GETPOSITION);
+			if((axCurrentGoal - currentPos < 5) && (axCurrentGoal - currentPos > -5))
 				axFinishedMove = 1;
 			else
 				axFinishedMove = 2;
@@ -279,7 +280,7 @@ void setAxActiveWheel(uint8_t id) {
 	axCurrentId = id;
 	axCurrentMode = WHEEL;
 	axCurrentGoal = 2000;
-	delayMilli(10);
+	delayMilli(20);
 }
 
 
@@ -288,7 +289,7 @@ void setAxActiveDefault(uint8_t id) {
 	axCurrentId = id;
 	axCurrentMode = DEFAULT;
 	axCurrentGoal = 2000;
-	delayMilli(10);
+	delayMilli(20);
 }
 
 void setAxSpeed(int speed) {
@@ -333,6 +334,7 @@ int axIsForcing() {
 void axSetTorqueSpeed(int id, int torque, int speed, int mode){
 
 	if ((id != axCurrentId) || (mode != axCurrentMode)){
+		printf("Set mode %d for ax-12 %d\n", mode, id);
 		if(mode)
 			setAxActiveWheel(id);
 		else
