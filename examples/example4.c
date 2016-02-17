@@ -44,10 +44,10 @@ int main() {
     setCollisionsCallback(collisionsCallback);
 
 	setAxActiveDefault(124);
-	setAxTorque(200);
+	setAxTorque(1023);
 	setAxSpeed(200);
-	setAxPosition(500);
-	while(! (axHasFinishedMove() || axForcing());
+	setAxPosition(1000);
+	while(! (axHasFinishedMove() || axIsForcing()));
 	printf("End\n");
 
     while(1) {
