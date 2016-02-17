@@ -70,7 +70,7 @@ static void interruptManager() {
 }
 
 int initToolboxDriver() {
-    cache = initCache(TOOLBOX_ADDR, 6, 0, 10, 0);
+    cache = initCache(TOOLBOX_ADDR, 6, 2, 10, 4);
     cache->w8_cmds[TB_PWM1&0x0F] = TB_PWM1;
     cache->w8_cmds[TB_PWM2&0x0F] = TB_PWM2;
     cache->w8_cmds[TB_PWM3&0x0F] = TB_PWM3;
@@ -170,11 +170,6 @@ int getCollisionDetector(int number) {
         return 0;
 }
 
-int getAxPosition() {
-	int val = c_read16(cache, AX_GETPOSITION&0x0F);
-	return val;
-}
-
 void enableSensorCallback(int number) {
     if(number < 1 || number > 5) {
         printf("SENSOR %d doesn't exist !\n", number);
@@ -235,6 +230,11 @@ void setLED(int number, int state) {
         else
             c_write8(cache, TB_LEDSCO&0x0F, 1 << (number - 1));
     }
+}
+
+int getAxPosition() {
+	int val = c_read16(cache, AX_GETPOSITION&0x0F);
+	return val;
 }
 
 void setAxActiveWheel(uint8_t id) {

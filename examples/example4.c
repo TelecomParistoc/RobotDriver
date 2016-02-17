@@ -20,7 +20,6 @@ static void sensorsCallback() {
 }
 
 int main() {
-    int dc = 0;
     initToolboxDriver();
     initMotionController();
 
@@ -42,9 +41,16 @@ int main() {
     enableCollisionCallback(5);
     setCollisionsCallback(collisionsCallback);
 
-    setPWM(4, dc);
+    setAxActiveWheel(124);
+    delayMilli(40);
+    setAxSpeed(700);
+    setAxPosition(150);
     while(1) {
-        delayMilli(40);
+        //delayMilli(00);
+        //setAxPosition(30);
+        //delayMilli(1000);
+        //setAxPosition(40);
+        //printf("%d\n", getAxPosition());
         //printf("%f\n", getMotorPowerLevel());
         //printf("bt1:%d, bt2:%d, bt3:%d, bt4:%d, bt5:%d\n", getButton(1), getButton(2), getButton(3), getButton(4), getButton(5));
         //printf("sensor1:%d, sensor2:%d, sensor3: %d, sensor4:%d, sensor5: %d\n", getSensor(1), getSensor(2), getSensor(3), getSensor(4), getSensor(5));
