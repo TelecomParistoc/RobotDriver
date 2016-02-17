@@ -1,8 +1,11 @@
-**/.DS_Store
-build/*.o
+**/.DS_Storee
+build/
+src/config.h
 **/.travis.yml
 examples/example1
 examples/example2
 examples/example3
 examples/example4
+examples/example5
+._*
 *.swp
