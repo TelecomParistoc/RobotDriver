@@ -54,6 +54,13 @@ static void invalidateCache(int command) {
     cache->r8_flags[command&0x0F] = CACHE_NOT_VALID;
 }
 
+static void setCacheValidation(int command, int state) {
+	if (!state)
+		cache->w16_flags[command&0x0F] = CACHE_VALID;
+	else
+		cache->w16_flags[command&0x0F] = CACHE_NOT_VALID;
+}
+
 volatile int axFinishedMove;
 volatile int axForcing;
 
