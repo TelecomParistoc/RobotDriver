@@ -68,6 +68,9 @@ void setAxSpeed(int speed);
 void setAxPosition(int position);
 void setAxTorque(int torque);
 
+extern volatile int axFinishedMove;
+extern volatile int axForcing;
+
 #ifdef __cplusplus
 }
 #endif

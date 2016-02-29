@@ -38,7 +38,7 @@
 #define TB_BT5 3
 // interrupt flags
 #define AX12_FINISHED_MOVE 0x01
-#define AX12_TORQUE_LIMIT 0x02
+#define AX12_FORCING 0x02
 #define SENSOR_CHANGE 0x04
 #define COLLISION_CHANGE 0x08
 
@@ -53,9 +53,19 @@ static void (*collisionsCallback)(void) = NULL;
 static void invalidateCache(int command) {
     cache->r8_flags[command&0x0F] = CACHE_NOT_VALID;
 }
+
+volatile int axFinishedMove;
+volatile int axForcing;
+
 static void interruptManager() {
     if(digitalRead(TB_INT)) {
         uint8_t flags = I2Cread8(TOOLBOX_ADDR, TB_INTERRUPT_STATUS);
+	if(flags & AX12_FINISHED_MOVE) {
+		axFinishedMove = 1;
+	}
+	if(flags & AX12_FORCING) {
+		axForcing;
+	}
         if(flags & SENSOR_CHANGE) {
             invalidateCache(TB_SENSORS);
             if(sensorsCallback != NULL)
