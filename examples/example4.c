@@ -47,6 +47,8 @@ int main() {
 	setAxTorque(200);
 	setAxSpeed(200);
 	setAxPosition(500);
+	while(! (axHasFinishedMove() || axForcing());
+	printf("End\n");
 
     while(1) {
 	/*setAxPosition(0);
