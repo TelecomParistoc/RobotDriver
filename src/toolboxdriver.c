@@ -64,7 +64,7 @@ static void interruptManager() {
     if(digitalRead(TB_INT)) {
         uint8_t flags = I2Cread8(TOOLBOX_ADDR, TB_INTERRUPT_STATUS);
 	if(flags & AX12_FINISHED_MOVE) {
-		if(getAxPosition() == I2Cread16(TOOLBOX_ADDR, AX_GETPOSITION, id))
+		if(getAxPosition() == I2Cread16(TOOLBOX_ADDR, AX_GETPOSITION))
 			axFinishedMove = 1;
 		else
 			axFinishedMove = 2;
