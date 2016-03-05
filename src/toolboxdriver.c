@@ -287,7 +287,7 @@ void setAxTorque(int torque) {
 
 int axHasFinishedMove() {
 	if (axFinishedMove) {
-		tmp = axFinishedMove;
+		int tmp = axFinishedMove;
 		axFinishedMove = 0;
 		return tmp;
 	}
