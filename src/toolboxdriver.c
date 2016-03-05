@@ -57,7 +57,7 @@ static void invalidateCache(int command) {
 static volatile int axFinishedMove;
 static volatile int axForcing;
 
-static char axCurrentId;
+static uint8_t axCurrentId;
 static int axPositions[150];
 
 static void interruptManager() {
