@@ -63,7 +63,11 @@ void setLED(int number, int state);
 int getAxPosition();
 
 /* returns the state of the corresponding flag
- * and clears it if it was set */
+ * and clears it if it was set
+ * for axHasFinshedMove, returns 2 if
+ * the destinantion wasn't reached
+ * (probably beacuse the ax-12 was blocked) */
+
 int axHasFinishedMove();
 int axIsForcing();
 

@@ -57,11 +57,17 @@ static void invalidateCache(int command) {
 static volatile int axFinishedMove;
 static volatile int axForcing;
 
+static char axCurrentId;
+static int axPositions[150];
+
 static void interruptManager() {
     if(digitalRead(TB_INT)) {
         uint8_t flags = I2Cread8(TOOLBOX_ADDR, TB_INTERRUPT_STATUS);
 	if(flags & AX12_FINISHED_MOVE) {
-		axFinishedMove = 1;
+		if(getAxPosition() == I2Cread16(TOOLBOX_ADDR, AX_GETPOSITION, id))
+			axFinishedMove = 1;
+		else
+			axFinishedMove = 2;
 	}
 	if(flags & AX12_FORCING) {
 		axForcing = 1;
@@ -252,12 +258,14 @@ int getAxPosition() {
 
 void setAxActiveWheel(uint8_t id) {
 	I2Cwrite8(TOOLBOX_ADDR, AX_SETACTIVEWHEEL, id);
+	axCurrentId = id;
 	delayMilli(10);
 }
 
 
 void setAxActiveDefault(uint8_t id) {
 	I2Cwrite8(TOOLBOX_ADDR, AX_SETACTIVEDEFAULT, id);
+	axCurrentId = id;
 	delayMilli(10);
 }
 
@@ -268,6 +276,7 @@ void setAxSpeed(int speed) {
 
 void setAxPosition(int position) {
 	I2Cwrite16(TOOLBOX_ADDR, AX_SETPOSITION, position);
+	axPositions[axCurrentId] = position;
 	delayMilli(10);
 }
 
