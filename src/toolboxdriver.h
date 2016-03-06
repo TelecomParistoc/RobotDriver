@@ -60,22 +60,36 @@ void setPWM(int number, uint8_t value);
  *      state : 1 to turn on, 0 to turn off */
 void setLED(int number, int state);
 
-int getAxPosition();
+/* Returns the position of the ax-12, */
 
-/* returns the state of the corresponding flag
- * and clears it if it was set
- * for axHasFinshedMove, returns 2 if
- * the destinantion wasn't reached
- * (probably beacuse the ax-12 was blocked) */
+int axGetPosition(int id);
+
+/* Returns the state of the corresponding flag and clears it if it was set
+ * for axHasFinishedMove, returns 2 if the destination wasn't reached
+ * (probably beacuse the ax-12 was blocked)
+ *
+ * Useless in endless turn mode and concerns the las ax-12 used */
 
 int axHasFinishedMove();
 int axIsForcing();
 
-void setAxActiveWheel(uint8_t id);
-void setAxActiveDefault(uint8_t id);
-void setAxSpeed(int speed);
-void setAxPosition(int position);
-void setAxTorque(int torque);
+/* High level function to control Ax-12 with id passed as parameter
+ * If you don't want to change speed or torque, pass an invalid parameter
+ * For endless turn mode, pass an invalid position parameter
+ *
+ * Torque : sets the maximum torque
+ * Range  : 0 <= val <= 1023
+ *
+ * Speed  : sets the moving speed
+ * Normal mode range :     0 <= val <= 1023
+ * Wheel  mode range : -1023 <= val <= 1023
+ *     a positive value is uses for a CounterClockWise rotation
+ *     a negative value is used for a ClockWise rotation
+ *
+ * Position : sets the goal position
+ * Range    : 0 <= val <= 1023 */
+
+void axSetTorqueSpeedPos(int id, int torque, int speed, int position);
 
 #ifdef __cplusplus
 }

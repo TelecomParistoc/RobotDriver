@@ -38,9 +38,12 @@
 #define TB_BT5 3
 // interrupt flags
 #define AX12_FINISHED_MOVE 0x01
-#define AX12_FORCING 0x02
-#define SENSOR_CHANGE 0x04
-#define COLLISION_CHANGE 0x08
+#define AX12_FORCING       0x02
+#define SENSOR_CHANGE      0x04
+#define COLLISION_CHANGE   0x08
+// ax-12 states
+#define DEFAULT 0
+#define WHEEL   1
 
 static struct device_cache *cache = NULL;
 
@@ -54,17 +57,24 @@ static void invalidateCache(int command) {
     cache->r8_flags[command&0x0F] = CACHE_NOT_VALID;
 }
 
+static void setAxActiveWheel(uint8_t id);
+static void setAxActiveDefault(uint8_t id);
+static void setAxSpeed(int speed);
+static void setAxPosition(int position);
+static void setAxTorque(int torque);
+
 static volatile int axFinishedMove;
 static volatile int axForcing;
 
-static uint8_t axCurrentId;
-static int axPositions[150];
+static int axCurrentId = 254;
+static int axCurrentMode = 2;
+static int axCurrentGoal = 2000;
 
 static void interruptManager() {
     if(digitalRead(TB_INT)) {
         uint8_t flags = I2Cread8(TOOLBOX_ADDR, TB_INTERRUPT_STATUS);
 	if(flags & AX12_FINISHED_MOVE) {
-		if(getAxPosition() == I2Cread16(TOOLBOX_ADDR, AX_GETPOSITION))
+		if(axCurrentGoal == I2Cread16(TOOLBOX_ADDR, AX_GETPOSITION))
 			axFinishedMove = 1;
 		else
 			axFinishedMove = 2;
@@ -251,7 +261,9 @@ void setLED(int number, int state) {
     }
 }
 
-int getAxPosition() {
+int axGetPosition(int id) {
+	if((axCurrentId != id) || axCurrentMode )
+		setActiveDefault(id);
 	int val = c_read16(cache, AX_GETPOSITION&0x0F);
 	return val;
 }
@@ -259,6 +271,8 @@ int getAxPosition() {
 void setAxActiveWheel(uint8_t id) {
 	I2Cwrite8(TOOLBOX_ADDR, AX_SETACTIVEWHEEL, id);
 	axCurrentId = id;
+	axCurrentMode = WHEEL;
+	axCurrentGoal = 2000;
 	delayMilli(10);
 }
 
@@ -266,6 +280,8 @@ void setAxActiveWheel(uint8_t id) {
 void setAxActiveDefault(uint8_t id) {
 	I2Cwrite8(TOOLBOX_ADDR, AX_SETACTIVEDEFAULT, id);
 	axCurrentId = id;
+	axCurrentMode = DEFAULT;
+	axCurrentGoal = 2000;
 	delayMilli(10);
 }
 
@@ -276,7 +292,7 @@ void setAxSpeed(int speed) {
 
 void setAxPosition(int position) {
 	I2Cwrite16(TOOLBOX_ADDR, AX_SETPOSITION, position);
-	axPositions[axCurrentId] = position;
+	axCurrentGoal = position;
 	delayMilli(10);
 }
 
@@ -301,6 +317,40 @@ int axIsForcing() {
 		return 1;
 	}
 	return 0;
+}
+
+void axSetTorqueSpeedPos(int id, int torque, int speed, int position){
+	
+	int mode;
+	if ((position < 0) || (position > 1023))
+		mode = WHEEL;
+	else
+		mode = DEFAULT;
+	
+	if ((id != axCurrentId) || (mode != axCurrentMode))
+		if(mode)
+			setActiveWheel(id);
+		else
+			setActiveDefault(id);
+	
+	if ((torque >= 0) && (torque <= 1023))
+		setAxTorque(torque);
+
+	if (mode){
+		if((speed >= -1023) && (speed <= 1023))
+			if(speed >= 0)
+				setAxSpeed(speed);
+			else
+				setAxSpeed(1024 - speed);
+	}
+	else{
+		if((speed >= 0) && (speed <= 1023))
+			setAxSpeed(speed);
+	}
+
+	if (!mode)
+		setAxPosition(position);
+
 }
 
 void setCollisionsCallback(void (*callback)(void)) {

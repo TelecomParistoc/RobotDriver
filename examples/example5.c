@@ -43,9 +43,7 @@ int main() {
     enableCollisionCallback(5);
     setCollisionsCallback(collisionsCallback);
 
-	setAxActiveWheel(135);
-	setAxSpeed(2047);	
-
+    	setAxTorqueSpeedPos(135, -1, 2047, -1);
 	while(1);
 
 	return 0;
