@@ -263,7 +263,7 @@ void setLED(int number, int state) {
 
 int axGetPosition(int id) {
 	if((axCurrentId != id) || axCurrentMode )
-		setActiveDefault(id);
+		setAxActiveDefault(id);
 	int val = c_read16(cache, AX_GETPOSITION&0x0F);
 	return val;
 }
@@ -327,21 +327,23 @@ void axSetTorqueSpeedPos(int id, int torque, int speed, int position){
 	else
 		mode = DEFAULT;
 	
-	if ((id != axCurrentId) || (mode != axCurrentMode))
+	if ((id != axCurrentId) || (mode != axCurrentMode)){
 		if(mode)
-			setActiveWheel(id);
+			setAxActiveWheel(id);
 		else
-			setActiveDefault(id);
+			setAxActiveDefault(id);
+	}
 	
 	if ((torque >= 0) && (torque <= 1023))
 		setAxTorque(torque);
 
 	if (mode){
-		if((speed >= -1023) && (speed <= 1023))
+		if((speed >= -1023) && (speed <= 1023)){
 			if(speed >= 0)
 				setAxSpeed(speed);
 			else
 				setAxSpeed(1024 - speed);
+		}
 	}
 	else{
 		if((speed >= 0) && (speed <= 1023))
