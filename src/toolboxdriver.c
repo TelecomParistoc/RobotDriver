@@ -54,7 +54,7 @@ static void (*sensorsCallback)(void) = NULL;
 static void (*collisionsCallback)(void) = NULL;
 
 static void invalidateCache(int command) {
-    cache->r8_flags[command&0x0F] = CACHE_NOT_VALID;
+	cache->r8_flags[command&0x0F] = CACHE_NOT_VALID;
 }
 
 static void setAxActiveWheel(uint8_t id);
@@ -71,194 +71,194 @@ static int axCurrentMode = 2;
 static int axCurrentGoal = 2000;
 
 static void interruptManager() {
-    if(digitalRead(TB_INT)) {
-        uint8_t flags = I2Cread8(TOOLBOX_ADDR, TB_INTERRUPT_STATUS);
-	if(flags & AX12_FINISHED_MOVE) {
-		if(axCurrentGoal == I2Cread16(TOOLBOX_ADDR, AX_GETPOSITION))
-			axFinishedMove = 1;
-		else
-			axFinishedMove = 2;
+	if(digitalRead(TB_INT)) {
+		uint8_t flags = I2Cread8(TOOLBOX_ADDR, TB_INTERRUPT_STATUS);
+		if(flags & AX12_FINISHED_MOVE) {
+			if(axCurrentGoal == I2Cread16(TOOLBOX_ADDR, AX_GETPOSITION))
+				axFinishedMove = 1;
+			else
+				axFinishedMove = 2;
+		}
+		if(flags & AX12_FORCING) {
+			axForcing = 1;
+		}
+		if(flags & SENSOR_CHANGE) {
+			invalidateCache(TB_SENSORS);
+			if(sensorsCallback != NULL)
+				sensorsCallback();
+		}
+		if(flags & COLLISION_CHANGE) {
+			invalidateCache(TB_COLLISIONS);
+			if(collisionsCallback != NULL)
+				collisionsCallback();
+		}
 	}
-	if(flags & AX12_FORCING) {
-		axForcing = 1;
-	}
-        if(flags & SENSOR_CHANGE) {
-            invalidateCache(TB_SENSORS);
-            if(sensorsCallback != NULL)
-                sensorsCallback();
-        }
-        if(flags & COLLISION_CHANGE) {
-            invalidateCache(TB_COLLISIONS);
-            if(collisionsCallback != NULL)
-                collisionsCallback();
-        }
-    }
 }
 
 int initToolboxDriver() {
-    cache = initCache(TOOLBOX_ADDR, 6, 2, 10, 4);
-    cache->w8_cmds[TB_PWM1&0x0F] = TB_PWM1;
-    cache->w8_cmds[TB_PWM2&0x0F] = TB_PWM2;
-    cache->w8_cmds[TB_PWM3&0x0F] = TB_PWM3;
-    cache->w8_cmds[TB_PWM4&0x0F] = TB_PWM4;
-    cache->w8_cmds[TB_LEDS&0x0F] = TB_LEDS;
-    cache->w8_cmds[TB_LEDSSO&0x0F] = TB_LEDSSO;
-    cache->w8_cmds[TB_LEDSCO&0x0F] = TB_LEDSCO;
-    cache->w8_cmds[TB_COLLMASK&0x0F] = TB_COLLMASK;
-    cache->w8_cmds[TB_SENMASK&0x0F] = TB_SENMASK;
-    cache->w8_cmds[AX_SETACTIVEWHEEL&0x0F] = AX_SETACTIVEWHEEL;
-    cache->w8_cmds[AX_SETACTIVEDEFAULT&0x0F] = AX_SETACTIVEDEFAULT;
+	cache = initCache(TOOLBOX_ADDR, 6, 2, 10, 4);
+	cache->w8_cmds[TB_PWM1&0x0F] = TB_PWM1;
+	cache->w8_cmds[TB_PWM2&0x0F] = TB_PWM2;
+	cache->w8_cmds[TB_PWM3&0x0F] = TB_PWM3;
+	cache->w8_cmds[TB_PWM4&0x0F] = TB_PWM4;
+	cache->w8_cmds[TB_LEDS&0x0F] = TB_LEDS;
+	cache->w8_cmds[TB_LEDSSO&0x0F] = TB_LEDSSO;
+	cache->w8_cmds[TB_LEDSCO&0x0F] = TB_LEDSCO;
+	cache->w8_cmds[TB_COLLMASK&0x0F] = TB_COLLMASK;
+	cache->w8_cmds[TB_SENMASK&0x0F] = TB_SENMASK;
+	cache->w8_cmds[AX_SETACTIVEWHEEL&0x0F] = AX_SETACTIVEWHEEL;
+	cache->w8_cmds[AX_SETACTIVEDEFAULT&0x0F] = AX_SETACTIVEDEFAULT;
 
-    cache->r8_cmds[TB_INTERRUPT_STATUS&0x0F] = TB_INTERRUPT_STATUS;
-    cache->r8_cmds[TB_MOTOR_POWER_LEVEL&0x0F] = TB_MOTOR_POWER_LEVEL;
-    cache->r8_cmds[TB_LOGIC_POWER_LEVEL&0x0F] = TB_LOGIC_POWER_LEVEL;
-    cache->r8_cmds[TB_BUTTONS&0x0F] = TB_BUTTONS;
-    cache->r8_cmds[TB_SENSORS&0x0F] = TB_SENSORS;
-    cache->r8_cmds[TB_COLLISIONS&0x0F] = TB_COLLISIONS;
+	cache->r8_cmds[TB_INTERRUPT_STATUS&0x0F] = TB_INTERRUPT_STATUS;
+	cache->r8_cmds[TB_MOTOR_POWER_LEVEL&0x0F] = TB_MOTOR_POWER_LEVEL;
+	cache->r8_cmds[TB_LOGIC_POWER_LEVEL&0x0F] = TB_LOGIC_POWER_LEVEL;
+	cache->r8_cmds[TB_BUTTONS&0x0F] = TB_BUTTONS;
+	cache->r8_cmds[TB_SENSORS&0x0F] = TB_SENSORS;
+	cache->r8_cmds[TB_COLLISIONS&0x0F] = TB_COLLISIONS;
 
-    cache->w16_cmds[AX_SETSPEED&0x0F] = AX_SETSPEED;
-    cache->w16_cmds[AX_SETPOSITION&0x0F] = AX_SETPOSITION;
-    cache->w16_cmds[AX_SETTORQUE&0x0F] = AX_SETTORQUE;
+	cache->w16_cmds[AX_SETSPEED&0x0F] = AX_SETSPEED;
+	cache->w16_cmds[AX_SETPOSITION&0x0F] = AX_SETPOSITION;
+	cache->w16_cmds[AX_SETTORQUE&0x0F] = AX_SETTORQUE;
 
-    cache->r16_cmds[AX_GETPOSITION&0x0F] = AX_GETPOSITION;
+	cache->r16_cmds[AX_GETPOSITION&0x0F] = AX_GETPOSITION;
 
-    cache->updateCallback = interruptManager;
+	cache->updateCallback = interruptManager;
 
-    // setup input pins
-    wiringPiSetup();
+	// setup input pins
+	wiringPiSetup();
 
-    pinMode(TB_INT, INPUT);
-    pinMode(TB_BT4, INPUT);
-    pinMode(TB_BT5, INPUT);
-    pullUpDnControl(TB_INT, PUD_DOWN);
-    pullUpDnControl(TB_BT4, PUD_DOWN);
-    pullUpDnControl(TB_BT5, PUD_DOWN);
+	pinMode(TB_INT, INPUT);
+	pinMode(TB_BT4, INPUT);
+	pinMode(TB_BT5, INPUT);
+	pullUpDnControl(TB_INT, PUD_DOWN);
+	pullUpDnControl(TB_BT4, PUD_DOWN);
+	pullUpDnControl(TB_BT5, PUD_DOWN);
 
-    //check for the I2C connection
-    if(i2c_init(TOOLBOX_ADDR)<0) {
-        printf("initToolboxDriver : ERROR cannot initialize Toolbox Controller\n");
-        return -1;
-    } else
-        return 0;
+	//check for the I2C connection
+	if(i2c_init(TOOLBOX_ADDR)<0) {
+		printf("initToolboxDriver : ERROR cannot initialize Toolbox Controller\n");
+		return -1;
+	} else
+		return 0;
 }
 
 double getMotorPowerLevel() {
-    uint8_t val = c_read8(cache, TB_MOTOR_POWER_LEVEL&0x0F);
-    double voltage = 0;
-    if(val) {
-        int period = (val+300)*2;
-        voltage = MOTOR_LEVEL_COEFF/period;
-    }
-    return voltage;
+	uint8_t val = c_read8(cache, TB_MOTOR_POWER_LEVEL&0x0F);
+	double voltage = 0;
+	if(val) {
+		int period = (val+300)*2;
+		voltage = MOTOR_LEVEL_COEFF/period;
+	}
+	return voltage;
 }
 
 double getLogicPowerLevel() {
-    uint8_t val = c_read8(cache, TB_LOGIC_POWER_LEVEL&0x0F);
-    return (val*2 + 448)*LOGIC_LEVEL_COEFF;
+	uint8_t val = c_read8(cache, TB_LOGIC_POWER_LEVEL&0x0F);
+	return (val*2 + 448)*LOGIC_LEVEL_COEFF;
 }
 
 int getButton(int number) {
-    if(number < 1 || number > 5) {
-        printf("Button %d doesn't exist !\n", number);
-        return -1;
-    }
+	if(number < 1 || number > 5) {
+		printf("Button %d doesn't exist !\n", number);
+		return -1;
+	}
 
-    if(number == 4)
-        return digitalRead(TB_BT4);
-    if(number == 5)
-        return digitalRead(TB_BT5);
+	if(number == 4)
+		return digitalRead(TB_BT4);
+	if(number == 5)
+		return digitalRead(TB_BT5);
 
-    uint8_t val = c_read8(cache, TB_BUTTONS&0x0F);
-    if(val & (0x01 << (number-1)))
-        return 1;
-    else
-        return 0;
+	uint8_t val = c_read8(cache, TB_BUTTONS&0x0F);
+	if(val & (0x01 << (number-1)))
+		return 1;
+	else
+		return 0;
 }
 
 int getSensor(int number) {
-    if(number < 1 || number > 5) {
-        printf("SENSOR %d doesn't exist !\n", number);
-        return 0;
-    }
-    uint8_t val = c_read8(cache, TB_SENSORS&0x0F);
-    if(val & (0x01 << (number-1)))
-        return 1;
-    else
-        return 0;
+	if(number < 1 || number > 5) {
+		printf("SENSOR %d doesn't exist !\n", number);
+		return 0;
+	}
+	uint8_t val = c_read8(cache, TB_SENSORS&0x0F);
+	if(val & (0x01 << (number-1)))
+		return 1;
+	else
+		return 0;
 }
 
 int getCollisionDetector(int number) {
-    if(number < 1 || number > 5) {
-        printf("Collision detector %d doesn't exist !\n", number);
-        return -1;
-    }
-    uint8_t val = c_read8(cache, TB_COLLISIONS&0x0F);
-    if(val & (0x01 << (number-1)))
-        return 1;
-    else
-        return 0;
+	if(number < 1 || number > 5) {
+		printf("Collision detector %d doesn't exist !\n", number);
+		return -1;
+	}
+	uint8_t val = c_read8(cache, TB_COLLISIONS&0x0F);
+	if(val & (0x01 << (number-1)))
+		return 1;
+	else
+		return 0;
 }
 
 void enableSensorCallback(int number) {
-    if(number < 1 || number > 5) {
-        printf("SENSOR %d doesn't exist !\n", number);
-        return;
-    }
-    sensorsMask |= 1 << (number - 1);
-    c_write8(cache, TB_SENMASK&0x0F, sensorsMask);
+	if(number < 1 || number > 5) {
+		printf("SENSOR %d doesn't exist !\n", number);
+		return;
+	}
+	sensorsMask |= 1 << (number - 1);
+	c_write8(cache, TB_SENMASK&0x0F, sensorsMask);
 }
 void disableSensorCallback(int number) {
-    if(number < 1 || number > 5) {
-        printf("SENSOR %d doesn't exist !\n", number);
-        return;
-    }
-    sensorsMask &= 0xFF ^ (1 << (number - 1));
-    c_write8(cache, TB_SENMASK&0x0F, sensorsMask);
+	if(number < 1 || number > 5) {
+		printf("SENSOR %d doesn't exist !\n", number);
+		return;
+	}
+	sensorsMask &= 0xFF ^ (1 << (number - 1));
+	c_write8(cache, TB_SENMASK&0x0F, sensorsMask);
 }
 void enableCollisionCallback(int number) {
-    if(number < 1 || number > 5) {
-        printf("Collision detector %d doesn't exist !\n", number);
-        return;
-    }
-    collisionsMask |= 1 << (number - 1);
-    c_write8(cache, TB_COLLMASK&0x0F, collisionsMask);
+	if(number < 1 || number > 5) {
+		printf("Collision detector %d doesn't exist !\n", number);
+		return;
+	}
+	collisionsMask |= 1 << (number - 1);
+	c_write8(cache, TB_COLLMASK&0x0F, collisionsMask);
 }
 void disableCollisionCallback(int number) {
-    if(number < 1 || number > 5) {
-        printf("Collision detector %d doesn't exist !\n", number);
-        return;
-    }
-    collisionsMask &= 0xFF ^ (1 << (number - 1));
-    c_write8(cache, TB_COLLMASK&0x0F, collisionsMask);
+	if(number < 1 || number > 5) {
+		printf("Collision detector %d doesn't exist !\n", number);
+		return;
+	}
+	collisionsMask &= 0xFF ^ (1 << (number - 1));
+	c_write8(cache, TB_COLLMASK&0x0F, collisionsMask);
 }
 
 void setPWM(int number, uint8_t value) {
-    double dc = value*0.754;
-    if(number < 1 || number > 4) {
-        printf("the PWM out %d doesn't exist !\n", number);
-        return;
-    }
-    c_write8(cache, number, (uint8_t) dc);
+	double dc = value*0.754;
+	if(number < 1 || number > 4) {
+		printf("the PWM out %d doesn't exist !\n", number);
+		return;
+	}
+	c_write8(cache, number, (uint8_t) dc);
 }
 
 void setLED(int number, int state) {
-    if(number < 1 || number > 4) {
-        printf("LED%d doesn't exist !\n", number);
-        return;
-    }
-    if(state) {
-        // if some data is already in cache
-        if(cache->w8_flags[TB_LEDSSO&0x0F]==CACHE_VALID)
-            cache->w8_cache[TB_LEDSSO&0x0F] |= 1 << (number - 1);
-        else
-            c_write8(cache, TB_LEDSSO&0x0F, 1 << (number - 1));
-    } else {
-        // if some data is already in cache
-        if(cache->w8_flags[TB_LEDSCO&0x0F]==CACHE_VALID)
-            cache->w8_cache[TB_LEDSCO&0x0F] |= 1 << (number - 1);
-        else
-            c_write8(cache, TB_LEDSCO&0x0F, 1 << (number - 1));
-    }
+	if(number < 1 || number > 4) {
+		printf("LED%d doesn't exist !\n", number);
+		return;
+	}
+	if(state) {
+		// if some data is already in cache
+		if(cache->w8_flags[TB_LEDSSO&0x0F]==CACHE_VALID)
+			cache->w8_cache[TB_LEDSSO&0x0F] |= 1 << (number - 1);
+		else
+			c_write8(cache, TB_LEDSSO&0x0F, 1 << (number - 1));
+	} else {
+		// if some data is already in cache
+		if(cache->w8_flags[TB_LEDSCO&0x0F]==CACHE_VALID)
+			cache->w8_cache[TB_LEDSCO&0x0F] |= 1 << (number - 1);
+		else
+			c_write8(cache, TB_LEDSCO&0x0F, 1 << (number - 1));
+	}
 }
 
 int axGetPosition(int id) {
@@ -320,20 +320,20 @@ int axIsForcing() {
 }
 
 void axSetTorqueSpeedPos(int id, int torque, int speed, int position){
-	
+
 	int mode;
 	if ((position < 0) || (position > 1023))
 		mode = WHEEL;
 	else
 		mode = DEFAULT;
-	
+
 	if ((id != axCurrentId) || (mode != axCurrentMode)){
 		if(mode)
 			setAxActiveWheel(id);
 		else
 			setAxActiveDefault(id);
 	}
-	
+
 	if ((torque >= 0) && (torque <= 1023))
 		setAxTorque(torque);
 
@@ -356,9 +356,9 @@ void axSetTorqueSpeedPos(int id, int torque, int speed, int position){
 }
 
 void setCollisionsCallback(void (*callback)(void)) {
-    collisionsCallback = callback;
+	collisionsCallback = callback;
 }
 
 void setSensorsCallback(void (*callback)(void)) {
-    sensorsCallback = callback;
+	sensorsCallback = callback;
 }
