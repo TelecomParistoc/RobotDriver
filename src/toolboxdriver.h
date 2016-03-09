@@ -93,8 +93,8 @@ int axIsForcing();
 
 void axSetTorqueSpeed(int id, int torque, int speed, int mode);
 
-/* Moves Ax-12 with id passed as parameter to position and calls callback()
- * after the end of the move */
+/* Moves Ax-12 with id passed as parameter to position (range 0 - 1023)
+ * and calls callback() after the end of the move */
 
 void axMove(int id, int position, void (* callback) (void));
 
