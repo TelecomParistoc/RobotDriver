@@ -44,7 +44,7 @@ int main() {
 	setCollisionsCallback(collisionsCallback);
 
 	axSetTorqueSpeedPos(124, 1023, 200, 1000);
-	while(! (axHasFinishedMove() || axIsForcing()));
+	while(! (axHasFinishedMove() || axIsForcing())) { delayMilli(10); }
 	printf("End\n");
 
 	while(1) {
