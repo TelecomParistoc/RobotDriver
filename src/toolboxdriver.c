@@ -63,8 +63,10 @@ static void setAxSpeed(int speed);
 static void setAxPosition(int position);
 static void setAxTorque(int torque);
 
-static volatile int axFinishedMove;
-static volatile int axForcing;
+static volatile int axFinishedMove = 0;
+static volatile int axForcing = 0;
+
+static void (*axCallback)(void) = NULL;
 
 static int axCurrentId = 254;
 static int axCurrentMode = 2;
@@ -78,6 +80,8 @@ static void interruptManager() {
 				axFinishedMove = 1;
 			else
 				axFinishedMove = 2;
+			if(axCallback != NULL)
+				axCallback();
 		}
 		if(flags & AX12_FORCING) {
 			axForcing = 1;
@@ -319,13 +323,7 @@ int axIsForcing() {
 	return 0;
 }
 
-void axSetTorqueSpeedPos(int id, int torque, int speed, int position){
-
-	int mode;
-	if ((position < 0) || (position > 1023))
-		mode = WHEEL;
-	else
-		mode = DEFAULT;
+void axSetTorqueSpeed(int id, int torque, int speed, int mode){
 
 	if ((id != axCurrentId) || (mode != axCurrentMode)){
 		if(mode)
@@ -350,10 +348,23 @@ void axSetTorqueSpeedPos(int id, int torque, int speed, int position){
 			setAxSpeed(speed);
 	}
 
-	if (!mode)
-		setAxPosition(position);
-
+	axFinishedMove = 0;
 }
+
+void axMove(int id, int position, (void *) callback){
+	if ((id != axCurrentId) || (mode != axCurrentMode))
+		setAxActiveDefault(id);
+	axFinishedMove = 0;
+	if ((position >= 0 && position <= 1023)){
+		axCallback = callback;
+		setAxPosition(position);
+	}
+	else{
+		printf("Position %d is out of range\n", position);
+	}
+}
+
+	
 
 void setCollisionsCallback(void (*callback)(void)) {
 	collisionsCallback = callback;

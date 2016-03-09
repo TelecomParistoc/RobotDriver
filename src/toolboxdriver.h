@@ -74,8 +74,11 @@ int axHasFinishedMove();
 int axIsForcing();
 
 /* High level function to control Ax-12 with id passed as parameter
+ * Mustn't be called to modify settings of a moving ax-12
+ * If you wan't to set speed or torque for a move, call this function
+ * before the axMove function
  * If you don't want to change speed or torque, pass an invalid parameter
- * For endless turn mode, pass an invalid position parameter
+ * The last parameter enables you to chose the Ax-12 mode 
  *
  * Torque : sets the maximum torque
  * Range  : 0 <= val <= 1023
@@ -86,10 +89,14 @@ int axIsForcing();
  *     a positive value is uses for a CounterClockWise rotation
  *     a negative value is used for a ClockWise rotation
  *
- * Position : sets the goal position
- * Range    : 0 <= val <= 1023 */
+ * Mode : 0 for the Normal mode, 1 for Wheel moed (endless turn mode) */
 
-void axSetTorqueSpeedPos(int id, int torque, int speed, int position);
+void axSetTorqueSpeed(int id, int torque, int speed, int mode);
+
+/* Moves Ax-12 with id passed as parameter to position and calls callback()
+ * after the end of the move */
+
+void axMove(int id, int position, (void *) callback);
 
 #ifdef __cplusplus
 }
