@@ -43,16 +43,18 @@ int main() {
 	enableCollisionCallback(5);
 	setCollisionsCallback(collisionsCallback);
 
-	axSetTorqueSpeedPos(124, 1023, 200, 1000);
+	axSetTorqueSpeed(124, 1023, 200, 0);
+	axMove(124, 1023, NULL);
 	while(! (axHasFinishedMove() || axIsForcing())) { delayMilli(10); }
 	printf("End\n");
 
+	/*axSetTorqueSpeed(124, -1, -1, 0);
 	while(1) {
-		/*axSetTorqueSpeedPos(124, -1, -1, 0);
-		  while(! (axHasFinishedMove() || axForcing());
-		  axSetTorqueSpeedPos(124, -1, -1, 1000);
-		  while(! (axHasFinishedMove() || axForcing());*/
-	}
+		axMove(124, 0, NULL);
+		while(! (axHasFinishedMove() || axIsForcing())) { delayMilli(10); }
+		axMove(124, 1023, NULL);
+		while(! (axHasFinishedMove() || axIsForcing())) { delayMilli(10); }
+	}*/
 	while(1);
 	return 0;
 }
