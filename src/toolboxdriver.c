@@ -351,7 +351,7 @@ void axSetTorqueSpeed(int id, int torque, int speed, int mode){
 	axFinishedMove = 0;
 }
 
-void axMove(int id, int position, (void *) callback){
+void axMove(int id, int position, void (* callback) (void)){
 	if ((id != axCurrentId) || (mode != axCurrentMode))
 		setAxActiveDefault(id);
 	axFinishedMove = 0;
