@@ -19,6 +19,7 @@
 #define TB_SENMASK 0x49
 #define AX_SETACTIVEWHEEL 0x4A
 #define AX_SETACTIVEDEFAULT 0x4B
+#define AX_RESET 0x4C
 // readable 8 bit registers
 #define TB_INTERRUPT_STATUS 0x40
 #define TB_MOTOR_POWER_LEVEL 0x41
@@ -112,6 +113,7 @@ int initToolboxDriver() {
 	cache->w8_cmds[TB_SENMASK&0x0F] = TB_SENMASK;
 	cache->w8_cmds[AX_SETACTIVEWHEEL&0x0F] = AX_SETACTIVEWHEEL;
 	cache->w8_cmds[AX_SETACTIVEDEFAULT&0x0F] = AX_SETACTIVEDEFAULT;
+	cache->w8_cmds[AX_RESET&0x0F] = AX_RESET;
 
 	cache->r8_cmds[TB_INTERRUPT_STATUS&0x0F] = TB_INTERRUPT_STATUS;
 	cache->r8_cmds[TB_MOTOR_POWER_LEVEL&0x0F] = TB_MOTOR_POWER_LEVEL;
@@ -139,7 +141,7 @@ int initToolboxDriver() {
 	pullUpDnControl(TB_BT5, PUD_DOWN);
 
 	//check for the I2C connection
-	if(i2c_init(TOOLBOX_ADDR)<0) {
+	if(i2c_init(TOOLBOX_ADDR) < 0) {
 		printf("initToolboxDriver : ERROR cannot initialize Toolbox Controller\n");
 		return -1;
 	} else
@@ -302,6 +304,11 @@ void setAxPosition(int position) {
 
 void setAxTorque(int torque) {
 	I2Cwrite16(TOOLBOX_ADDR, AX_SETTORQUE, torque);
+	delayMilli(10);
+}
+
+void axReset() {
+	I2Cwrite8(TOOLBOX_ADDR, AX_RESET, 0);
 	delayMilli(10);
 }
 

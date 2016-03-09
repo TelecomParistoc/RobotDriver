@@ -98,6 +98,10 @@ void axSetTorqueSpeed(int id, int torque, int speed, int mode);
 
 void axMove(int id, int position, void (* callback) (void));
 
+/* Calls the PIC routine that initializes all the Ax-12 */
+
+void axReset();
+
 #ifdef __cplusplus
 }
 #endif
