@@ -310,7 +310,8 @@ void setAxTorque(int torque) {
 
 void axReset() {
 	I2Cwrite8(TOOLBOX_ADDR, AX_RESET, 0);
-	delayMilli(200);
+	delayMilli(500);
+	printf("Reset\n");
 }
 
 int axHasFinishedMove() {
