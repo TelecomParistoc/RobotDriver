@@ -309,7 +309,7 @@ void setAxTorque(int torque) {
 
 void axReset() {
 	I2Cwrite8(TOOLBOX_ADDR, AX_RESET, 0);
-	delayMilli(10);
+	delayMilli(50);
 }
 
 int axHasFinishedMove() {
