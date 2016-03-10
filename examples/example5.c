@@ -43,7 +43,7 @@ int main() {
 	enableCollisionCallback(5);
 	setCollisionsCallback(collisionsCallback);
 
-	setAxTorqueSpeedPos(135, -1, 2047, 1);
+	axSetTorqueSpeed(124, -1, 1023, 1);
 	while(1);
 
 	return 0;
