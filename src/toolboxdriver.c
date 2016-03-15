@@ -285,7 +285,8 @@ void setAxActiveWheel(uint8_t id) {
 
 
 void setAxActiveDefault(uint8_t id) {
-	I2Cwrite8(TOOLBOX_ADDR, AX_SETACTIVEDEFAULT, id);
+	printf("Write : %d\n", I2Cwrite8(TOOLBOX_ADDR, AX_SETACTIVEDEFAULT, id));
+	printf("Setting active number %d\n", id);
 	axCurrentId = id;
 	axCurrentMode = DEFAULT;
 	axCurrentGoal = 2000;
