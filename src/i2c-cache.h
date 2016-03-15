@@ -1,5 +1,5 @@
 #ifndef I2CDRIVERCACHE_H
-#define  I2CDRIVERCACHE_H
+#define I2CDRIVERCACHE_H
 
 #include <stdint.h>
 

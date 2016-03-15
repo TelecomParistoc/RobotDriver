@@ -16,6 +16,7 @@ void delayMilli(int milliseconds) {
 	for(int i=0; i<milliseconds; i++)
 		nanosleep(&wait_time, NULL);
 }
+
 static void collisionsCallback() {
 	printf("coll3:%d, coll4:%d, coll5: %d\n", getCollisionDetector(3), getCollisionDetector(4), getCollisionDetector(5));
 }
@@ -55,9 +56,6 @@ int main() {
 	setCollisionsCallback(collisionsCallback);
 
 	axSetTorqueSpeed(124, 1023, 200, 0);
-	/*axMove(124, 1023, NULL);
-	while(! (axHasFinishedMove() || axIsForcing())) { delayMilli(10); }
-	printf("End\n"); */
 
 	axMove(124, pos, axCallback);
 

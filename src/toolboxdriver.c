@@ -17,9 +17,6 @@
 #define TB_LEDSCO 0x47
 #define TB_COLLMASK 0x48
 #define TB_SENMASK 0x49
-#define AX_SETACTIVEWHEEL 0x4A
-#define AX_SETACTIVEDEFAULT 0x4B
-#define AX_RESET 0x4C
 // readable 8 bit registers
 #define TB_INTERRUPT_STATUS 0x40
 #define TB_MOTOR_POWER_LEVEL 0x41
@@ -31,6 +28,9 @@
 #define AX_SETSPEED 0x81
 #define AX_SETPOSITION 0x82
 #define AX_SETTORQUE 0x83
+#define AX_SETACTIVEWHEEL 0x84
+#define AX_SETACTIVEDEFAULT 0x85
+#define AX_RESET 0x86
 // readable 16 bit registers
 #define AX_GETPOSITION 0x81
 // input pins
@@ -102,7 +102,7 @@ static void interruptManager() {
 }
 
 int initToolboxDriver() {
-	cache = initCache(TOOLBOX_ADDR, 6, 2, 10, 4);
+	cache = initCache(TOOLBOX_ADDR, 6, 2, 10, 7);
 	cache->w8_cmds[TB_PWM1&0x0F] = TB_PWM1;
 	cache->w8_cmds[TB_PWM2&0x0F] = TB_PWM2;
 	cache->w8_cmds[TB_PWM3&0x0F] = TB_PWM3;
@@ -112,9 +112,6 @@ int initToolboxDriver() {
 	cache->w8_cmds[TB_LEDSCO&0x0F] = TB_LEDSCO;
 	cache->w8_cmds[TB_COLLMASK&0x0F] = TB_COLLMASK;
 	cache->w8_cmds[TB_SENMASK&0x0F] = TB_SENMASK;
-	cache->w8_cmds[AX_SETACTIVEWHEEL&0x0F] = AX_SETACTIVEWHEEL;
-	cache->w8_cmds[AX_SETACTIVEDEFAULT&0x0F] = AX_SETACTIVEDEFAULT;
-	cache->w8_cmds[AX_RESET&0x0F] = AX_RESET;
 
 	cache->r8_cmds[TB_INTERRUPT_STATUS&0x0F] = TB_INTERRUPT_STATUS;
 	cache->r8_cmds[TB_MOTOR_POWER_LEVEL&0x0F] = TB_MOTOR_POWER_LEVEL;
@@ -126,6 +123,9 @@ int initToolboxDriver() {
 	cache->w16_cmds[AX_SETSPEED&0x0F] = AX_SETSPEED;
 	cache->w16_cmds[AX_SETPOSITION&0x0F] = AX_SETPOSITION;
 	cache->w16_cmds[AX_SETTORQUE&0x0F] = AX_SETTORQUE;
+	cache->w16_cmds[AX_SETACTIVEWHEEL&0x0F] = AX_SETACTIVEWHEEL;
+	cache->w16_cmds[AX_SETACTIVEDEFAULT&0x0F] = AX_SETACTIVEDEFAULT;
+	cache->w16_cmds[AX_RESET&0x0F] = AX_RESET;
 
 	cache->r16_cmds[AX_GETPOSITION&0x0F] = AX_GETPOSITION;
 
@@ -276,7 +276,7 @@ int axGetPosition(int id) {
 }
 
 void setAxActiveWheel(uint8_t id) {
-	I2Cwrite8(TOOLBOX_ADDR, AX_SETACTIVEWHEEL, id);
+	I2Cwrite16(TOOLBOX_ADDR, AX_SETACTIVEWHEEL, id);
 	axCurrentId = id;
 	axCurrentMode = WHEEL;
 	axCurrentGoal = 2000;
@@ -285,12 +285,11 @@ void setAxActiveWheel(uint8_t id) {
 
 
 void setAxActiveDefault(uint8_t id) {
-	printf("Write : %d\n", I2Cwrite8(TOOLBOX_ADDR, AX_SETACTIVEDEFAULT, id));
-	printf("Setting active number %d\n", id);
+	I2Cwrite16(TOOLBOX_ADDR, AX_SETACTIVEDEFAULT, id);
 	axCurrentId = id;
 	axCurrentMode = DEFAULT;
 	axCurrentGoal = 2000;
-	delayMilli(2000);
+	delayMilli(50);
 }
 
 void setAxSpeed(int speed) {
@@ -312,7 +311,6 @@ void setAxTorque(int torque) {
 void axReset() {
 	I2Cwrite8(TOOLBOX_ADDR, AX_RESET, 0);
 	delayMilli(50);
-	printf("Reset\n");
 }
 
 int axHasFinishedMove() {
@@ -336,7 +334,6 @@ int axIsForcing() {
 void axSetTorqueSpeed(int id, int torque, int speed, int mode){
 
 	if ((id != axCurrentId) || (mode != axCurrentMode)){
-		printf("Set mode %d for ax-12 %d\n", mode, id);
 		if(mode)
 			setAxActiveWheel(id);
 		else
