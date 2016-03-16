@@ -78,6 +78,7 @@ static void interruptManager() {
 		uint8_t flags = I2Cread8(TOOLBOX_ADDR, TB_INTERRUPT_STATUS);
 		if(flags & AX12_FINISHED_MOVE) {
 			int currentPos = I2Cread16(TOOLBOX_ADDR, AX_GETPOSITION);
+			printf("Mouvement fini\n");
 			if((axCurrentGoal - currentPos < 5) && (axCurrentGoal - currentPos > -5))
 				axFinishedMove = 1;
 			else
@@ -311,6 +312,7 @@ void setAxTorque(int torque) {
 void axReset() {
 	I2Cwrite8(TOOLBOX_ADDR, AX_RESET, 0);
 	delayMilli(50);
+	printf("Reset ax12\n");
 }
 
 int axHasFinishedMove() {
