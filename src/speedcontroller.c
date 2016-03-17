@@ -69,12 +69,12 @@ void setRobotDistance(double distance) {
 }
 
 static void terminateMotionAction(struct motionElement* action) {
+    action->finished = 1;
     if(action->callback != NULL)
         action->callback(action);
     if(moveStopCallback != NULL)
         moveStopCallback();
     newMotion = 1;
-    action->finished = 1;
 }
 static double computeSpeedChange(struct motionElement* action) {
     double speed = limitAcceleration(currentTargetSpeed, action->speed);
