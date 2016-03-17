@@ -11,6 +11,11 @@ static double currentTargetSpeed = 0;
 static double distanceTolerance = 1; // in mm
 extern int blockingHistoryFill;
 
+static void (*moveStartCallback)(void) = NULL;
+static void (*moveStopCallback)(void) = NULL;
+static int newMotion = 1;
+static double distanceAtMoveStart = 0;
+
 void setDistanceTolerance(double tolerance) { distanceTolerance = fabs(tolerance); }
 double getDistanceTolerance() { return distanceTolerance; }
 
@@ -66,6 +71,9 @@ void setRobotDistance(double distance) {
 static void terminateMotionAction(struct motionElement* action) {
     if(action->callback != NULL)
         action->callback(action);
+    if(moveStopCallback != NULL)
+        moveStopCallback();
+    newMotion = 1;
     action->finished = 1;
 }
 static double computeSpeedChange(struct motionElement* action) {
@@ -116,6 +124,12 @@ static double computeSpeedChangeAt(struct motionElement* action, double distance
 double computeTargetSpeed(double distance) {
     struct motionElement* action = getHead();
     if(action != NULL) {
+        if(newMotion) {
+            newMotion = 0;
+            if(moveStartCallback != NULL)
+                moveStartCallback();
+            distanceAtMoveStart = getRobotDistance();
+        }
         switch (action->type) {
             case speedChange:
                 currentTargetSpeed = computeSpeedChange(action);
@@ -129,4 +143,15 @@ double computeTargetSpeed(double distance) {
         }
     }
     return currentTargetSpeed;
+}
+
+void setMoveStartCallback(void (*callback)(void)) {
+    moveStartCallback = callback;
+}
+void setMoveEndCallback(void (*callback)(void)) {
+    moveStopCallback = callback;
+}
+
+double getDistanceSinceMoveStart() {
+    return getRobotDistance() - distanceAtMoveStart;
 }

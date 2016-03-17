@@ -104,7 +104,20 @@ double getTargetSpeed();
   * it will clear the queue and set the speed to the given value (in m/s) */
 void fastSpeedChange(double speed);
 
+/* set a callback called when a new speedChange/speedChangeAt/stopAt move begins
+ * set to NULL to disable
+ * the callback should be like : void myCallback(void) { ... } */
+void setMoveStartCallback(void (*callback)(void));
+/* set a callback called when a speedChange/speedChangeAt/stopAt move ends
+ * set to NULL to disable
+ * the callback should be like : void myCallback(void) { ... } */
+void setMoveEndCallback(void (*callback)(void));
 
+/* get the distance travelled since the beginning of the current move (in mm)
+ * it is positive when the robot travelled forward and negative when the robot
+ * travelled backward. The distance is reset when a new move starts, that is,
+ * whenever the moveStartCallback is called */
+double getDistanceSinceMoveStart();
 
 // DO NOT CALL, used by the implementation
 double computeTargetSpeed(double distance);
