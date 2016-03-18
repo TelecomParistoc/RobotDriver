@@ -37,6 +37,7 @@
 #define TB_INT 7
 #define TB_BT4 2
 #define TB_BT5 3
+#define TB_BT6 0
 // interrupt flags
 #define AX12_FINISHED_MOVE 0x01
 #define AX12_FORCING       0x02
@@ -138,9 +139,11 @@ int initToolboxDriver() {
 	pinMode(TB_INT, INPUT);
 	pinMode(TB_BT4, INPUT);
 	pinMode(TB_BT5, INPUT);
+	pinMode(TB_BT6, INPUT);
 	pullUpDnControl(TB_INT, PUD_DOWN);
 	pullUpDnControl(TB_BT4, PUD_DOWN);
 	pullUpDnControl(TB_BT5, PUD_DOWN);
+	pullUpDnControl(TB_BT6, PUD_DOWN);
 
 	//check for the I2C connection
 	if(i2c_init(TOOLBOX_ADDR) < 0) {
@@ -166,15 +169,23 @@ double getLogicPowerLevel() {
 }
 
 int getButton(int number) {
-	if(number < 1 || number > 5) {
-		printf("Button %d doesn't exist !\n", number);
-		return -1;
-	}
-
+	#ifdef BIG_ROBOT
+		if(number < 1 || number > 6) {
+			printf("Button %d doesn't exist !\n", number);
+			return -1;
+		}
+	#else
+		if(number < 1 || number > 5) {
+			printf("Button %d doesn't exist !\n", number);
+			return -1;
+		}
+	#endif
 	if(number == 4)
 		return digitalRead(TB_BT4);
 	if(number == 5)
 		return digitalRead(TB_BT5);
+	if(number == 6)
+		return digitalRead(TB_BT6);
 
 	uint8_t val = c_read8(cache, TB_BUTTONS&0x0F);
 	if(val & (0x01 << (number-1)))

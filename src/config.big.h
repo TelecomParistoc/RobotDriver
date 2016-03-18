@@ -9,4 +9,12 @@
 // distance between coding wheels in mm
 #define WHEEL_DISTANCE 190 // !!!! WARNING : WRONG VALUE !!!!
 
+// coefficient for motor battery level
+#define MOTOR_LEVEL_COEFF 7840.0
+
+// coefficient for motor battery level
+#define LOGIC_LEVEL_COEFF 0.014
+
+#define BIG_ROBOT
+
 #endif
