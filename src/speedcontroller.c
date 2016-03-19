@@ -13,8 +13,10 @@ extern int blockingHistoryFill;
 
 static void (*moveStartCallback)(void) = NULL;
 static void (*moveStopCallback)(void) = NULL;
-static int newMotion = 1;
+static int newMotion = 0;
 static double distanceAtMoveStart = 0;
+static int freshDistanceSet = 0;
+static double tmpDistance;
 
 void setDistanceTolerance(double tolerance) { distanceTolerance = fabs(tolerance); }
 double getDistanceTolerance() { return distanceTolerance; }
@@ -34,6 +36,7 @@ static void queueAction(motionType type, double speed, double distance, motionCa
             removeHead();
     }
     addToQueue(action);
+    newMotion = 1;
 }
 void queueSpeedChange(double speed, motionCallback onMotionFinished) {
     queueAction(speedChange, speed, 0, onMotionFinished);
@@ -56,7 +59,7 @@ double getTargetSpeed() {
     return currentTargetSpeed;
 }
 double getRobotDistance() {
-    double dist = (getRdistance()+getLdistance())/2;
+    double dist = freshDistanceSet ? tmpDistance : (getRdistance()+getLdistance())/2;
     if(dist > 11000)
         printf("!! WARNING !! : distance may overflow, please reset it ASAP\n");
     return dist;
@@ -66,6 +69,8 @@ void setRobotDistance(double distance) {
     blockingHistoryFill = 0;
     setRdistance(distance);
     setLdistance(distance);
+    tmpDistance = distance;
+    freshDistanceSet = 1;
 }
 
 static void terminateMotionAction(struct motionElement* action) {
@@ -141,6 +146,9 @@ double computeTargetSpeed(double distance) {
                 currentTargetSpeed = computeStopAt(action, distance);
                 break;
         }
+    }
+    if(freshDistanceSet) {
+        freshDistanceSet = 0;
     }
     return currentTargetSpeed;
 }
