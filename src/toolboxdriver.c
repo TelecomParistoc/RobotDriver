@@ -292,7 +292,6 @@ void setAxActiveWheel(uint8_t id) {
 	axCurrentId = id;
 	axCurrentMode = WHEEL;
 	axCurrentGoal = 2000;
-	delayMilli(20);
 }
 
 
@@ -301,29 +300,23 @@ void setAxActiveDefault(uint8_t id) {
 	axCurrentId = id;
 	axCurrentMode = DEFAULT;
 	axCurrentGoal = 2000;
-	delayMilli(50);
 }
 
 void setAxSpeed(int speed) {
 	I2Cwrite16(TOOLBOX_ADDR, AX_SETSPEED, speed);
-	delayMilli(10);
 }
 
 void setAxPosition(int position) {
 	I2Cwrite16(TOOLBOX_ADDR, AX_SETPOSITION, position);
 	axCurrentGoal = position;
-	delayMilli(10);
 }
 
 void setAxTorque(int torque) {
 	I2Cwrite16(TOOLBOX_ADDR, AX_SETTORQUE, torque);
-	delayMilli(10);
 }
 
 void axReset() {
-	I2Cwrite8(TOOLBOX_ADDR, AX_RESET, 0);
-	delayMilli(50);
-	printf("Reset ax12\n");
+	I2Cwrite16(TOOLBOX_ADDR, AX_RESET, 0);
 }
 
 int axHasFinishedMove() {
