@@ -15,4 +15,6 @@
 // coefficient for motor battery level
 #define LOGIC_LEVEL_COEFF 0.014
 
+#define SMALL_ROBOT
+
 #endif
