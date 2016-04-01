@@ -4,16 +4,8 @@
 #include <time.h>
 #include <wiringPi.h>
 
-/* In this example, we'll test the "tapis roulant" (i don't know how it translates in English and I'm too lazy to search)*/
+/* In this example, we'll test the conveyor belt*/
 
-void delayMilli(int milliseconds) {
-	struct timespec wait_time = {
-		.tv_sec = 0,
-		.tv_nsec = 1000000
-	};
-	for(int i=0; i<milliseconds; i++)
-		nanosleep(&wait_time, NULL);
-}
 static void collisionsCallback() {
 	printf("coll3:%d, coll4:%d, coll5: %d\n", getCollisionDetector(3), getCollisionDetector(4), getCollisionDetector(5));
 }

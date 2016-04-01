@@ -8,15 +8,6 @@
 
 int pos = 0;
 
-void delayMilli(int milliseconds) {
-	struct timespec wait_time = {
-		.tv_sec = 0,
-		.tv_nsec = 1000000
-	};
-	for(int i=0; i<milliseconds; i++)
-		nanosleep(&wait_time, NULL);
-}
-
 static void collisionsCallback() {
 	printf("coll3:%d, coll4:%d, coll5: %d\n", getCollisionDetector(3), getCollisionDetector(4), getCollisionDetector(5));
 }
@@ -37,10 +28,12 @@ int main() {
 	initToolboxDriver();
 	initMotionController();
 
+	// turn on some LEDs on the roof
 	setLED(1, 1);
 	setLED(2, 0);
 	setLED(3, 1);
 
+	// enable callback only for sensors in use and call sensorsCallback when something happens
 	enableSensorCallback(1);
 	disableSensorCallback(2);
 	disableSensorCallback(3);
@@ -48,6 +41,7 @@ int main() {
 	disableSensorCallback(5);
 	setSensorsCallback(sensorsCallback);
 
+	// enable callback only for collision detectors in use and call collisionsCallback when something happens
 	disableCollisionCallback(1);
 	disableCollisionCallback(2);
 	enableCollisionCallback(3);
@@ -55,11 +49,10 @@ int main() {
 	enableCollisionCallback(5);
 	setCollisionsCallback(collisionsCallback);
 
+	// move an AX12 and call axCallback when it's done
 	axSetTorqueSpeed(124, 1023, 200, 0);
-
 	axMove(124, pos, axCallback);
 
 	while(1);
-	axCallback();
 	return 0;
 }
