@@ -380,7 +380,7 @@ void axMove(int id, int position, void (* callback) (void)){
 
 void axStopPolling(){
 	axSetTorqueSpeed(0, -1, 2000, 1);
-}	
+}
 
 void setCollisionsCallback(void (*callback)(void)) {
 	collisionsCallback = callback;
@@ -388,4 +388,8 @@ void setCollisionsCallback(void (*callback)(void)) {
 
 void setSensorsCallback(void (*callback)(void)) {
 	sensorsCallback = callback;
+}
+
+void waitFor(int milliseconds) {
+	delayMilli(milliseconds);
 }

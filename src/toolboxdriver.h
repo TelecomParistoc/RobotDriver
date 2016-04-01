@@ -60,6 +60,13 @@ void setPWM(int number, uint8_t value);
  *      state : 1 to turn on, 0 to turn off */
 void setLED(int number, int state);
 
+/* wait for the given amount of time (in milliseconds). Please note that actual
+ * wait time may vary of +/- 10% the target value */
+void waitFor(int milliseconds);
+
+
+/* ====================== AX-12 ====================== */
+
 /* Returns the position of the ax-12, */
 
 int axGetPosition(int id);
@@ -78,7 +85,7 @@ int axIsForcing();
  * If you wan't to set speed or torque for a move, call this function
  * before the axMove function
  * If you don't want to change speed or torque, pass an invalid parameter
- * The last parameter enables you to chose the Ax-12 mode 
+ * The last parameter enables you to chose the Ax-12 mode
  *
  * Torque : sets the maximum torque
  * Range  : 0 <= val <= 1023
@@ -103,6 +110,7 @@ void axStopPolling();
 /* Calls the PIC routine that initializes all the Ax-12 */
 
 void axReset();
+
 
 #ifdef __cplusplus
 }
