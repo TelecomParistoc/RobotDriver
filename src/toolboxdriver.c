@@ -287,7 +287,7 @@ int axGetPosition(int id) {
 void setAxActiveWheel(uint8_t id) {
 	I2Cwrite16(TOOLBOX_ADDR, AX_SETACTIVEWHEEL, id);
 	axCurrentId = id;
-	axCurrentMode = WHEEL;
+	axCurrentMode = WHEEL_MODE;
 	axCurrentGoal = 2000;
 }
 
@@ -295,7 +295,7 @@ void setAxActiveWheel(uint8_t id) {
 void setAxActiveDefault(uint8_t id) {
 	I2Cwrite16(TOOLBOX_ADDR, AX_SETACTIVEDEFAULT, id);
 	axCurrentId = id;
-	axCurrentMode = DEFAULT;
+	axCurrentMode = DEFAULT_MODE;
 	axCurrentGoal = 2000;
 }
 
