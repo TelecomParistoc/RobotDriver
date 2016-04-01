@@ -80,6 +80,9 @@ int axGetPosition(int id);
 int axHasFinishedMove();
 int axIsForcing();
 
+// AX-12 MODES
+#define DEFAULT_MODE 0
+#define WHEEL_MODE 1
 /* High level function to control Ax-12 with id passed as parameter
  * Mustn't be called to modify settings of a moving ax-12
  * If you wan't to set speed or torque for a move, call this function
@@ -97,8 +100,8 @@ int axIsForcing();
  *     a negative value is used for a ClockWise rotation
  *
  * Mode : 0 for the Normal mode, 1 for Wheel moed (endless turn mode) */
-
 void axSetTorqueSpeed(int id, int torque, int speed, int mode);
+
 
 /* Moves Ax-12 with id passed as parameter to position (range 0 - 1023)
  * and calls callback() after the end of the move */

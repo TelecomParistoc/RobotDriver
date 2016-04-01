@@ -43,9 +43,6 @@
 #define AX12_FORCING       0x02
 #define SENSOR_CHANGE      0x04
 #define COLLISION_CHANGE   0x08
-// ax-12 states
-#define DEFAULT 0
-#define WHEEL   1
 
 static struct device_cache *cache = NULL;
 
