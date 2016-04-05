@@ -71,12 +71,14 @@ void waitFor(int milliseconds);
 
 int axGetPosition(int id);
 
+// AX-12 FINISH CODES
+#define MOVE_FINISHED 1
+#define MOVE_BLOCKED 2
 /* Returns the state of the corresponding flag and clears it if it was set
  * for axHasFinishedMove, returns 2 if the destination wasn't reached
  * (probably beacuse the ax-12 was blocked)
  *
  * Useless in endless turn mode and concerns the las ax-12 used */
-
 int axHasFinishedMove();
 int axIsForcing();
 
@@ -99,7 +101,7 @@ int axIsForcing();
  *     a positive value is uses for a CounterClockWise rotation
  *     a negative value is used for a ClockWise rotation
  *
- * Mode : 0 for the Normal mode, 1 for Wheel moed (endless turn mode) */
+ * Mode : 0 for the Normal mode, 1 for Wheel mode (endless turn mode) */
 void axSetTorqueSpeed(int id, int torque, int speed, int mode);
 
 
