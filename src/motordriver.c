@@ -26,10 +26,6 @@
 
 static struct device_cache *cache = NULL;
 
-static void invalidateCache(int command) {
-	cache->r16_flags[command&0x0F] = CACHE_NOT_VALID;
-}
-
 int initMotorDriver() {
     int error = 0;
 
