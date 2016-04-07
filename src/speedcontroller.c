@@ -126,9 +126,9 @@ double computeTargetSpeed(double distance) {
     if(action != NULL) {
         if(newMotion) {
             newMotion = 0;
+            distanceAtMoveStart = getRobotDistance();
             if(moveStartCallback != NULL)
                 moveStartCallback();
-            distanceAtMoveStart = getRobotDistance();
         }
         switch (action->type) {
             case speedChange:
