@@ -33,6 +33,7 @@ double getMaxAcceleration();
  * by default, it is called about every 200ms if still blocked
  * (see getMotorDriverUpdateFreq() in motordriver.h) */
 void setBlockingCallback(void (*callback)(void));
+void setRecalibrationCallback(void (*callback)(void));
 
 #ifdef __cplusplus
 }

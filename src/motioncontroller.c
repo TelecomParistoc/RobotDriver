@@ -12,6 +12,7 @@
 
 int blockingHistoryFill = 0;
 static void (*blockingCallback)(void) = NULL;
+static void (*recalibrationCallback)(void) = NULL;
 
 double maxAcceleration = 0.5; // in m.s^-2
 
@@ -22,6 +23,8 @@ void setMaxAcceleration(double acceleration) {
 double getMaxAcceleration() { return maxAcceleration; }
 
 void setBlockingCallback(void (*callback)(void)) { blockingCallback = callback; }
+
+void setRecalibrationCallback(void (*callback)(void)) { recalibrationCallback = callback; }
 
 static void detectBlocking(double currentSpeed) {
     // keep the 20 last value
@@ -45,6 +48,8 @@ static void detectBlocking(double currentSpeed) {
             if(relativeError > BLOCKING_REL_THRESHOLD) {
                 if(blockingCallback != NULL)
                     blockingCallback();
+                if(recalibrationCallback != NULL)
+                    recalibrationCallback();
                 // once a blocking has been detected, reset history to avoid flooding the user
                 blockingHistoryFill=0;
             }
