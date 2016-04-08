@@ -57,12 +57,12 @@ double getRdistance() {
 }
 void setLdistance(double distance) {
     distance = distance/0.385;
-    cache->r16_flags[SPEEDL_CMD] = CACHE_NOT_VALID;
+    cache->r16_flags[CODL_CMD] = CACHE_NOT_VALID;
     c_write16(cache, CODL_CMD, round(distance));
 }
 void setRdistance(double distance) {
     distance = distance/0.385;
-    cache->r16_flags[SPEEDR_CMD] = CACHE_NOT_VALID;
+    cache->r16_flags[CODR_CMD] = CACHE_NOT_VALID;
     c_write16(cache, CODR_CMD, round(distance));
 }
 double getLspeed() {
