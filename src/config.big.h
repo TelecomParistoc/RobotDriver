@@ -7,7 +7,7 @@
 #define CONFIG_H
 
 // distance between coding wheels in mm
-#define WHEEL_DISTANCE 190 // !!!! WARNING : WRONG VALUE !!!!
+#define WHEEL_DISTANCE 197
 
 // coefficient for motor battery level
 #define MOTOR_LEVEL_COEFF 7840.0

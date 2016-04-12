@@ -70,7 +70,7 @@ void setRobotDistance(double distance) {
     setRdistance(distance);
     setLdistance(distance);
     tmpDistance = distance;
-    freshDistanceSet = 1;
+    freshDistanceSet = 2;
 }
 
 static void terminateMotionAction(struct motionElement* action) {
@@ -148,7 +148,7 @@ double computeTargetSpeed(double distance) {
         }
     }
     if(freshDistanceSet) {
-        freshDistanceSet = 0;
+        freshDistanceSet--;
     }
     return currentTargetSpeed;
 }
