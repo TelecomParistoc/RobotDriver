@@ -52,6 +52,9 @@ static uint8_t collisionsMask = 0x1F;
 static void (*sensorsCallback)(void) = NULL;
 static void (*collisionsCallback)(void) = NULL;
 
+static void (*scheduledCallbacks[10])(void) = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+static int scheduledTimes[10] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+
 static void invalidateCache(int command) {
 	cache->r8_flags[command&0x0F] = CACHE_NOT_VALID;
 }
@@ -96,6 +99,17 @@ static void interruptManager() {
 			invalidateCache(TB_COLLISIONS);
 			if(collisionsCallback != NULL)
 				collisionsCallback();
+		}
+	}
+	// call scheduled callbacks
+	for (int i = 0; i < 10; i++) {
+		if(scheduledTimes[i] > 0) {
+			scheduledTimes[i] -= 10;
+			if(scheduledTimes[i] < 0) {
+				scheduledTimes[i] = -1;
+				if(scheduledCallbacks[i] != NULL)
+					scheduledCallbacks[i]();
+			}
 		}
 	}
 }
@@ -389,4 +403,15 @@ void setSensorsCallback(void (*callback)(void)) {
 
 void waitFor(int milliseconds) {
 	delayMilli(milliseconds);
+}
+
+int scheduleIn(int milliseconds, void (*callback)(void)) {
+	int i=0;
+	while(i<10 && scheduledTimes[i]>0)
+		i++;
+	if(i==10)
+		return -1;
+	scheduledCallbacks[i] = callback;
+	scheduledTimes[i] = milliseconds;
+	return 0;
 }
