@@ -6,7 +6,7 @@
 /* In this example, we'll demonstrate how to use toolbox driver */
 
 static void first() {
-	printf("1 second\Än");
+	printf("1 second\n");
 }
 static void second() {
         printf("2 second\n");
