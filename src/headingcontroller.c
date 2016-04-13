@@ -18,8 +18,8 @@ static double lastDifferential = 0;
 static double integral = 0;
 
 static double headingKp = 0.007;
-static double headingKi = 0.000;
-static double headingKd = 0;
+static double headingKi = 0;
+static double headingKd = 0.001;
 
 void setHeadingTolerance(double tolerance) { angularTolerance = tolerance; }
 double getHeadingTolerance() { return angularTolerance; }
