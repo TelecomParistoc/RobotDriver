@@ -67,6 +67,9 @@ static void motionManager() {
 
     detectBlocking(speed);
 
+    if(getRotationDirection())
+        differential = -differential;
+    
     setRspeed(speed - differential);
     setLspeed(speed + differential);
 }
