@@ -102,10 +102,10 @@ static void interruptManager() {
 		}
 	}
 	// call scheduled callbacks
-	for (int i = 0; i < 10; i++) {
+	for(int i=0; i<10; i++) {
 		if(scheduledTimes[i] > 0) {
 			scheduledTimes[i] -= 10;
-			if(scheduledTimes[i] < 0) {
+			if(scheduledTimes[i] <= 0) {
 				scheduledTimes[i] = -1;
 				if(scheduledCallbacks[i] != NULL)
 					scheduledCallbacks[i]();
@@ -411,6 +411,7 @@ int scheduleIn(int milliseconds, void (*callback)(void)) {
 		i++;
 	if(i==10)
 		return -1;
+
 	scheduledCallbacks[i] = callback;
 	scheduledTimes[i] = milliseconds;
 	return 0;
