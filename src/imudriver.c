@@ -65,7 +65,7 @@ int initIMU() {
 double getHeading() {
     int val = c_read16(cache, IMU_HEADING) & 0x1FFF;
     double result = val/16.0;
-    
+
     if(headingRotationDirection)
         result = 360 -  result;
 
@@ -84,6 +84,9 @@ void setHeading(double heading) {
 }
 void setHeadingRotationDirection(int direction) {
     headingRotationDirection = direction ? 1 : 0;
+}
+int getHeadingRotationDirection() {
+    return headingRotationDirection;
 }
 double getPitch() {
     int val = c_read16(cache, IMU_PITCH);

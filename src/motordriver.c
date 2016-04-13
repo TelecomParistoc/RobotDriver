@@ -107,5 +107,6 @@ void setMotorUpdateCallback(void (*updateCallback)(void)) {
 double getRobotHeading() { return getHeading(); }
 void setRobotHeading(double heading) { setHeading(heading); }
 void setRotationDirection(int direction) { setHeadingRotationDirection(direction); }
+int getRotationDirection() { return getHeadingRotationDirection(); }
 void setMotorDriverUpdateFreq(int max_freq) { setUpdateFrequency(max_freq); }
 int getMotorDriverUpdateFreq() { return getUpdateFrequency(); }
