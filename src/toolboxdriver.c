@@ -77,7 +77,6 @@ static int axTimeout = 100;
 static int axTimeMoved = 101;
 
 static void interruptManager() {
-	if(digitalRead(TB_INT)) {
 		uint8_t flags = I2Cread8(TOOLBOX_ADDR, TB_INTERRUPT_STATUS);
 		if(flags & AX12_FINISHED_MOVE) {
 			int currentPos = I2Cread16(TOOLBOX_ADDR, AX_GETPOSITION);
@@ -111,7 +110,6 @@ static void interruptManager() {
 			if(collisionsCallback != NULL)
 				collisionsCallback();
 		}
-	}
 	// call scheduled callbacks
 	for(int i=0; i<10; i++) {
 		if(scheduledTimes[i] > 0) {
