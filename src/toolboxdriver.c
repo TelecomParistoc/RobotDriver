@@ -73,6 +73,8 @@ static void (*axCallback)(void) = NULL;
 static int axCurrentId = 254;
 static int axCurrentMode = 2;
 static int axCurrentGoal = 2000;
+static int axTimeout;
+static int axTimeMoved;
 
 static void interruptManager() {
 	if(digitalRead(TB_INT)) {
@@ -80,12 +82,21 @@ static void interruptManager() {
 		if(flags & AX12_FINISHED_MOVE) {
 			int currentPos = I2Cread16(TOOLBOX_ADDR, AX_GETPOSITION);
 			printf("Mouvement fini\n");
+			axTimeMoved = axTimeout + 1;
 			if((axCurrentGoal - currentPos < 5) && (axCurrentGoal - currentPos > -5))
 				axFinishedMove = 1;
 			else
 				axFinishedMove = 2;
 			if(axCallback != NULL)
 				axCallback();
+		} else {
+			if(axTimeMoved == axTimeout){
+				printf("TIMEOUT !!!\n");
+				axFinishedMove = 2;
+				if(axCallback != NULL)
+					axCallback();
+			}
+			axTimeMoved ++;
 		}
 		if(flags & AX12_FORCING) {
 			axForcing = 1;
@@ -376,7 +387,9 @@ void axSetTorqueSpeed(int id, int torque, int speed, int mode){
 	axFinishedMove = 0;
 }
 
-void axMove(int id, int position, void (* callback) (void)){
+void axMove(int id, int position, void (* callback) (void), int timeout){
+	axTimeMoved = 0;
+	axTimeout = timeout / 10;
 	if ((id != axCurrentId) || axCurrentMode)
 		setAxActiveDefault(id);
 	axFinishedMove = 0;
