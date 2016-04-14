@@ -73,8 +73,8 @@ static void (*axCallback)(void) = NULL;
 static int axCurrentId = 254;
 static int axCurrentMode = 2;
 static int axCurrentGoal = 2000;
-static int axTimeout;
-static int axTimeMoved;
+static int axTimeout = 100;
+static int axTimeMoved = 101;
 
 static void interruptManager() {
 	if(digitalRead(TB_INT)) {
