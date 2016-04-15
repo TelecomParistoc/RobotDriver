@@ -81,7 +81,6 @@ static void interruptManager() {
 		uint8_t flags = I2Cread8(TOOLBOX_ADDR, TB_INTERRUPT_STATUS);
 		if(flags & AX12_FINISHED_MOVE) {
 			int currentPos = I2Cread16(TOOLBOX_ADDR, AX_GETPOSITION);
-			printf("Mouvement fini\n");
 			axTimeMoved = axTimeout + 1;
 			if((axCurrentGoal - currentPos < 5) && (axCurrentGoal - currentPos > -5))
 				axFinishedMove = 1;
@@ -91,7 +90,6 @@ static void interruptManager() {
 				axCallback();
 		} else {
 			if(axTimeMoved == axTimeout){
-				printf("TIMEOUT !!!\n");
 				hasTimeouted = 1;
 				axFinishedMove = 2;
 				if(axCallback != NULL)
