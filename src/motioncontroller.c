@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#define BLOCKING_ABS_THRESHOLD 40
+#define BLOCKING_ABS_THRESHOLD 20
 #define BLOCKING_REL_THRESHOLD 0.95
 #define BLOCKING_HISTORY_SIZE 30
 
@@ -30,12 +30,12 @@ void setRecalibrationCallback(void (*callback)(void)) { recalibrationCallback = 
 
 static int isBlocked(double * distances, double * speeds, int head) {
     double real=0, expected=0;
-    for(i=1;i<BLOCKING_HISTORY_SIZE;i++) {
+    for(int i=1;i<BLOCKING_HISTORY_SIZE;i++) {
         real += distances[(head+i+1)%BLOCKING_HISTORY_SIZE] - distances[(head+i)%BLOCKING_HISTORY_SIZE];
         expected += 1000*speeds[(head+i)%BLOCKING_HISTORY_SIZE]/getMotorDriverUpdateFreq();
     }
-    if(fabs(expected - real) > 10)
-        printf("absolute : %f\n", fabs(expected - real));
+    //if(fabs(expected - real) > 10)
+    //    printf("absolute : %f\n", fabs(expected - real));
     //check the error is higher than the absolute threshold
     if(fabs(expected - real) > BLOCKING_ABS_THRESHOLD) {
         //check the relative error is higher than the relative threshold
@@ -52,6 +52,7 @@ static void detectBlocking(double currentSpeedR, double currentSpeedL) {
     static double distancesR[BLOCKING_HISTORY_SIZE] = {0};
     static double speedsR[BLOCKING_HISTORY_SIZE] = {0};
     static int headIndex=0;
+
     int blockedR=0, blockedL=0;
     distancesR[headIndex] = getRdistance();
     distancesL[headIndex] = getLdistance();

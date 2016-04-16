@@ -1,5 +1,6 @@
 #include "headingcontroller.h"
 #include "motordriver.h"
+#include "toolboxdriver.h"
 #include "motioncontroller.h"
 #include "controllerutils.h"
 #include <stdlib.h>
@@ -55,14 +56,14 @@ void enableHeadingControl(int enable) {
 
 static double computeTurn(double error) {
     double distanceError = error*WHEEL_DISTANCE*M_PI/360;
-    double differential = sqrt(2*getMaxAcceleration()*fabs(distanceError)/1000.0)*SIGN(distanceError);
+    double differential = sqrt(getMaxAcceleration()*fabs(distanceError)/1000.0)*SIGN(distanceError);
 
     if(fabs(differential) > limitAcceleration(fabs(lastDifferential),maxDiffSpeed))
         differential = limitAcceleration(lastDifferential, maxDiffSpeed*SIGN(distanceError));
 
     if(fabs(error) <= angularTolerance) {
         if(headingCallback != NULL) {
-            headingCallback();
+            scheduleIn(100, headingCallback);
             headingCallback = NULL;
         }
         integral = 0;
