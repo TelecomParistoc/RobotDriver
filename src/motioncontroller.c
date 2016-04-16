@@ -52,7 +52,6 @@ static void detectBlocking(double currentSpeedR, double currentSpeedL) {
     static double distancesR[BLOCKING_HISTORY_SIZE] = {0};
     static double speedsR[BLOCKING_HISTORY_SIZE] = {0};
     static int headIndex=0;
-    
     int blockedR=0, blockedL=0;
     distancesR[headIndex] = getRdistance();
     distancesL[headIndex] = getLdistance();
