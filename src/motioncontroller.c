@@ -64,7 +64,7 @@ static void detectBlocking(double currentSpeedR, double currentSpeedL) {
             printf("        blockedR !\n");
         if(blockedL)
             printf("        blockedL !\n");
-        if((blockedR && blockedL)&&sideBlockingCallback != NULL) {
+        if((blockedR || blockedL) && sideBlockingCallback != NULL) {
             printf("            side blocked !\n");
             sideBlockingCallback();
         }
