@@ -14,6 +14,7 @@
 
 int blockingHistoryFill = 0;
 static void (*blockingCallback)(void) = NULL;
+static void (*sideBlockingCallback)(void) = NULL;
 static void (*recalibrationCallback)(void) = NULL;
 
 double maxAcceleration = 0.5; // in m.s^-2
@@ -25,7 +26,7 @@ void setMaxAcceleration(double acceleration) {
 double getMaxAcceleration() { return maxAcceleration; }
 
 void setBlockingCallback(void (*callback)(void)) { blockingCallback = callback; }
-
+void setSideBlockingCallback(void (*callback)(void)) { sideBlockingCallback = callback; }
 void setRecalibrationCallback(void (*callback)(void)) { recalibrationCallback = callback; }
 
 static int isBlocked(double * distances, double * speeds, int head) {
@@ -63,6 +64,10 @@ static void detectBlocking(double currentSpeedR, double currentSpeedL) {
             printf("        blockedR !\n");
         if(blockedL)
             printf("        blockedL !\n");
+        if((blockedR && blockedL)&&sideBlockingCallback != NULL) {
+            printf("            side blocked !\n");
+            sideBlockingCallback();
+        }
         if(blockedR && blockedL) {
             printf("            blocked !\n");
             if(blockingCallback != NULL)

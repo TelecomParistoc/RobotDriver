@@ -12,7 +12,7 @@
 static double maxDiffSpeed = 0.25;
 static double targetHeading = 0;
 static int headingControl = 1;
-static double angularTolerance = 0.5; // in degrees
+static double angularTolerance = 0.2; // in degrees
 static void (*headingCallback)(void) = NULL;
 static int turning = 0;
 static double lastDifferential = 0;
