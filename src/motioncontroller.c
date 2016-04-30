@@ -41,7 +41,7 @@ static int isBlocked(double * distances, double * speeds, int head) {
     if(fabs(expected - real) > BLOCKING_ABS_THRESHOLD) {
         //check the relative error is higher than the relative threshold
         double relativeError = fabs(expected - real)/MAX(fabs(expected), fabs(real));
-        printf("    relative : %f\n", relativeError);
+        //printf("    relative : %f\n", relativeError);
         return relativeError > BLOCKING_REL_THRESHOLD;
     }
     return 0;
