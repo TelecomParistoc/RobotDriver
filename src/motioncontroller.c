@@ -16,7 +16,7 @@ int blockingHistoryFill = 0;
 static void (*blockingCallback)(void) = NULL;
 static void (*sideBlockingCallback)(void) = NULL;
 static void (*recalibrationCallback)(void) = NULL;
-
+static int forceStopState = 0;
 double maxAcceleration = 0.5; // in m.s^-2
 
 void setMaxAcceleration(double acceleration) {
@@ -85,17 +85,44 @@ static void detectBlocking(double currentSpeedR, double currentSpeedL) {
     headIndex = (headIndex+1)%30;
 }
 
+void forceStop(int stop) {
+    forceStopState = stop ? 3 : 1;
+}
 static void motionManager() {
+    static double lastSpeedR = 0;
+    static double lastSpeedL = 0;
+
     double differential = computeSpeedDifferential();
     double speed = computeTargetSpeed(getRobotDistance());
 
     if(getRotationDirection())
         differential = -differential;
 
-    setRspeed(speed - differential);
-    setLspeed(speed + differential);
+    switch (forceStopState) {
+        case 0:
+            lastSpeedR = speed - differential;
+            lastSpeedL = speed + differential;
+            break;
+        case 1:
+            lastSpeedR = limitAcceleration(lastSpeedR, speed - differential);
+            lastSpeedL = limitAcceleration(lastSpeedL, speed + differential);
+            if(lastSpeedR == speed - differential && lastSpeedL == speed + differential)
+                forceStopState = 0;
+            break;
+        case 2:
+            lastSpeedR = 0; lastSpeedL = 0;
+            break;
+        case 3:
+            lastSpeedR = limitAcceleration(lastSpeedR, 0);
+            lastSpeedL = limitAcceleration(lastSpeedL, 0);
+            if(lastSpeedR == 0 && lastSpeedL == 0)
+                forceStopState = 2;
+            break;
+    }
+    setRspeed(lastSpeedR);
+    setLspeed(lastSpeedL);
 
-    detectBlocking(speed-differential, speed+differential);
+    detectBlocking(lastSpeedR, lastSpeedL);
 }
 
 int initMotionController() {

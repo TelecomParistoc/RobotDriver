@@ -37,6 +37,9 @@ void setSideBlockingCallback(void (*callback)(void));
 /* works the same way as setBlockingCallback but usage is reserved to pathFollower */
 void setRecalibrationCallback(void (*callback)(void));
 
+/* force robot to stop */
+void forceStop(int stop);
+
 #ifdef __cplusplus
 }
 #endif
