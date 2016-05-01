@@ -60,10 +60,10 @@ static void detectBlocking(double currentSpeedR, double currentSpeedL) {
     if(blockingHistoryFill >= BLOCKING_HISTORY_SIZE) {
         blockedR = isBlocked(distancesR, speedsR, headIndex);
         blockedL = isBlocked(distancesL, speedsL, headIndex);
-        if(blockedR)
+        /*if(blockedR)
             printf("        blockedR !\n");
         if(blockedL)
-            printf("        blockedL !\n");
+            printf("        blockedL !\n");*/
         if((blockedR || blockedL) && sideBlockingCallback != NULL) {
             printf("            side blocked !\n");
             sideBlockingCallback();

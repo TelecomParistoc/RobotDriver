@@ -29,7 +29,7 @@ static void queueAction(motionType type, double speed, double distance, motionCa
     action->distance = distance;
     action->finished = 0;
     action->callback = callback;
-
+	printf("%f\n",action->speed);
     if(getHead() != NULL) {
         struct motionElement* head = getHead();
         if(head->finished)
