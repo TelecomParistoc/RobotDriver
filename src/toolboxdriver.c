@@ -75,6 +75,7 @@ static int axCurrentMode = 2;
 static int axCurrentGoal = 2000;
 static int axTimeout = 100;
 static int axTimeMoved = 101;
+static int hasTimeouted = 0;
 
 static void interruptManager() {
 		uint8_t flags = I2Cread8(TOOLBOX_ADDR, TB_INTERRUPT_STATUS);
@@ -86,11 +87,12 @@ static void interruptManager() {
 				axFinishedMove = 1;
 			else
 				axFinishedMove = 2;
-			if(axCallback != NULL)
+			if(axCallback != NULL && !hasTimeouted)
 				axCallback();
 		} else {
 			if(axTimeMoved == axTimeout){
 				printf("TIMEOUT !!!\n");
+				hasTimeouted = 1;
 				axFinishedMove = 2;
 				if(axCallback != NULL)
 					axCallback();
@@ -393,6 +395,7 @@ void axMove(int id, int position, void (* callback) (void), int timeout){
 	axFinishedMove = 0;
 	if ((position >= 0 && position <= 1023)){
 		axCallback = callback;
+		hasTimeouted = 0;
 		setAxPosition(position);
 	}
 	else{
