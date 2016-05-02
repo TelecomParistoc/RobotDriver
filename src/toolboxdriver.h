@@ -85,7 +85,7 @@ int axGetPosition(int id);
  * for axHasFinishedMove, returns 2 if the destination wasn't reached
  * (probably beacuse the ax-12 was blocked)
  *
- * Useless in endless turn mode and concerns the las ax-12 used */
+ * Useless in endless turn mode and concerns the last ax-12 used */
 int axHasFinishedMove();
 int axIsForcing();
 
