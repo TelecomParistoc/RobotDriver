@@ -20,7 +20,7 @@ static double integral = 0;
 
 static double headingKp = 0.007;
 static double headingKi = 0;
-static double headingKd = 0.001;
+static double headingKd = 0.01;
 
 void setHeadingTolerance(double tolerance) { angularTolerance = tolerance; }
 double getHeadingTolerance() { return angularTolerance; }
