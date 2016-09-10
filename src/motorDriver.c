@@ -1,11 +1,10 @@
 // http://wiringpi.com/reference/i2c-library/
 #include <wiringPiI2C.h>
 #include <stdio.h>
+#include "motorDriver.h"
 
 // This value cound be found using "gpio i2cdetect"
 #define I2C_DEV_ID            0x20
-// Motherboard address
-#define MB_ADDR               0x12
 // Current x absolute position register (high weight)
 #define CURR_X_ABS_POS_H_REG  0x82
 // Current x absolute position register (low weight)
