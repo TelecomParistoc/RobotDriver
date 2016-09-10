@@ -39,6 +39,6 @@ void setAngularI(int angI);
 int  getAngularD();
 void setAngularD(int angD);
 
-int getDistReachedFromLastCommand();
+unsigned int getDistReachedFromLastCommand();
 
 #endif // MOTOR_DEFINE_H

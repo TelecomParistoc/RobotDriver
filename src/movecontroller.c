@@ -25,7 +25,12 @@ int abs(int x)
 void moveForward(int dist)
 {
   setGoalMeanDist(dist);
-  while(abs(getDistReachedFromLastCommand() - dist) > DIST_ACCURACY);
+  printf("goal dist: %d\n", dist);
+  int currDist = getDistReachedFromLastCommand();
+  while(abs(currDist - dist) > DIST_ACCURACY) {
+    currDist = getDistReachedFromLastCommand();
+    //printf("dist: %d %d\n", dist, currDist);
+  }
 }
 
 /*
@@ -44,7 +49,7 @@ static int distance(int x1, int y1, point_t * p2)
   return sqrt(dx*dx + dy*dy);
 }
 
-/* Return heading in order to be centered on target
+/* Return heading (in 0.1deg) in order to be centered on target
 ** target: target position
 */
 int getHeadingTo(point_t * target)
@@ -53,21 +58,30 @@ int getHeadingTo(point_t * target)
   int currX = getPosX();
   int currY = getPosY();
   // get angle from position to destination (in 0.1deg)
-  return atan2(target->y - currY, target->x - currX) * 1800 / M_PI;
+  return atan2(target->y - currY, target->x - currX) * (1800 / M_PI);
 }
 
+/* Rotate robot
+** angle: goal heading in 0.1deg
+*/
 void rotate(int angle)
 {
-  setHeading(angle);
+  angle = angle * 576 / 360;
+  printf("goalHeading: %u\n", angle);
+  setGoalHeading(angle);
   // wait until new heading reached
-  while(abs(getHeading() - angle) > ANG_ACCURACY);
+  int heading = getHeading();
+  int currHeadingDiff = abs(heading - angle);
+  while(currHeadingDiff > ANG_ACCURACY && currHeadingDiff < 5760 - ANG_ACCURACY){
+    heading = getHeading();
+    //printf("heading: %u to %u\n", angle, heading);
+    currHeadingDiff = abs(heading - angle);
+  }
 }
 
 void goForward(point_t * dest)
 {
-  #ifdef DEBUG
-    printf("heading: %d, [%d,%d] to [%d,%d]\n", getHeading() / 10, getPosX(), getPosY(), dest->x, dest->y);
-  #endif
+  printf("heading: %u, [%d,%d] to [%d,%d]\n", getHeading(), getPosX(), getPosY(), dest->x, dest->y);
   rotate(getHeadingTo(dest));
   moveForward(distance(getPosX(), getPosY(), dest));
 }
