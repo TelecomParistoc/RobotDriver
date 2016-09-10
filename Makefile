@@ -5,8 +5,9 @@ OBJECTS = $(addprefix build/,${SRCS:.c=.o})
 TESTS = tests/motorDriver tests/AX12position tests/AXcomm tests/AXmove
 JSBINDINGS := $(wildcard JSbinding/*.js)
 CC=gcc
-CFLAGS = -O2 -std=gnu99 -Wall -Werror -fpic
+CFLAGS = -O2 -g -std=gnu99 -Wall -Werror -fpic
 LDFLAGS= -shared -lwiringPi -lm -lwalkingdriver
+LDFLAGS_EXE = -lwiringPi -lm -lwalkingdriver
 PREFIX = /usr/local
 VPATH = build/
 
@@ -32,11 +33,12 @@ build/$(TARGET): $(OBJECTS)
 tests: $(TESTS)
 
 tests/motorDriver: tests/motorDriver.o src/motorDriver.o
-	$(CC) $(LDFLAGS) $^ -o $@
+	$(CC) $(LDFLAGS_EXE) $^ -o $@
 
 clean:
 	rm -f build/*.o build/*.so build/*.d
 	rm -f $(TESTS)
+	rm -f tests/*.o
 
 jsinstall: $(JSBINDINGS) JSbinding/package.json
 	mkdir -p $(DESTDIR)$(PREFIX)/lib/node_modules/walkingdriver

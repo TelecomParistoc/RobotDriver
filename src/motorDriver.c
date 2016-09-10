@@ -2,6 +2,7 @@
 #include <wiringPiI2C.h>
 #include <stdio.h>
 #include "motorDriver.h"
+#include "i2c-functions.h"
 
 // This value cound be found using "gpio i2cdetect"
 #define I2C_DEV_ID            0x20

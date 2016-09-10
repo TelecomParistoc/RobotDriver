@@ -6,6 +6,6 @@
 int main(int argc, char * argv[])
 {
   int res = I2Cread16(MB_ADDR, 0x00);
-  printf("%c%c", (res & 0xFF00) >> 8, res & 0x00FF);
+  printf(">%d-%d<", (res & 0xFF00) >> 8, res & 0x00FF);
   return 0;
 }
