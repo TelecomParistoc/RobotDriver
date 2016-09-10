@@ -1,5 +1,6 @@
 // http://wiringpi.com/reference/i2c-library/
 #include <wiringPiI2C.h>
+#include <stdio.h>
 
 // This value cound be found using "gpio i2cdetect"
 #define I2C_DEV_ID            0x20
@@ -42,7 +43,7 @@
 // Linear i coefficiant register
 #define LINEAR_I_REG          0x10
 // Linear d coefficiant register
-#define LINEAR_d_REG          0x12
+#define LINEAR_D_REG          0x12
 // Angular p coefficiant register
 #define ANGULAR_P_REG         0x14
 // Angular i coefficiant register
