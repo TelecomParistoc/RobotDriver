@@ -13,6 +13,11 @@ void init()
   setCruiseSpeed(LIN_SPEED);
 }
 
+int abs(int x)
+{
+  return(x >= 0 ? x : -x);
+}
+
 /*
 ** dist in mm
 ** sleep: in us
@@ -32,7 +37,7 @@ void moveBackward(int dist)
   moveForward(-dist);
 }
 
-int distance(int x1, int x2, point_t * p2)
+static int distance(int x1, int y1, point_t * p2)
 {
   int dx = x1 - p2->x;
   int dy = y1 - p2->y;
@@ -42,39 +47,39 @@ int distance(int x1, int x2, point_t * p2)
 /* Return heading in order to be centered on target
 ** target: target position
 */
-int getHeadingTo(pos_t * target)
+int getHeadingTo(point_t * target)
 {
   // get current position
   int currX = getPosX();
   int currY = getPosY();
   // get angle from position to destination (in 0.1deg)
-  return atan2(dest->y - currY, dest->x - currX) * 1800 / M_PI;
+  return atan2(target->y - currY, target->x - currX) * 1800 / M_PI;
 }
 
-void rotate(int angle);
+void rotate(int angle)
 {
-  setHeading(heading);
+  setHeading(angle);
   // wait until new heading reached
-  while(abs(getHeading - heading) > ANGLE_ACCURACY);
+  while(abs(getHeading() - angle) > ANG_ACCURACY);
 }
 
 void goForward(point_t * dest)
 {
   #ifdef DEBUG
-    printf("heading: %d, [%d,%d] to [%d,%d]\n", getHeading() / 10, currX, currY, dest->x, dest->y);
+    printf("heading: %d, [%d,%d] to [%d,%d]\n", getHeading() / 10, getPosX(), getPosY(), dest->x, dest->y);
   #endif
   rotate(getHeadingTo(dest));
-  moveForward(distance(currX, currY, dest));
+  moveForward(distance(getPosX(), getPosY(), dest));
 }
 
 void goBackward(point_t * dest)
 {
 #ifdef DEBUG
-  printf("heading: %d, [%d,%d] to [%d,%d]\n", getHeading() / 10, currX, currY, dest->x, dest->y);
+  printf("heading: %d, [%d,%d] to [%d,%d]\n", getHeading() / 10, getPosX(), getPosY(), dest->x, dest->y);
 #endif
   int heading = getHeadingTo(dest) + 1800;
   if(heading >= 3600)
     heading -= 3600;
   rotate(heading);
-  moveBackward(distance(currX, currY, dest));
+  moveForward(distance(getPosX(), getPosY(), dest));
 }

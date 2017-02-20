@@ -14,10 +14,11 @@ int main(int argc, char * argv[])
   int y = getPosY();
   int heading = getHeading();
   printf("position [%d,%d], heading >%d°<\n", x, y, heading/10);
-  move_t dest = {x + 20, y + 100, heading + 900, RADIUS};
-  printf("new position [%d,%d], new heading >%d°<\n", dest.x, dest.y, dest.angle/10);
-  //goTo(RADIUS, &dest);
-  setHeading(dest.angle);
+  point_t dest_pos = {x + 20, y + 100};
+  int dest_ang = heading + 900;
+  printf("new position [%d,%d], new heading >%d°<\n", dest_pos.x, dest_pos.y, dest_ang/10);
+  goForward(&dest_pos);
+  rotate(dest_ang);
   printf("position [%d,%d], heading >%d°<\n", getPosX(), getPosY(), getHeading()/10);
 	return 0;
 }

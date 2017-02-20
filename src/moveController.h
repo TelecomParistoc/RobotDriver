@@ -1,9 +1,10 @@
 #ifndef MOVE_CONTROLLER_H
 #define MOVE_CONTROLLER_H
 
+// coordinates in mm
 typedef struct point_s{
-	float x;
-	float y;
+	int x;
+	int y;
 } point_t;
 
 #define LIN_SPEED     400 // mm/s
