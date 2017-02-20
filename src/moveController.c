@@ -1,4 +1,6 @@
 #include "moveController.h"
+#include "motorDriver.h"
+#include <unistd.h>
 
 #define DT1           (LIN_SPEED / MAX_LIN_ACC)
 
@@ -27,13 +29,6 @@ void goForward(int dist, int sleep)
   setGoalMeanDist(dist);
   usleep(sleep);
 }
-
-typedef struct move_s {
-  int x; // in mm
-	int y; // in mm
-	int angle; // in 0.1 deg
-	int radius; // in mm
-} move_t;
 
 void goTo(move_t * dest)
 {
