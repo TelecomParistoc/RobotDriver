@@ -1,3 +1,4 @@
+#include <math.h>
 #include "pathFinder.h"
 
 float distance(point_t a, point_t b)
@@ -117,6 +118,5 @@ interpoints_t computeInterpoints(move_t *depMove, move_t *destMove)
 	if(scal(subs(result.tan2, dest), dir2vec(destDir)) < 0)
 		result.alpha2 = 2*M_PI - result.alpha2;
 
-	beginNewPID();
 	return result;
 }
