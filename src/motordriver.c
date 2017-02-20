@@ -1,7 +1,7 @@
 // http://wiringpi.com/reference/i2c-library/
 #include <wiringPiI2C.h>
 #include <stdio.h>
-#include "motorDriver.h"
+#include "motordriver.h"
 #include "i2c-functions.h"
 
 // This value cound be found using "gpio i2cdetect"
@@ -57,10 +57,12 @@
 
 int  getPosX() {
   int res = I2Cread16(MB_ADDR, CURR_X_ABS_POS_H_REG);
+  if(res == -1) return -1;
   return res * 65536 + I2Cread16(MB_ADDR, CURR_X_ABS_POS_L_REG);
 }
 int  getPosY() {
   int res = I2Cread16(MB_ADDR, CURR_Y_ABS_POS_H_REG);
+  if(res == -1) return -1;
   return res * 65536 + I2Cread16(MB_ADDR, CURR_Y_ABS_POS_L_REG);
 }
 int  getHeading() {
@@ -72,6 +74,7 @@ void setHeading(int heading) {
 
 int  getWheelRightDist() {
   int res = I2Cread16(MB_ADDR, CURR_R_WHEEL_DIST_H_REG);
+  if(res == -1) return -1;
   return res * 65536 + I2Cread16(MB_ADDR, CURR_R_WHEEL_DIST_L_REG);
 }
 void setWheelRightDist(int dist) {
@@ -80,6 +83,7 @@ void setWheelRightDist(int dist) {
 }
 int  getWheelLeftDist() {
   int res = I2Cread16(MB_ADDR, CURR_L_WHEEL_DIST_H_REG);
+  if(res == -1) return -1;
   return res * 65536 + I2Cread16(MB_ADDR, CURR_L_WHEEL_DIST_L_REG);
 }
 void setWheelLeftDist(int dist) {
@@ -160,5 +164,6 @@ void setAngularD(int angD) {
 
 int getDistReachedFromLastCommand() {
   int res = I2Cread16(MB_ADDR, LAST_TRAVELED_H_REG) ;
+  if(res == -1) return -1;
   return res * 65536 + I2Cread16(MB_ADDR, LAST_TRAVELED_L_REG);
 }

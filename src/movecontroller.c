@@ -1,8 +1,8 @@
 #include <unistd.h>
 #include <math.h>
 #include <stdio.h>
-#include "moveController.h"
-#include "motorDriver.h"
+#include "movecontroller.h"
+#include "motordriver.h"
 
 #define DT1           (LIN_SPEED / MAX_LIN_ACC)
 #define DEBUG         1
