@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <math.h>
+#include <stdio.h>
 #include "moveController.h"
 #include "motorDriver.h"
 
@@ -70,18 +71,18 @@ void goTo(move_t * dest)
   // make first rotaion
   rotation_t rot1 = {RADIUS, getDirection(heading, &pos, &interpoints.tan1), interpoints.alpha1 - heading};
 #ifdef DEBUG
-  printf("rot1: %d, %d, %d\n", rot1.radius, rot1.dir, rot1.angle / 10);
+  printf("rot1: %d, %d, %d\n", rot1.radius, rot1.direction, rot1.angle / 10);
 #endif
   rotate(&rot1);
   int dt2 = rot1.angle * rot1.radius / (MAX_LIN_ACC * DT1) - DT1;
-  int dist = distance(interpoints.tan1, interpoints.tan2);
+  int dist = distance(&interpoints.tan1, &interpoints.tan2);
 #ifdef DEBUG
   printf("dist: %d\n", dist);
 #endif
-  gotForward(dist, dt2);
-  rotation_t rot2 = {RADIUS+1, getDirection(interpoints.alpha2, &interpoints.tan2, pos_dest), dest.angle - heading};
+  goForward(dist, dt2);
+  rotation_t rot2 = {RADIUS+1, getDirection(interpoints.alpha2, &interpoints.tan2, &pos_dest), dest->angle - heading};
 #ifdef DEBUG
-  printf("rot2: %d, %d, %d\n", rot1.radius, rot1.dir, rot1.angle / 10);
+  printf("rot2: %d, %d, %d\n", rot1.radius, rot1.direction, rot1.angle / 10);
 #endif
   rotate(&rot2);
 }
