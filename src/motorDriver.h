@@ -1,7 +1,8 @@
+#ifndef MOTOR_DEFINE_H
+#define MOTOR_DEFINE_H
+
 // Motherboard address
 #define MB_ADDR               0x12
-
-int  init();
 
 int  getPosX();
 int  getPosY();
@@ -37,3 +38,5 @@ int  getAngularI();
 void setAngularI(int angI);
 int  getAngularD();
 void setAngularD(int angD);
+
+#endif // MOTOR_DEFINE_H

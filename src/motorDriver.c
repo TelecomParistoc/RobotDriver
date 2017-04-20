@@ -50,111 +50,105 @@
 // Angular d coefficiant register
 #define ANGULAR_D_REG         0x18
 
-int init() {
-  int err = wiringPiI2CSetup(I2C_DEV_ID);
-  if(err != -1)
-    printf("[ERROR] An error occured during Wiring Pi I2C setup: %d\n", err);
-  return err;
-}
 int  getPosX() {
-  int res = wiringPiI2CReadReg16(MB_ADDR, CURR_X_ABS_POS_H_REG);
-  return res * 65536 + wiringPiI2CReadReg16(MB_ADDR, CURR_X_ABS_POS_L_REG);
+  int res = I2Cread16(MB_ADDR, CURR_X_ABS_POS_H_REG);
+  return res * 65536 + I2Cread16(MB_ADDR, CURR_X_ABS_POS_L_REG);
 }
 int  getPosY() {
-  int res = wiringPiI2CReadReg16(MB_ADDR, CURR_Y_ABS_POS_H_REG);
-  return res * 65536 + wiringPiI2CReadReg16(MB_ADDR, CURR_Y_ABS_POS_L_REG);
+  int res = I2Cread16(MB_ADDR, CURR_Y_ABS_POS_H_REG);
+  return res * 65536 + I2Cread16(MB_ADDR, CURR_Y_ABS_POS_L_REG);
 }
 int  getHeading() {
-  return wiringPiI2CReadReg16(MB_ADDR, CURR_HEADING_REG);
+  return I2Cread16(MB_ADDR, CURR_HEADING_REG);
 }
 void setHeading(int heading) {
-  wiringPiI2CWriteReg16(MB_ADDR, CURR_HEADING_REG, heading);
+  I2Cwrite16(MB_ADDR, CURR_HEADING_REG, heading);
 }
 
 int  getWheelRightDist() {
-  int res = wiringPiI2CReadReg16(MB_ADDR, CURR_R_WHEEL_DIST_H_REG);
-  return res * 65536 + wiringPiI2CReadReg16(MB_ADDR, CURR_R_WHEEL_DIST_L_REG);
+  int res = I2Cread16(MB_ADDR, CURR_R_WHEEL_DIST_H_REG);
+  return res * 65536 + I2Cread16(MB_ADDR, CURR_R_WHEEL_DIST_L_REG);
 }
 void setWheelRightDist(int dist) {
-  wiringPiI2CWriteReg16(MB_ADDR, CURR_R_WHEEL_DIST_H_REG, dist / 65536);
-  wiringPiI2CWriteReg16(MB_ADDR, CURR_R_WHEEL_DIST_L_REG, dist % 65536);
+  I2Cwrite16(MB_ADDR, CURR_R_WHEEL_DIST_H_REG, dist / 65536);
+  I2Cwrite16(MB_ADDR, CURR_R_WHEEL_DIST_L_REG, dist % 65536);
 }
 int  getWheelLeftDist() {
-  int res = wiringPiI2CReadReg16(MB_ADDR, CURR_L_WHEEL_DIST_H_REG);
-  return res * 65536 + wiringPiI2CReadReg16(MB_ADDR, CURR_L_WHEEL_DIST_L_REG);
+  int res = I2Cread16(MB_ADDR, CURR_L_WHEEL_DIST_H_REG);
+  return res * 65536 + I2Cread16(MB_ADDR, CURR_L_WHEEL_DIST_L_REG);
 }
 void setWheelLeftDist(int dist) {
-  wiringPiI2CWriteReg16(MB_ADDR, CURR_L_WHEEL_DIST_H_REG, dist / 65536);
-  wiringPiI2CWriteReg16(MB_ADDR, CURR_L_WHEEL_DIST_L_REG, dist % 65536);
+  I2Cwrite16(MB_ADDR, CURR_L_WHEEL_DIST_H_REG, dist / 65536);
+  I2Cwrite16(MB_ADDR, CURR_L_WHEEL_DIST_L_REG, dist % 65536);
 }
 
 int  getMaxAcc() {
-  return wiringPiI2CReadReg16(MB_ADDR, MAX_ACC_REG);
+  return I2Cread16(MB_ADDR, MAX_ACC_REG);
 }
 void setMaxAcc(int acc) {
-  wiringPiI2CWriteReg16(MB_ADDR, MAX_ACC_REG, acc);
+  I2Cwrite16(MB_ADDR, MAX_ACC_REG, acc);
 }
 int  getMaxAngularAcc() {
-  return wiringPiI2CReadReg16(MB_ADDR, MAX_ACC_ANG_REG);
+  return I2Cread16(MB_ADDR, MAX_ACC_ANG_REG);
 }
 void setMaxAngularAcc(int acc) {
-  wiringPiI2CWriteReg16(MB_ADDR, MAX_ACC_ANG_REG, acc);
+  I2Cwrite16(MB_ADDR, MAX_ACC_ANG_REG, acc);
 }
 int  getCruiseSpeed() {
-  return wiringPiI2CReadReg16(MB_ADDR, CRUISE_SPEED_REG);
+  return I2Cread16(MB_ADDR, CRUISE_SPEED_REG);
 }
 void setCruiseSpeed(int speed) {
-  wiringPiI2CWriteReg16(MB_ADDR, CRUISE_SPEED_REG, speed);
+  I2Cwrite16(MB_ADDR, CRUISE_SPEED_REG, speed);
 }
 int  getCruiseAngularSpeed() {
-  return wiringPiI2CReadReg16(MB_ADDR, CRUISE_ANG_SPEED_REG);
+  return I2Cread16(MB_ADDR, CRUISE_ANG_SPEED_REG);
 }
 void setCruiseAngularSpeed(int speed) {
-  wiringPiI2CWriteReg16(MB_ADDR, CRUISE_ANG_SPEED_REG, speed);
+  I2Cwrite16(MB_ADDR, CRUISE_ANG_SPEED_REG, speed);
 }
 void setGoalMeanDist(int dist) {
-  wiringPiI2CWriteReg16(MB_ADDR, GOAL_MIN_DIST_REG, dist);
+  I2Cwrite16(MB_ADDR, GOAL_MIN_DIST_REG, dist);
 }
 void setGoalHeading(int heading) {
-  wiringPiI2CWriteReg16(MB_ADDR, GOAL_HEADING_REG, heading);
+  I2Cwrite16(MB_ADDR, GOAL_HEADING_REG, heading);
 }
 void setHeadingDistSyncRef(int dist) {
-  wiringPiI2CWriteReg16(MB_ADDR, HEADING_DIST_SYNC_REF, dist);
+  I2Cwrite16(MB_ADDR, HEADING_DIST_SYNC_REF, dist);
 }
 
 int  getLinearP() {
-  return wiringPiI2CReadReg16(MB_ADDR, LINEAR_P_REG);
+  return I2Cread16(MB_ADDR, LINEAR_P_REG);
 }
 void setLinearP(int linP) {
-  wiringPiI2CWriteReg16(MB_ADDR, LINEAR_P_REG, linP);
+  I2Cwrite16(MB_ADDR, LINEAR_P_REG, linP);
 }
 int  getLinearI() {
-  return wiringPiI2CReadReg16(MB_ADDR, LINEAR_I_REG);
+  return I2Cread16(MB_ADDR, LINEAR_I_REG);
 }
 void setLinearI(int linI) {
-  wiringPiI2CWriteReg16(MB_ADDR, LINEAR_I_REG, linI);
+  I2Cwrite16(MB_ADDR, LINEAR_I_REG, linI);
 }
 int  getLinearD() {
-  return wiringPiI2CReadReg16(MB_ADDR, LINEAR_D_REG);
+  return I2Cread16(MB_ADDR, LINEAR_D_REG);
 }
 void setLinearD(int linD) {
-  wiringPiI2CWriteReg16(MB_ADDR, LINEAR_D_REG, linD);
+  I2Cwrite16(MB_ADDR, LINEAR_D_REG, linD);
 }
 int  getAngularP() {
-  return wiringPiI2CReadReg16(MB_ADDR, ANGULAR_P_REG);
+  return I2Cread16(MB_ADDR, ANGULAR_P_REG);
 }
 void setAngularP(int angP) {
-  wiringPiI2CWriteReg16(MB_ADDR, ANGULAR_P_REG, angP);
+  I2Cwrite16(MB_ADDR, ANGULAR_P_REG, angP);
 }
 int  getAngularI() {
-  return wiringPiI2CReadReg16(MB_ADDR, ANGULAR_I_REG);
+  return I2Cread16(MB_ADDR, ANGULAR_I_REG);
 }
 void setAngularI(int angI) {
-  wiringPiI2CWriteReg16(MB_ADDR, ANGULAR_I_REG, angI);
+  I2Cwrite16(MB_ADDR, ANGULAR_I_REG, angI);
 }
 int  getAngularD() {
-  return wiringPiI2CReadReg16(MB_ADDR, ANGULAR_D_REG);
+  return I2Cread16(MB_ADDR, ANGULAR_D_REG);
 }
 void setAngularD(int angD) {
-  wiringPiI2CWriteReg16(MB_ADDR, ANGULAR_D_REG, angD);
+  I2Cwrite16(MB_ADDR, ANGULAR_D_REG, angD);
 }
