@@ -2,7 +2,7 @@
 #include <wiringPiI2C.h>
 
 // This value cound be found using "gpio i2cdetect"
-#define I2C_DEV_ID            X
+#define I2C_DEV_ID            0x20
 // Motherboard address
 #define MB_ADDR               0x12
 // Current x absolute position register (high weight)
