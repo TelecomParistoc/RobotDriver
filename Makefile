@@ -1,5 +1,5 @@
 TARGET = libwalkingdriver.so
-SRCS = i2c-cache.c imudriver.c i2c-functions.c toolboxdriver.c timing.c ax12driver.c ax-comm.c
+SRCS = i2c-cache.c imudriver.c i2c-functions.c toolboxdriver.c timing.c ax12driver.c ax-comm.c motorDriver.c
 HEADERS = $(addprefix src/, ${SRCS:.c=.h}) src/driver.h
 OBJECTS = $(addprefix build/,${SRCS:.c=.o})
 TESTS = tests/timing tests/IMU tests/toolbox tests/powertest tests/AX12position tests/AXcomm tests/AXmove
