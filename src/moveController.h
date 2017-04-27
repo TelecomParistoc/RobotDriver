@@ -5,14 +5,14 @@
 
 #define LIN_SPEED     0.4 // m/s
 #define MAX_LIN_ACC   1.0 // m/s^2
+#define RADIUS        30 // mm
 
 /* Initialise motors with correct values
 */
 void init();
-/* Move from current position to (x,y) position
-** x: x coordinate of destination (in mm)
-** y: y coordinate of destination (in mm)
+/* Move from current position to next one
+** dest: destination informations
 */
-int  goTo(int x, int y);
+void goTo(move_t * dest);
 
 #endif // MOVE_CONTROLLER_H
