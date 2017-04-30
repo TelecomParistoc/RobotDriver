@@ -28,24 +28,33 @@ void goForward(int dist, int sleep)
   usleep(sleep);
 }
 
-typedef struct move_s {
-  int x; // in mm
-	int y; // in mm
-	int angle; // in 0.1 deg
-	int radius; // in mm
-} move_t;
+int scal(point_t * a, point_t * b)
+{
+  return a->x * b->x + a->y * b->y;
+}
+
+int getDirection(int heading, point_t * pos, point_t * dest)
+{
+  point_t dir = {sin(heading * M_PI / 1800)*100, -cos(heading * M_PI / 1800)*100};
+  point_t dir_dest = {dest->x - pos->x, dest->y - pos->y};
+  return((scal(dir, dir_dest) > 0) ? 1 : -1);
+}
 
 void goTo(move_t * dest)
 {
   // get current position
   int currX = getPosX();
   int currY = getPosY();
+  point_t pos = point_t{currX, currY};
+  int heading = getHeading();
   // find path to destination
-  move_t depart = {currX, currY, getHeading(), RADIUS};
+  move_t depart = {currX, currY, heading, RADIUS};
   interpoints_t interpoints = computeInterpoints(&depart, dest);
   // moving by following the path
-  rotate(&path->rot1);
-  int dt2 = path->rot1.angle * path->rot1.radius / (MAX_LIN_ACC * DT1) - DT1;
+  // make first rotaion
+  rotation_t rot1 = rotation_t{RADUIS, getDirection(heading, &pos, interpoints.tan1), interpoints.alpha1};
+  rotate(&rot1);
+  int dt2 = rot1.angle * rot1.radius / (MAX_LIN_ACC * DT1) - DT1;
   //gotForward(path->forward, dt2);
   //rotate(&path->rot2);
 }
