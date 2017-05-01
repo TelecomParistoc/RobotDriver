@@ -1,7 +1,7 @@
 #include <math.h>
 #include "pathFinder.h"
 
-float distance(point_t a, point_t b)
+static float distance(point_t a, point_t b)
 {
 	return sqrt(pow((b.x - a.x), 2) + pow((b.y - a.y), 2));
 }

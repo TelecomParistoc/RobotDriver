@@ -3,8 +3,8 @@
 
 #include "pathFinder.h"
 
-#define LIN_SPEED     0.4 // m/s
-#define MAX_LIN_ACC   1.0 // m/s^2
+#define LIN_SPEED     400 // mm/s
+#define MAX_LIN_ACC   1000 // mm/s^2
 #define RADIUS        30 // mm
 
 /* Initialise motors with correct values

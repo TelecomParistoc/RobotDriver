@@ -1,21 +1,22 @@
 #include <wiringPiI2C.h>
 #include "../src/moveController.h"
+#include "../src/motorDriver.h"
 #include "../src/i2c-functions.h"
 #include <stdio.h>
 
 int main(int argc, char * argv[])
 {
-  printf("maxAcc >%x<, cruiseSpeed >%x<\n", getMaxAcc(), getCruiseSpeed());
+  printf("maxAcc >%d<, cruiseSpeed >%d<\n", getMaxAcc(), getCruiseSpeed());
   init();
-  printf("maxAcc >%x<, cruiseSpeed >%x<\n", getMaxAcc(), getCruiseSpeed());
+  printf("maxAcc >%d<, cruiseSpeed >%d<\n", getMaxAcc(), getCruiseSpeed());
 
   int x = getPosX();
   int y = getPosY();
   int heading = getHeading();
-  printf("position [%x,%x], heading >%x<\n", x, y, heading);
+  printf("position [%d,%d], heading >%d°<\n", x, y, heading/10);
   move_t dest = {x + 20, y + 100, heading + 900, RADIUS};
-  printf("new position [%x,%x], new heading >%x<\n", dest.x, dest.y, dest.heading);
-  goTo(&dest);
-  printf("position [%x,%x], heading >%x<\n", getPosX(), getPosY(), getHeading());
+  printf("new position [%d,%d], new heading >%d°<\n", dest.x, dest.y, dest.angle/10);
+  goTo(RADIUS, &dest);
+  printf("position [%d,%d], heading >%d°<\n", getPosX(), getPosY(), getHeading()/10);
 	return 0;
 }

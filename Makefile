@@ -6,8 +6,8 @@ TESTS = tests/motorDriver tests/AX12position tests/AXcomm tests/AXmove
 JSBINDINGS := $(wildcard JSbinding/*.js)
 CC=gcc
 CFLAGS = -O2 -g -std=gnu99 -Wall -Werror -fpic
-LDFLAGS= -shared -lwiringPi -lm -lwalkingdriver
-LDFLAGS_EXE = -lwiringPi -lm -lwalkingdriver
+LDFLAGS= -shared -lwiringPi -lm -lwalkingdriver -lpthread
+LDFLAGS_EXE = -lwiringPi -lm -lwalkingdriver -lpthread
 PREFIX = /usr/local
 VPATH = build/
 
@@ -30,9 +30,10 @@ build/$(TARGET): $(OBJECTS)
 	@echo "\nLinking target $@"
 	@$(CC) $(CFLAGS) $(OBJECTS) -o $@ $(LDFLAGS)
 
+tests: LDFLAGS = -lm -lwiringPi
 tests: $(TESTS)
 
-tests/motorDriver: tests/motorDriver.o src/motorDriver.o
+tests/%: tests/%.o $(OBJECTS)
 	$(CC) $(LDFLAGS_EXE) $^ -o $@
 
 clean:

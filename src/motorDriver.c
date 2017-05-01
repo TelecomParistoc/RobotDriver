@@ -50,6 +50,10 @@
 #define ANGULAR_I_REG         0x16
 // Angular d coefficiant register
 #define ANGULAR_D_REG         0x18
+// Last traveled distance high register
+#define LAST_TRAVELED_H_REG   0x96
+// Last traveled distance low register
+#define LAST_TRAVELED_L_REG   0x92
 
 int  getPosX() {
   int res = I2Cread16(MB_ADDR, CURR_X_ABS_POS_H_REG);
@@ -152,4 +156,9 @@ int  getAngularD() {
 }
 void setAngularD(int angD) {
   I2Cwrite16(MB_ADDR, ANGULAR_D_REG, angD);
+}
+
+int getDistReachedFromLastCommand() {
+  int res = I2Cread16(MB_ADDR, LAST_TRAVELED_H_REG) ;
+  return res * 65536 + I2Cread16(MB_ADDR, LAST_TRAVELED_L_REG);
 }
