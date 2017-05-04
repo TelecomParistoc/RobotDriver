@@ -10,6 +10,7 @@
 /* Initialise motors with correct values
 */
 void init();
+
 /* Move from current position to next one
 ** dest: destination informations
 */
