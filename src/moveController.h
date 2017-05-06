@@ -12,8 +12,9 @@
 void init();
 
 /* Move from current position to next one
+** startRadius: first radius of rotation
 ** dest: destination informations
 */
-void goTo(move_t * dest);
+void goTo(int startRadius, move_t * dest);
 
 #endif // MOVE_CONTROLLER_H

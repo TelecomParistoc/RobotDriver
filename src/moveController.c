@@ -66,7 +66,7 @@ void goTo(int startRadius, move_t * dest)
   printf("dist: %d\n", dist);
 #endif
   goForward(dist);
-  rotation_t rot2 = {dist.radius, dest->angle};
+  rotation_t rot2 = {dest->radius, dest->angle};
 #ifdef DEBUG
   printf("rot2: %d, %d\n", rot2.radius, rot2.angle / 10);
 #endif
