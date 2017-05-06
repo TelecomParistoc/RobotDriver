@@ -45,8 +45,6 @@ void goTo(int startRadius, move_t * dest)
   int currX = getPosX();
   int currY = getPosY();
 
-  point_t pos = {currX, currY};
-  point_t pos_dest = {dest->x, dest->y};
   int heading = getHeading();
 #ifdef DEBUG
   printf("heading: %d, [%d,%d] to [%d,%d]\n", heading / 10, currX, currY, dest->x, dest->y);
