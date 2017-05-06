@@ -22,7 +22,6 @@ typedef struct interpoints_s {
 
 typedef struct rotation_s {
   int radius; // in mm
-  int direction; // -1:left, 1:right
   int angle; // in radian
 } rotation_t;
 

@@ -13,29 +13,23 @@ void init()
   setCruiseSpeed(LIN_SPEED);
 }
 
-void rotate(rotation_t * rot)
+void rotate(rotation_t * rot, int currHeading)
 {
-  setMaxAngularAcc(MAX_LIN_ACC / rot->radius);
-  setCruiseAngularSpeed(MAX_LIN_ACC * DT1 / rot->radius);
-  int goalHeading = getHeading() + rot->direction * rot->angle;
+  int goalHeading = rot->angle;
   setGoalHeading(goalHeading);
-  setGoalMeanDist(rot->radius * rot->angle);
-  usleep(DT1 * 1000000);
+  int dist = rot->radius * (rot->angle - currHeading);
+  setGoalMeanDist(dist);
+  while(getDistReachedFromLastCommand() < dist);
 }
 
 /*
 ** dist in mm
 ** sleep: in us
 */
-void goForward(int dist, int sleep)
+void goForward(int dist)
 {
   setGoalMeanDist(dist);
-  usleep(sleep);
-}
-
-int scalVect(point_t * a, point_t * b)
-{
-  return a->x * b->x + a->y * b->y;
+  while(getDistReachedFromLastCommand() < dist);
 }
 
 int distance(point_t * p1, point_t * p2)
@@ -45,14 +39,7 @@ int distance(point_t * p1, point_t * p2)
   return sqrt(dx*dx + dy*dy);
 }
 
-int getDirection(int heading, point_t * pos, point_t * dest)
-{
-  point_t dir = {sin(heading * M_PI / 1800)*100, -cos(heading * M_PI / 1800)*100};
-  point_t dir_dest = {dest->x - pos->x, dest->y - pos->y};
-  return((scalVect(&dir, &dir_dest) > 0) ? 1 : -1);
-}
-
-void goTo(move_t * dest)
+void goTo(int startRadius, move_t * dest)
 {
   // get current position
   int currX = getPosX();
@@ -65,24 +52,23 @@ void goTo(move_t * dest)
   printf("heading: %d, [%d,%d] to [%d,%d]\n", heading / 10, currX, currY, dest->x, dest->y);
 #endif
   // find path to destination
-  move_t depart = {currX, currY, heading, RADIUS};
+  move_t depart = {currX, currY, heading, startRadius};
   interpoints_t interpoints = computeInterpoints(&depart, dest);
   // moving by following the path
   // make first rotaion
-  rotation_t rot1 = {RADIUS, getDirection(heading, &pos, &interpoints.tan1), interpoints.alpha1 - heading};
+  rotation_t rot1 = {startRadius, interpoints.alpha1};
 #ifdef DEBUG
-  printf("rot1: %d, %d, %d\n", rot1.radius, rot1.direction, rot1.angle / 10);
+  printf("rot1: %d, %d\n", rot1.radius, rot1.angle / 10);
 #endif
-  rotate(&rot1);
-  int dt2 = rot1.angle * rot1.radius / (MAX_LIN_ACC * DT1) - DT1;
+  rotate(&rot1, heading);
   int dist = distance(&interpoints.tan1, &interpoints.tan2);
 #ifdef DEBUG
   printf("dist: %d\n", dist);
 #endif
-  goForward(dist, dt2);
-  rotation_t rot2 = {RADIUS+1, getDirection(interpoints.alpha2, &interpoints.tan2, &pos_dest), dest->angle - heading};
+  goForward(dist);
+  rotation_t rot2 = {dist.radius, dest->angle};
 #ifdef DEBUG
-  printf("rot2: %d, %d, %d\n", rot1.radius, rot1.direction, rot1.angle / 10);
+  printf("rot2: %d, %d\n", rot2.radius, rot2.angle / 10);
 #endif
-  rotate(&rot2);
+  rotate(&rot2, heading);
 }
