@@ -1,20 +1,34 @@
 #ifndef MOVE_CONTROLLER_H
 #define MOVE_CONTROLLER_H
 
-#include "pathFinder.h"
+typedef struct point_s{
+	float x;
+	float y;
+} point_t;
 
 #define LIN_SPEED     400 // mm/s
 #define MAX_LIN_ACC   1000 // mm/s^2
 #define RADIUS        30 // mm
+#define ANG_ACCURACY  2 // 0.1deg
+#define DIST_ACCURACY 2 // mm
 
 /* Initialise motors with correct values
 */
 void init();
 
-/* Move from current position to next one
-** startRadius: first radius of rotation
-** dest: destination informations
+/* Move forward from current position to destination one
+** dest:  destination absolute coodinates
 */
-void goTo(int startRadius, move_t * dest);
+void goForward(point_t * dest);
+
+/* Move backward from current position to destination one
+** dest:  destination absolute coodinates
+*/
+void goBackward(point_t * dest);
+
+/* Rotation to target angle
+** angle: goal angle (in 0.1deg)
+*/
+void rotate(int angle);
 
 #endif // MOVE_CONTROLLER_H

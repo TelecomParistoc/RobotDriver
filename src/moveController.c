@@ -13,60 +13,68 @@ void init()
   setCruiseSpeed(LIN_SPEED);
 }
 
-void rotate(rotation_t * rot, int currHeading)
+/*
+** dist in mm
+** sleep: in us
+*/
+void moveForward(int dist)
 {
-  int goalHeading = rot->angle;
-  setGoalHeading(goalHeading);
-  int dist = rot->radius * (rot->angle - currHeading);
   setGoalMeanDist(dist);
-  while(getDistReachedFromLastCommand() < dist);
+  while(abs(getDistReachedFromLastCommand() - dist) > DIST_ACCURACY);
 }
 
 /*
 ** dist in mm
 ** sleep: in us
 */
-void goForward(int dist)
+void moveBackward(int dist)
 {
-  setGoalMeanDist(dist);
-  while(getDistReachedFromLastCommand() < dist);
+  moveForward(-dist);
 }
 
-int distance(point_t * p1, point_t * p2)
+int distance(int x1, int x2, point_t * p2)
 {
-  int dx = p1->x - p2->x;
-  int dy = p1->y - p2->y;
+  int dx = x1 - p2->x;
+  int dy = y1 - p2->y;
   return sqrt(dx*dx + dy*dy);
 }
 
-void goTo(int startRadius, move_t * dest)
+/* Return heading in order to be centered on target
+** target: target position
+*/
+int getHeadingTo(pos_t * target)
 {
   // get current position
   int currX = getPosX();
   int currY = getPosY();
+  // get angle from position to destination (in 0.1deg)
+  return atan2(dest->y - currY, dest->x - currX) * 1800 / M_PI;
+}
 
-  int heading = getHeading();
+void rotate(int angle);
+{
+  setHeading(heading);
+  // wait until new heading reached
+  while(abs(getHeading - heading) > ANGLE_ACCURACY);
+}
+
+void goForward(point_t * dest)
+{
+  #ifdef DEBUG
+    printf("heading: %d, [%d,%d] to [%d,%d]\n", getHeading() / 10, currX, currY, dest->x, dest->y);
+  #endif
+  rotate(getHeadingTo(dest));
+  moveForward(distance(currX, currY, dest));
+}
+
+void goBackward(point_t * dest)
+{
 #ifdef DEBUG
-  printf("heading: %d, [%d,%d] to [%d,%d]\n", heading / 10, currX, currY, dest->x, dest->y);
+  printf("heading: %d, [%d,%d] to [%d,%d]\n", getHeading() / 10, currX, currY, dest->x, dest->y);
 #endif
-  // find path to destination
-  move_t depart = {currX, currY, heading, startRadius};
-  interpoints_t interpoints = computeInterpoints(&depart, dest);
-  // moving by following the path
-  // make first rotaion
-  rotation_t rot1 = {startRadius, interpoints.alpha1};
-#ifdef DEBUG
-  printf("rot1: %d, %d\n", rot1.radius, rot1.angle / 10);
-#endif
-  rotate(&rot1, heading);
-  int dist = distance(&interpoints.tan1, &interpoints.tan2);
-#ifdef DEBUG
-  printf("dist: %d\n", dist);
-#endif
-  goForward(dist);
-  rotation_t rot2 = {dest->radius, dest->angle};
-#ifdef DEBUG
-  printf("rot2: %d, %d\n", rot2.radius, rot2.angle / 10);
-#endif
-  rotate(&rot2, heading);
+  int heading = getHeadingTo(dest) + 1800;
+  if(heading >= 3600)
+    heading -= 3600;
+  rotate(heading);
+  moveBackward(distance(currX, currY, dest));
 }
