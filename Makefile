@@ -1,8 +1,8 @@
-TARGET = libwalkingdriver.so
-SRCS = i2c-cache.c imudriver.c i2c-functions.c toolboxdriver.c timing.c ax12driver.c ax-comm.c
+TARGET = librobotdriver.so
+SRCS = i2c-functions.c timing.c ax12driver.c ax-comm.c motordriver.c
 HEADERS = $(addprefix src/, ${SRCS:.c=.h}) src/driver.h
 OBJECTS = $(addprefix build/,${SRCS:.c=.o})
-TESTS = tests/timing tests/IMU tests/toolbox tests/powertest tests/AX12position tests/AXcomm tests/AXmove
+TESTS = tests/timing tests/AX12position tests/AXcomm tests/AXmove
 JSBINDINGS := $(wildcard JSbinding/*.js)
 CC=gcc
 CFLAGS = -O2 -std=gnu99 -Wall -Werror -fpic
@@ -10,7 +10,7 @@ LDFLAGS= -shared -lwiringPi -lm
 PREFIX = /usr/local
 VPATH = build/
 
-vpath %.c src/ tests/ examples/
+vpath %.c src/ tests/
 vpath %.h src/
 
 .PHONY: all build clean tests AX12console jsinstall
@@ -29,7 +29,7 @@ build/$(TARGET): $(OBJECTS)
 	@echo "\nLinking target $@"
 	@$(CC) $(CFLAGS) $(OBJECTS) -o $@ $(LDFLAGS)
 
-tests: LDFLAGS=-lwalkingdriver
+tests: LDFLAGS=-lrobotdriver
 tests: $(TESTS)
 
 clean:
@@ -37,9 +37,9 @@ clean:
 	rm -f $(TESTS)
 
 jsinstall: $(JSBINDINGS) JSbinding/package.json
-	mkdir -p $(DESTDIR)$(PREFIX)/lib/node_modules/walkingdriver
-	cp -r JSbinding/* $(DESTDIR)$(PREFIX)/lib/node_modules/walkingdriver
-	cd $(DESTDIR)$(PREFIX)/lib/node_modules/walkingdriver; npm install
+	mkdir -p $(DESTDIR)$(PREFIX)/lib/node_modules/robotdriver
+	cp -r JSbinding/* $(DESTDIR)$(PREFIX)/lib/node_modules/robotdriver
+	cd $(DESTDIR)$(PREFIX)/lib/node_modules/robotdriver; npm install
 AX12console: AX12console/app.js AX12console/package.json AX12console/AX12
 	mkdir -p $(DESTDIR)$(PREFIX)/lib/node_modules/AX12console
 	cp -r AX12console/* $(DESTDIR)$(PREFIX)/lib/node_modules/AX12console
@@ -47,13 +47,13 @@ AX12console: AX12console/app.js AX12console/package.json AX12console/AX12
 	cp AX12console/AX12 $(DESTDIR)$(PREFIX)/bin/
 	chmod a+x $(DESTDIR)$(PREFIX)/bin/AX12
 
-install: build/$(TARGET) jsinstall AX12console
+install: build/$(TARGET)
 	mkdir -p $(DESTDIR)$(PREFIX)/lib
-	mkdir -p $(DESTDIR)$(PREFIX)/include/walkingdriver
+	mkdir -p $(DESTDIR)$(PREFIX)/include/robotdriver
 	cp build/$(TARGET) $(DESTDIR)$(PREFIX)/lib/
-	cp $(HEADERS) $(DESTDIR)$(PREFIX)/include/walkingdriver/
+	cp $(HEADERS) $(DESTDIR)$(PREFIX)/include/robotdriver/
 	chmod 0755 $(DESTDIR)$(PREFIX)/lib/$(TARGET)
 	ldconfig
-	ldconfig -p | grep walkingdriver
+	ldconfig -p | grep robotdriver
 
 -include $(subst .c,.d,$(SRCS))
