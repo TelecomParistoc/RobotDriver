@@ -4,6 +4,7 @@
 #include "motordriver.h"
 #include "timing.h"
 #include "i2c-functions.h"
+#include "roof.h"
 
 // Sleep time during two commands in ms
 #define SLEEP                 10
@@ -83,7 +84,9 @@ int  getPosY() {
   int res = I2Cread16(MB_ADDR, CURR_Y_ABS_POS_H_REG);
   if(res == -1) return -1;
   waitFor(SLEEP);
-  return res * 65536 + I2Cread16(MB_ADDR, CURR_Y_ABS_POS_L_REG);
+  res = res * 65536 + I2Cread16(MB_ADDR, CURR_Y_ABS_POS_L_REG);
+  if(getColor)
+  return -res;
 }
 int  getHeading() {
   waitFor(SLEEP);

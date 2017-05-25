@@ -1,23 +1,23 @@
 #include <wiringPi.h>
 #include "fToit.c"
 
-
-// A modifier par le fichier de configuration
-// d'Arnaud
-#include "config.h"
+#include "roofdefs.h"
 
 
-void init()
+void initRoof()
 {
-  pinMode(29,INPUT);
-  pinMode(32,INPUT);
-  pinMode(24,INPUT);
-  pinMode(26,OUTPUT);
-  pinMode(27,OUTPUT);
-  pinMode(28,OUTPUT);
+  pinMode(22,INPUT);
+  pinMode(26,INPUT);
+  pinMode(21,INPUT);
+  pinMode(30,OUTPUT);
+  pinMode(31,OUTPUT);
+  pinMode(11,OUTPUT);
   digitalWrite(RED_LED, LOW);
   digitalWrite(YELLOW_LED, LOW);
   digitalWrite(GREEN_LED, LOW);
+  pullUpDnControl(22, PUD_UP);
+  pullUpDnControl(26, PUD_UP);
+  pullUpDnControl(21, PUD_UP);
 }
 
 void setRedLed(int val){

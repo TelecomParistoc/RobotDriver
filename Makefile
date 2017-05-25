@@ -15,7 +15,16 @@ vpath %.h src/
 
 .PHONY: all build clean tests AX12console jsinstall
 
+
 all: build build/$(TARGET)
+
+small:
+	cp src/roofdefs.small.h roofdefs.h
+	make all
+
+big:
+	cp src/roofdefs.big.h roofdefs.h
+	make all
 
 build:
 	@mkdir -p build

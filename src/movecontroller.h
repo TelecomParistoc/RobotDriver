@@ -1,6 +1,10 @@
 #ifndef MOVE_CONTROLLER_H
 #define MOVE_CONTROLLER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // coordinates in mm
 typedef struct point_s{
 	int x;
@@ -37,5 +41,9 @@ void rotate(int angle);
 #define DIR_FORWARD 1
 #define DIR_BACKWARD 2
 int getDirection();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // MOVE_CONTROLLER_H

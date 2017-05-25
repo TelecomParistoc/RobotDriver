@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "movecontroller.h"
 #include "motordriver.h"
+#include "roof.h"
 
 #define DT1           (LIN_SPEED / MAX_LIN_ACC)
 #define DEBUG         1
@@ -31,9 +32,9 @@ int getDirection() {
 void moveForward(int dist)
 {
   if(dist > 0)
-  	movingDir = DIR_FORWARD;
+    movingDir = DIR_FORWARD;
   else if(dist < 0)
-  	movingDir = DIR_BACKWARD;
+    movingDir = DIR_BACKWARD;
 
   setGoalMeanDist(dist);
   printf("goal dist: %d\n", dist);
@@ -81,8 +82,11 @@ int getHeadingTo(point_t * target)
 /* Rotate robot
 ** angle: goal heading in 0.1deg
 */
-void rotate(int angle)
-{
+void rotate(int angle) {
+  if(getColor() == YELLOW_TEAM) {
+    angle = 3600-angle;
+  }
+
   printf("goalHeading: %d\n", angle);
   angle = angle * 576 / 360;
   printf("goalHeading: %u\n", angle);
@@ -94,6 +98,7 @@ void rotate(int angle)
     heading = getHeading();
     //printf("heading: %u to %u\n", angle, heading);
     currHeadingDiff = abs(heading - angle);
+	waitFor(50);
   }
 }
 

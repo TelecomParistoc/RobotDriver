@@ -6,6 +6,10 @@
 #define I2CDRIVERFUNCTIONS_H
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* ############## I2C functions ##############
  * If the i2c device is not open, they will open it before the read/write
  * but it is also possible to do it manually with i2c_init()
@@ -20,5 +24,9 @@ int I2Cwrite16(uint8_t addr, uint8_t reg, uint16_t value);
 
 /* wait a given number of milliseconds*/
 void delayMilli(int milliseconds);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
