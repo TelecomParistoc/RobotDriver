@@ -119,7 +119,7 @@ void goBackward(point_t * dest)
   if(heading >= 3600)
     heading -= 3600;
   rotate(heading);
-  moveForward(distance(getPosX(), getPosY(), dest));
+  moveForward(-distance(getPosX(), getPosY(), dest));
 }
 
 void stopRobot() {

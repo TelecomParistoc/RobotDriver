@@ -1,5 +1,5 @@
 TARGET = librobotdriver.so
-SRCS = i2c-functions.c timing.c ax12driver.c ax-comm.c motordriver.c movecontroller.c roof.c
+SRCS = i2c-functions.c timing.c ax12driver.c ax-comm.c motordriver.c movecontroller.c roof.c ax12actions.c
 HEADERS = $(addprefix src/, ${SRCS:.c=.h}) src/driver.h
 OBJECTS = $(addprefix build/,${SRCS:.c=.o})
 TESTS = tests/timing tests/AX12position tests/AXcomm tests/AXmove

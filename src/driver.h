@@ -4,6 +4,7 @@
  */
 
 #include <robotdriver/ax12driver.h>
+#include <robotdriver/ax12actions.h>
 #include <robotdriver/timing.h>
 #include <robotdriver/motordriver.h>
 #include <robotdriver/movecontroller.h>
