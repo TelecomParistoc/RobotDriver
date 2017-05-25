@@ -32,4 +32,10 @@ void goBackward(point_t * dest);
 */
 void rotate(int angle);
 
+/* returns the current moving direction */
+#define DIR_NONE 0
+#define DIR_FORWARD 1
+#define DIR_BACKWARD 2
+int getDirection();
+
 #endif // MOVE_CONTROLLER_H

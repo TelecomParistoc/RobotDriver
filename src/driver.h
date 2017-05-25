@@ -7,3 +7,4 @@
 #include <robotdriver/timing.h>
 #include <robotdriver/motordriver.h>
 #include <robotdriver/movecontroller.h>
+#include <robotdriver/roof.h>

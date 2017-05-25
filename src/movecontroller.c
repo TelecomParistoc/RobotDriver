@@ -7,6 +7,8 @@
 #define DT1           (LIN_SPEED / MAX_LIN_ACC)
 #define DEBUG         1
 
+static int movingDir = DIR_NONE;
+
 void init()
 {
   setMaxAcc(MAX_LIN_ACC);
@@ -18,19 +20,31 @@ int abs(int x)
   return(x >= 0 ? x : -x);
 }
 
+int getDirection() {
+	return movingDir;
+}
+
 /*
 ** dist in mm
 ** sleep: in us
 */
 void moveForward(int dist)
 {
+  if(dist > 0)
+  	movingDir = DIR_FORWARD;
+  else if(dist < 0)
+  	movingDir = DIR_BACKWARD;
+
   setGoalMeanDist(dist);
   printf("goal dist: %d\n", dist);
   int currDist = getDistReachedFromLastCommand();
   while(abs(currDist - dist) > DIST_ACCURACY) {
     currDist = getDistReachedFromLastCommand();
     //printf("dist: %d %d\n", dist, currDist);
+	waitFor(50); // ms
   }
+
+  movingDir = DIR_NONE;
 }
 
 /*
