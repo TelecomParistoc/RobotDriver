@@ -42,6 +42,10 @@ void rotate(int angle);
 #define DIR_BACKWARD 2
 int getDirection();
 
+// stop and resume move if an enemy is in our way
+void stopRobot();
+void resumeRobot();
+
 #ifdef __cplusplus
 }
 #endif

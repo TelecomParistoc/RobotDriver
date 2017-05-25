@@ -59,6 +59,8 @@
 #define LAST_TRAVELED_H_REG   0x94
 // Last traveled distance low register
 #define LAST_TRAVELED_L_REG   0x92
+// stop robot quickly
+#define EMERGENCY_STOP_REG    0xA6
 
 void setPosX(int x) {
   waitFor(SLEEP);
@@ -226,4 +228,14 @@ int getDistReachedFromLastCommand() {
   if(res == -1) return -1;
   waitFor(SLEEP);
   return res * 65536 + I2Cread16(MB_ADDR, LAST_TRAVELED_L_REG);
+}
+
+void emergencyStop() {
+  waitFor(SLEEP);
+  I2Cwrite8(MB_ADDR, EMERGENCY_STOP_REG, 1);
+}
+
+void emergencyResume() {
+  waitFor(SLEEP);
+  I2Cwrite8(MB_ADDR, EMERGENCY_STOP_REG, 0);
 }

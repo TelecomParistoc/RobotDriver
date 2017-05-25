@@ -43,4 +43,7 @@ void setAngularD(int angD);
 
 int  getDistReachedFromLastCommand();
 
+void emergencyStop();
+void emergencyResume();
+
 #endif // MOTOR_DEFINE_H

@@ -121,3 +121,11 @@ void goBackward(point_t * dest)
   rotate(heading);
   moveForward(distance(getPosX(), getPosY(), dest));
 }
+
+void stopRobot() {
+	emergencyStop();
+}
+
+void resumeRobot() {
+	emergencyResume();
+}
