@@ -10,7 +10,7 @@ typedef struct point_s{
 #define LIN_SPEED     400 // mm/s
 #define MAX_LIN_ACC   1000 // mm/s^2
 #define RADIUS        30 // mm
-#define ANG_ACCURACY  15 // 0.1deg
+#define ANG_ACCURACY  20 // 0.1deg
 #define DIST_ACCURACY 10 // mm
 
 /* Initialise motors with correct values

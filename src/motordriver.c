@@ -203,7 +203,7 @@ void setAngularD(int angD) {
   I2Cwrite16(MB_ADDR, ANGULAR_D_REG, angD);
 }
 
-unsigned int getDistReachedFromLastCommand() {
+int getDistReachedFromLastCommand() {
   waitFor(SLEEP);
   int res = I2Cread16(MB_ADDR, LAST_TRAVELED_H_REG) ;
   if(res == -1) return -1;
