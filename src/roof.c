@@ -1,8 +1,5 @@
 #include <wiringPi.h>
-#include "fToit.c"
-
 #include "roofdefs.h"
-
 
 void initRoof()
 {

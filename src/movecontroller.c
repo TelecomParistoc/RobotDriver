@@ -4,6 +4,7 @@
 #include "movecontroller.h"
 #include "motordriver.h"
 #include "roof.h"
+#include "timing.h"
 
 #define DT1           (LIN_SPEED / MAX_LIN_ACC)
 #define DEBUG         1

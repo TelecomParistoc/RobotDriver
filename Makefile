@@ -19,11 +19,11 @@ vpath %.h src/
 all: build build/$(TARGET)
 
 small:
-	cp src/roofdefs.small.h roofdefs.h
+	cp src/roofdefs.small.h src/roofdefs.h
 	make all
 
 big:
-	cp src/roofdefs.big.h roofdefs.h
+	cp src/roofdefs.big.h src/roofdefs.h
 	make all
 
 build:

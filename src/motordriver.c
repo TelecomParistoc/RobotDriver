@@ -85,8 +85,10 @@ int  getPosY() {
   if(res == -1) return -1;
   waitFor(SLEEP);
   res = res * 65536 + I2Cread16(MB_ADDR, CURR_Y_ABS_POS_L_REG);
-  if(getColor)
-  return -res;
+  if(getColor() == YELLOW_TEAM)
+  	return -res;
+  else
+    return res;
 }
 int  getHeading() {
   waitFor(SLEEP);
