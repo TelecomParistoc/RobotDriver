@@ -1,8 +1,7 @@
 #include <wiringPi.h>
 #include "roofdefs.h"
 
-void initRoof()
-{
+void initRoof() {
   pinMode(22,INPUT);
   pinMode(26,INPUT);
   pinMode(21,INPUT);
@@ -15,6 +14,7 @@ void initRoof()
   pullUpDnControl(22, PUD_UP);
   pullUpDnControl(26, PUD_UP);
   pullUpDnControl(21, PUD_UP);
+  pullUpDnControl(10, PUD_UP);
 }
 
 void setRedLed(int val){
