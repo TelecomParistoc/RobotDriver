@@ -55,10 +55,13 @@ static int distance(int x1, int y1, point_t * p2)
 int getHeadingTo(point_t * target)
 {
   // get current position
-  int currX = getPosX();
-  int currY = getPosY();
+  int dx = target->x - getPosX();
+  int dy = target->y - getPosY();
+  printf("dx:%d dy:%d, atan:%f\n", dx, dy, atan2(dy,dx)*180/M_PI);
   // get angle from position to destination (in 0.1deg)
-  return atan2(target->y - currY, target->x - currX) * (1800 / M_PI);
+  if(atan2(dy, dx) < 0)
+    return(atan2(dy, dx) * (1800 / M_PI) + 3600);
+  return(atan2(dy, dx) * (1800 / M_PI));
 }
 
 /* Rotate robot
@@ -66,6 +69,7 @@ int getHeadingTo(point_t * target)
 */
 void rotate(int angle)
 {
+  printf("goalHeading: %d\n", angle);
   angle = angle * 576 / 360;
   printf("goalHeading: %u\n", angle);
   setGoalHeading(angle);
