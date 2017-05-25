@@ -61,15 +61,15 @@
 
 void setPosX(int x) {
   waitFor(SLEEP);
-  I2Cwrite16(MB_ADDR, CURR_X_ABS_POS_H_REG, x / 65536);
-  waitFor(SLEEP);
   I2Cwrite16(MB_ADDR, CURR_X_ABS_POS_L_REG, x % 65536);
+  waitFor(SLEEP);
+  I2Cwrite16(MB_ADDR, CURR_X_ABS_POS_H_REG, x / 65536);
 }
 void setPosY(int y) {
   waitFor(SLEEP);
-  I2Cwrite16(MB_ADDR, CURR_Y_ABS_POS_H_REG, y / 65536);
-  waitFor(SLEEP);
   I2Cwrite16(MB_ADDR, CURR_Y_ABS_POS_L_REG, y % 65536);
+  waitFor(SLEEP);
+  I2Cwrite16(MB_ADDR, CURR_Y_ABS_POS_H_REG, y / 65536);
 }
 int  getPosX() {
   waitFor(SLEEP);

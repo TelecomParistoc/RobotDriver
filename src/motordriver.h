@@ -4,10 +4,10 @@
 // Motherboard address
 #define MB_ADDR               0x12
 
-int  getPosX(int x);
-int  getPosY(int y);
-void setPosX();
-void setPosY();
+int  getPosX();
+int  getPosY();
+void setPosX(int x);
+void setPosY(int y);
 int  getHeading();
 void setHeading(int heading);
 
