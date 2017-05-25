@@ -19,6 +19,8 @@ int getStartJack();
 #define YELLOW_TEAM 1
 int getColor();
 
+#define TEST_MODE 0
+#define RUN_MODE 1
 int getMode();
 
 #ifdef __cplusplus
