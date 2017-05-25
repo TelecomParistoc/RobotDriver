@@ -31,7 +31,6 @@
 #define POS_4_OPEN	20
 #define POS_4_CLOSE	80
 
-int abs(int n);
 void wait();
 void move_to_block(int id, float angle);
 void move_to(int id, float angle);
