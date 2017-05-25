@@ -106,7 +106,7 @@ void rotate(int angle) {
 void goForward(point_t * dest)
 {
   printf("heading: %u, [%d,%d] to [%d,%d]\n", getHeading(), getPosX(), getPosY(), dest->x, dest->y);
-  rotate(getHeadingTo(dest));
+  //rotate(getHeadingTo(dest));
   moveForward(distance(getPosX(), getPosY(), dest));
 }
 

@@ -11,7 +11,7 @@ typedef struct point_s{
 	int y;
 } point_t;
 
-#define LIN_SPEED     400 // mm/s
+#define LIN_SPEED     10 // mm/s
 #define MAX_LIN_ACC   1000 // mm/s^2
 #define RADIUS        30 // mm
 #define ANG_ACCURACY  20 // 0.1deg
